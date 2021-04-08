@@ -112,13 +112,13 @@ Bob al recibir el mensaje lo descifraría con el comando
 gpg --output file --decrypt file_to_send.gpg
 ```
 
-**Firmar documentos:** Con el tiempo la mensaje puede modificarse accidentalmente, con el temor de que eso ocurra  Alice quiere firmar la mensaje como la versión original, la única que ella reconoce como válida, para eso utiliza las firmas digitales, esto crea una huella digital de los datos que contiene la mensaje y su firma asociada generada a partir de la clave privada de Alice, luego cualquiera puede verificar que Alice ha firmado esos datos, no importa si están cifrados o no.
+**Firmar documentos:** 
+Para evitar  modificaciones del mensaje que puedan comprometer a Alice. Se puede firmar el mensaje para dar fe de que es versión válida, para eso utiliza las firmas digitales, esto crea una huella digital de los datos que contiene la mensaje y su firma asociada generada a partir de la clave privada de Alice, luego cualquiera puede verificar que Alice ha firmado esos datos, no importa si están cifrados o no.
 
 Firma digital y cifrado en binario, esto genera un archivo ilegible como el que vimos anteriormente.
 ```
 gpg --output doc.sig --sign mensaje.txt
 ```
-
 
 Si queremos firmar en ascii usamos
 ```
@@ -129,24 +129,8 @@ Esto genera un archivo dividido en dos partes, la primera es el mensaje exacto q
 ```
 -----BEGIN PGP SIGNED MESSAGE-----
 Hash: SHA512
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus aliquam varius pellentesque. Suspendisse potenti. In euismod fermentum laoreet. Ut vehicula, sapien nec vehicula aliquam, nibh est feugiat nisi, ut iaculis sem libero eget metus. Duis vehicula ultrices felis, eu vulputate purus scelerisque eget. Vivamus in ex commodo ipsum vehicula malesuada. Vestibulum aliquam sit amet risus a sodales. 
 
-Ingredientes:
-
-    1 huevo
-    125 g de mantequilla
-    1 taza de azúcar mascabado
-    1 y media tazas de harina leudante
-    1 pizca de sal
-    1 taza de chispas de chocolate
-
-Preparación:
-
-    Precalienta el horno a 180°C.
-    Bate el huevo y el azúcar juntos hasta lograr una consistencia espumosa y espesa.
-    Derrite la mantequilla y añade a la mezcla de huevo.
-    Agrega el harina, sal y chispas de chocolate. Mezcla bien.
-    Coloca la masa a cucharadas (una cucharada colmada por galleta) sobre una charola para hornear forrada con papel encerado.
-    Hornea durante 10 minutos. Deja que las galletas se enfríen en la charola.
 -----BEGIN PGP SIGNATURE-----
 
 iQGzBAEBCgAdFiEECQrDeIyWOB3x1EdWt98kgJAC7JAFAl8KZy0ACgkQt98kgJAC
@@ -167,6 +151,7 @@ Si unicamente queremos verificar la firma se usa la opción
 ```
 gpg --verify doc.sig
 ```
+
 Esto mostraría algo como lo siguiente:
 ```
 gpg: Signature made sáb 11 jul 2020 21:28:13 -04
@@ -175,7 +160,7 @@ gpg: Good signature from "Some name <someemail@gmail.com>" [ultimate]
 gpg: WARNING: not a detached signature; file 'mensaje.txt' was NOT verified!
 ```
 
-En caso de que exista una modificación, por ejemplo cambiamos la cantidad de huevos que lleva la mensaje diría algo asi:
+En caso de que exista una modificación, diría algo asi:
 ```
 gpg: Signature made sáb 11 jul 2020 21:28:13 -04
 gpg:                using RSA key 090AC3788C96381DF1D44756B7DF24809002EC90
