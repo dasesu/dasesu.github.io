@@ -1,8 +1,8 @@
 ---
 layout: post
-title: "Classic Problems - #1 Fibonacci"
-date: 2020-10-03 18:00:00 -0400
-relatives: 
+title: "Classic Problems - Fibonacci"
+date: 2021-04-08 12:00:00 -0400
+relatives: classic-problems-fibonacci
 categories: [c++] 
 ---
 
