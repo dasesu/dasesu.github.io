@@ -1,9 +1,0 @@
-cd - [para ir al ultimo directorio visitado]
-cd [para ir a home]
-cd ~ para ir a home
-
-!! para repetir el ultimo comando
-Ctrl + L hace clear
-Ctrl + u limpia lo que se esta tipeando
-
-cp /home/sample.txt{,-old} copia sample.txt a sample.txt-old
