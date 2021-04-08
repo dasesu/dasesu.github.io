@@ -1,0 +1,31 @@
+---
+layout: inner
+---
+{% if page.head_image %}
+<img src="/assets/img/posts/{{ page.head_image }}" width="100%">
+<br><br>
+{% endif %}
+
+<h1 class="inner_post_title">{{ page.title }}</h1>
+<span class="view">by {{ page.author | default: site.author }}</span> - <span class="time">{{ page.date | date_to_string }}</span>
+{% if page.categories %}
+<div class="tags"> Category
+&raquo; {% for category in page.categories %}<a href="/category/{{ category }}">{{ category }}</a>{% if forloop.last == false %}, {% endif %}{% endfor %}
+</div>
+{% endif %}
+<br>
+
+{{content}}
+
+
+<div class="PageNavigation">
+  {% if page.previous.url %}
+    <a class="prev" href="{{ page.previous.url }}">&laquo; Previous Post</a>
+  {% endif %}
+  {% if page.previous.url and page.next.url %}
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  {% endif %}
+  {% if page.next.url %}
+    <a class="next" href="{{ page.next.url }}">Next Post &raquo;</a>
+  {% endif %}
+</div>
