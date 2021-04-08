@@ -5,25 +5,25 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Begin Jekyll SEO tag v2.6.1 -->
-<title>Create Bitcoin Address with python | Notes</title>
+<title>Create Bitcoin Address with python | Field Notes</title>
 <meta name="generator" content="Jekyll v4.1.1" />
 <meta property="og:title" content="Create Bitcoin Address with python" />
 <meta name="author" content="dasesu" />
 <meta property="og:locale" content="en_US" />
 <meta name="description" content="Wallets Las Wallets llamadas también Carteras o monederos, son algo asi como el sitio donde “almacenamos” criptomonedas, en realidad las criptomonedas no se almacenan en la cartera, la propiedad de criptomonedas queda registrada en la red bitcoin que se encuentra distribuida alrededor del mundo en forma de registros de transacciones." />
 <meta property="og:description" content="Wallets Las Wallets llamadas también Carteras o monederos, son algo asi como el sitio donde “almacenamos” criptomonedas, en realidad las criptomonedas no se almacenan en la cartera, la propiedad de criptomonedas queda registrada en la red bitcoin que se encuentra distribuida alrededor del mundo en forma de registros de transacciones." />
-<link rel="canonical" href="http://localhost:4000/bitcoin/python/2020/10/04/create-bitcoin-address.html" />
-<meta property="og:url" content="http://localhost:4000/bitcoin/python/2020/10/04/create-bitcoin-address.html" />
-<meta property="og:site_name" content="Notes" />
+<link rel="canonical" href="http://localhost:4000/bitcoin/python/2021/04/08/bitcoin-address-creation.html" />
+<meta property="og:url" content="http://localhost:4000/bitcoin/python/2021/04/08/bitcoin-address-creation.html" />
+<meta property="og:site_name" content="Field Notes" />
 <meta property="og:type" content="article" />
-<meta property="article:published_time" content="2020-10-04T21:16:00-04:00" />
+<meta property="article:published_time" content="2021-04-08T10:18:00-04:00" />
 <script type="application/ld+json">
-{"datePublished":"2020-10-04T21:16:00-04:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/bitcoin/python/2020/10/04/create-bitcoin-address.html"},"url":"http://localhost:4000/bitcoin/python/2020/10/04/create-bitcoin-address.html","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/img/logo.png"},"name":"dasesu"},"author":{"@type":"Person","name":"dasesu"},"headline":"Create Bitcoin Address with python","dateModified":"2020-10-04T21:16:00-04:00","description":"Wallets Las Wallets llamadas también Carteras o monederos, son algo asi como el sitio donde “almacenamos” criptomonedas, en realidad las criptomonedas no se almacenan en la cartera, la propiedad de criptomonedas queda registrada en la red bitcoin que se encuentra distribuida alrededor del mundo en forma de registros de transacciones.","@context":"https://schema.org"}</script>
+{"datePublished":"2021-04-08T10:18:00-04:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/bitcoin/python/2021/04/08/bitcoin-address-creation.html"},"url":"http://localhost:4000/bitcoin/python/2021/04/08/bitcoin-address-creation.html","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/img/logo.png"},"name":"dasesu"},"author":{"@type":"Person","name":"dasesu"},"headline":"Create Bitcoin Address with python","dateModified":"2021-04-08T10:18:00-04:00","description":"Wallets Las Wallets llamadas también Carteras o monederos, son algo asi como el sitio donde “almacenamos” criptomonedas, en realidad las criptomonedas no se almacenan en la cartera, la propiedad de criptomonedas queda registrada en la red bitcoin que se encuentra distribuida alrededor del mundo en forma de registros de transacciones.","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
     <meta name="author" content="dasesu" />
     <meta name="description" content="Create Bitcoin Address with python" />
-    <meta name="keywords" content="Create Bitcoin Address with python, Notes, bitcoin, python" />
+    <meta name="keywords" content="Create Bitcoin Address with python, Field Notes, bitcoin, python" />
 	
 	  <link rel="stylesheet" href="/assets/css/bootstrap.min.css?v=" >
     <link rel="stylesheet" href="/assets/css/style.css?v=">
@@ -42,13 +42,13 @@
               <li><a class="navigationside" href="/contact">Contact Me</a></li>
             
         </nav>
-        <h3 class="text-muted"><a href="/">Notes</a></h3>
+        <h3 class="text-muted"><a href="/">Field Notes</a></h3>
         <hr>
 
       
 
 <h1 class="inner_post_title">Create Bitcoin Address with python</h1>
-<span class="view">by dasesu</span> - <span class="time">04 Oct 2020</span>
+<span class="view">by dasesu</span> - <span class="time">08 Apr 2021</span>
 
 <div class="tags"> Category
 &raquo; <a href="/category/bitcoin">bitcoin</a>, <a href="/category/python">python</a>
@@ -59,17 +59,15 @@
 <h2 id="wallets">Wallets</h2>
 <p>Las Wallets llamadas también Carteras o monederos, son algo asi como el sitio donde “almacenamos” criptomonedas, en realidad las criptomonedas no se almacenan en la cartera, la propiedad de criptomonedas queda registrada en la red bitcoin que se encuentra distribuida alrededor del mundo en forma de registros de transacciones.</p>
 
-<p>Bitcoin y otras criptomonedas usan protocolos y algoritmos reconocidos internacionalmente para el cifrado de la información. Bitcoin usa el crifrado de clave pública, es decir que para garantizar la pertenencia de criptomonedas y realizar transferencias de estas, se necesitan dos claves únicas: clave pública y clave privada. Básicamente un wallet es la unión de estas dos claves.</p>
+<p>Bitcoin y otras criptomonedas usan protocolos y algoritmos reconocidos internacionalmente para el cifrado de la información. Bitcoin usa el crifrado de clave pública, es decir que para garantizar la pertenencia de criptomonedas y realizar transferencias de estas, se necesitan dos claves únicas: clave pública y clave privada. Básicamente un wallet es poseer estas dos claves.</p>
 
 <p>Podemos ver la clave pública como una dirección que podemos compartir libremente y que nos permite la recepción de monedas. Es como el número de cuenta del banco, cualquiera que lo tenga puede enviarte dinero, pero no puede disponer de lo que tengas allí ahorrado.</p>
 
 <p>La clave privada se parece mas a la contraseña que nos da total acceso a las criptomonedas transferidas hacia una clave pública. La clave pública se genera a partir de la clave privada, y solo con la clave privada pueden firmarse las transacciones salientes desde una clave pública.</p>
 
-<p>Como usuarios normales no es necesario comprender como funcionan estos algoritmos para usar un Wallet, de la misma forma que no necesitmos comprender la tecnología magnetica o chip asociada a las tarjetas de debito o crédito, sin embargo, si queremos desarrollar aplicaciones o sacar el maximo provecho a las que existen es importante conocer mejor su funcionamiento.</p>
+<p>Los usuarios comunmente no necesitan comprender como funcionan estos algoritmos, de la misma forma que no necesitmos comprender la tecnología magnetica o chip asociada a las tarjetas de debito o crédito, sin embargo, si queremos desarrollar aplicaciones o sacar el maximo provecho de las que existen es importante conocer mejor su funcionamiento.</p>
 
 <h2 id="como-se-genera-una-dirección-bitcoin">Como se genera una dirección bitcoin</h2>
-
-<p>Durante el proceso de generación de direcciones Bitcoin vamos a ver diferentes aspectos a considerar, asi como diferentes tipos de Claves.</p>
 
 <p><strong>Claves Privadas</strong> <br />
 Las claves privadas son usadas para comprobar la pertenencia de los fondos usados en una transacción, estas claves permiten crear firmas que son requeridas para transferir fondos.</p>
@@ -96,7 +94,7 @@ Es una codificación para representar grandes numeros enteros como texto alfanum
 <p>Veamos el proceso y que otras cosas ocurren para la generación de un par de claves pùblica y privada.</p>
 
 <p align="center">
-<img src="/assets/img/posts/create-bitcoin-address/Address_map.jpg?raw=true" />
+<img src="/assets/img/posts/bitcoin-address-creation/Address_map.jpg?raw=true" />
 </p>
 
 <h2 id="generando-una-clave-privada">Generando una clave Privada</h2>
@@ -240,13 +238,19 @@ Es una codificación para representar grandes numeros enteros como texto alfanum
 <span class="p">...</span>
 </code></pre></div></div>
 
+<p><a href="/codes/bitcoin-address-creation/generador_claveprivada_direccionbitcoin.py">Full Code</a></p>
+
 
 
 <div class="PageNavigation">
   
+    <a class="prev" href="/raspberry/security/2021/04/08/raspberry-automated-keyboard.html">&laquo; Previous Post</a>
   
   
-    <a class="next" href="/raspberry/2021/04/07/raspberry-without-peripherals.html">Next Post &raquo;</a>
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  
+  
+    <a class="next" href="/security/2021/04/08/gpg-encryptation.html">Next Post &raquo;</a>
   
 </div>
       

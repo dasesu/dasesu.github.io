@@ -1,7 +1,8 @@
 ---
 layout: post
 title: "Create Bitcoin Address with python"
-date: 2020-10-04 21:16:00 -0400
+date: 2021-04-08 10:18:00 -0400
+relatives: bitcoin-address-creation
 categories: [bitcoin,python]
 ---
 
@@ -10,7 +11,7 @@ Wallets
 Las Wallets llamadas también Carteras o monederos, son algo asi como el sitio donde "almacenamos" criptomonedas, en realidad las criptomonedas no se almacenan en la cartera, la propiedad de criptomonedas queda registrada en la red bitcoin que se encuentra distribuida alrededor del mundo en forma de registros de transacciones.
 
 
-Bitcoin y otras criptomonedas usan protocolos y algoritmos reconocidos internacionalmente para el cifrado de la información. Bitcoin usa el crifrado de clave pública, es decir que para garantizar la pertenencia de criptomonedas y realizar transferencias de estas, se necesitan dos claves únicas: clave pública y clave privada. Básicamente un wallet es la unión de estas dos claves.
+Bitcoin y otras criptomonedas usan protocolos y algoritmos reconocidos internacionalmente para el cifrado de la información. Bitcoin usa el crifrado de clave pública, es decir que para garantizar la pertenencia de criptomonedas y realizar transferencias de estas, se necesitan dos claves únicas: clave pública y clave privada. Básicamente un wallet es poseer estas dos claves.
 
 
 Podemos ver la clave pública como una dirección que podemos compartir libremente y que nos permite la recepción de monedas. Es como el número de cuenta del banco, cualquiera que lo tenga puede enviarte dinero, pero no puede disponer de lo que tengas allí ahorrado.
@@ -19,14 +20,12 @@ Podemos ver la clave pública como una dirección que podemos compartir libremen
 La clave privada se parece mas a la contraseña que nos da total acceso a las criptomonedas transferidas hacia una clave pública. La clave pública se genera a partir de la clave privada, y solo con la clave privada pueden firmarse las transacciones salientes desde una clave pública.
 
 
-Como usuarios normales no es necesario comprender como funcionan estos algoritmos para usar un Wallet, de la misma forma que no necesitmos comprender la tecnología magnetica o chip asociada a las tarjetas de debito o crédito, sin embargo, si queremos desarrollar aplicaciones o sacar el maximo provecho a las que existen es importante conocer mejor su funcionamiento.
+Los usuarios comunmente no necesitan comprender como funcionan estos algoritmos, de la misma forma que no necesitmos comprender la tecnología magnetica o chip asociada a las tarjetas de debito o crédito, sin embargo, si queremos desarrollar aplicaciones o sacar el maximo provecho de las que existen es importante conocer mejor su funcionamiento.
 
 
 
 Como se genera una dirección bitcoin
 ---
-
-Durante el proceso de generación de direcciones Bitcoin vamos a ver diferentes aspectos a considerar, asi como diferentes tipos de Claves.
 
 **Claves Privadas**   
 Las claves privadas son usadas para comprobar la pertenencia de los fondos usados en una transacción, estas claves permiten crear firmas que son requeridas para transferir fondos.
@@ -53,7 +52,7 @@ Es una codificación para representar grandes numeros enteros como texto alfanum
 Veamos el proceso y que otras cosas ocurren para la generación de un par de claves pùblica y privada.
 
 <p align="center">
-<img src="{{site.baseurl}}/assets/img/posts/create-bitcoin-address/Address_map.jpg?raw=true">
+<img src="{{site.baseurl}}/assets/img/posts/{{page.relatives}}/Address_map.jpg?raw=true">
 </p>
 
 Generando una clave Privada
@@ -210,3 +209,5 @@ public_address = base58.b58encode( addchecksum )
 print( public_address )
 ...
 ```
+
+[Full Code]({{site.baseurl}}/codes/{{page.relatives}}/generador_claveprivada_direccionbitcoin.py)
