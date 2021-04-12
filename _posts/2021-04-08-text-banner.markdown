@@ -3,7 +3,7 @@ layout: post
 title: "Banner ascii on the terminal"
 date: 2021-04-08 15:28:10 -0400
 relatives: text-banner
-categories: [security]
+categories: [linux]
 ---
 
 ## Crear banners con caracteres ascii
