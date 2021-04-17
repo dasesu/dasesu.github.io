@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Laravel | Field Notes</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Laravel" />
+<meta name="author" content="dasesu" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Laraval:" />
+<meta property="og:description" content="Laraval:" />
+<link rel="canonical" href="http://localhost:4000/linux/2021/04/15/laravel.html" />
+<meta property="og:url" content="http://localhost:4000/linux/2021/04/15/laravel.html" />
+<meta property="og:site_name" content="Field Notes" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-04-15T16:23:10-04:00" />
+<script type="application/ld+json">
+{"datePublished":"2021-04-15T16:23:10-04:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/linux/2021/04/15/laravel.html"},"url":"http://localhost:4000/linux/2021/04/15/laravel.html","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/img/logo.png"},"name":"dasesu"},"author":{"@type":"Person","name":"dasesu"},"headline":"Laravel","dateModified":"2021-04-15T16:23:10-04:00","description":"Laraval:","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta name="author" content="dasesu" />
+    <meta name="description" content="Laravel" />
+    <meta name="keywords" content="Laravel, Field Notes, linux" />
+	
+	  <link rel="stylesheet" href="/assets/css/bootstrap.min.css?v=" >
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <link rel="stylesheet" href="/assets/css/mystyle.css?v=">
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+           
+        <nav>
+        <ul class="nav nav-pills pull-right">
+        	<li><a class="navigationside" href="/">Home</a></li>
+          
+              <li><a class="navigationside" href="/contact">Contact Me</a></li>
+            
+        </nav>
+        <h3 class="text-muted"><a href="/">Field Notes</a></h3>
+        <hr>
+
+      
+
+<h1 class="inner_post_title">Laravel</h1>
+<span class="view">by dasesu</span> - <span class="time">15 Apr 2021</span>
+
+<div class="tags"> Category
+&raquo; <a href="/category/linux">linux</a>
+</div>
+
+<br>
+
+<h2 id="laraval">Laraval:</h2>
+
+<h2 id="convenciones-de-nombrado">Convenciones de nombrado</h2>
+<p>Laravel como otros frameworks usa convención sobre configuración, en varios casos laravel se vale de estas convenciones para simplificar tareas ya que asume y hasta cierto punto impone su uso, conocer estas convenciones permite ahorrar mucho tiempo a la hora de programar.</p>
+
+<h3 id="controladores">Controladores</h3>
+<p>Por <strong>convención</strong> los controladores deben estar en <strong>singular</strong>, sin espacios entre palabras, y la primer letra de cada palabra debe ser mayuscula <strong>(PascalCase)</strong> y deben terminar con la palabra Controller.</p>
+<ul>
+  <li>UserController</li>
+  <li>OrderDetailController</li>
+</ul>
+
+<h3 id="funciones">Funciones</h3>
+<p>Las funciones deben ser nombradas aplicando camelCase.</p>
+<ul>
+  <li>getUser()</li>
+  <li>setIsAdminAttribute()</li>
+  <li>orderDetails()</li>
+</ul>
+
+<h3 id="modelos">Modelos</h3>
+<p>Para nombrar a los modelos tomamos el nombre de la entidad en singular y siempre aplicando PascalCase. Veamos algunos ejemplos:</p>
+<ul>
+  <li>User</li>
+  <li>OrderDetail</li>
+</ul>
+
+<h3 id="en-la-bd">En la BD</h3>
+<ul>
+  <li>Es recomendable el uso de sustantivos en idioma inglés.</li>
+  <li>Nombres de tablas: Usa sustantivos en <em>minúsculas</em> y en <em>plural</em>, y con snake_case.</li>
+  <li>Nombres de campos/columnas/atributos: Usa sustantivos en <em>minúsculas</em> y en <em>singular</em> y usando snake_case.</li>
+</ul>
+
+<h3 id="pruebas">Pruebas</h3>
+<p>Para nombras los métodos de prueba antepondremos test, el resto del nombre debe ser una descripción del tipo de prueba que se realice, siguiendo lo ya mencionado en la sección funciones. Para el estilo de nombrado se emplea camelCase.</p>
+<ul>
+  <li>testGetUserOrderHistory()</li>
+  <li>testCreateAndAssignRolesToAUser()</li>
+</ul>
+
+<h3 id="rutas">Rutas</h3>
+<p>Los sustantivos en las rutas deben ser indicadas en plural, aplicando durante todo esto kebab-case
+/customers/23
+/orders</p>
+
+<h3 id="vistas">Vistas</h3>
+
+<h2 id="creación-de-un-proyecto">Creación de un proyecto</h2>
+<p>Creación de proyecto con composer
+<code class="language-plaintext highlighter-rouge">composer create-project laravel/laravel LaravelDeComposer</code></p>
+
+<p>Esto crea un proyecto laravel con los siguientes documentos.</p>
+<pre>
+app        composer.json  database      public     routes      tests
+artisan    composer.lock  package.json  README.md  server.php  vendor
+bootstrap  config         phpunit.xml   resources  storage     webpack.mix.js
+</pre>
+
+<p>Si queremos especifcar una versión de laravel:<br />
+<code class="language-plaintext highlighter-rouge">composer create-project laravel/laravel LaravelLTS 5.1.x</code></p>
+
+<p>Si usamos la box Homestead de vagrant, configuramos el espacio de trabajo y directorios compartidos entre la maquina host y la maquina guest, algunos parametros del archivo Homestead.yaml coresponden al nombre del proyecto en el host y el sitio de donde se va a tomar ese proyecto en la maquina guest.</p>
+<pre>
+sites:
+	- map: homestead.test
+	  to: /home/vagrant/code/blog/public
+</pre>
+
+<h2 id="route-files">Route Files</h2>
+<p>El archivo routes/web.php contiene las instrucciones de como deben ser procesadas las urls</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">use</span> <span class="nc">Illuminate\Support\Facades\Route</span><span class="p">;</span>
+
+<span class="nc">Route</span><span class="o">::</span><span class="nf">get</span><span class="p">(</span><span class="s1">'/greeting'</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="s1">'Hello World'</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>esta url tambien puede tener parametros variables</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">use</span> <span class="nc">Illuminate\Support\Facades\Route</span><span class="p">;</span>
+
+<span class="nc">Route</span><span class="o">::</span><span class="nf">get</span><span class="p">(</span><span class="s1">'/greeting/{name}'</span><span class="p">,</span> <span class="k">function</span> <span class="p">(</span><span class="nv">$name</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nv">$name</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>Mas opciones <a href="https://laravel.com/docs/8.x/routing">https://laravel.com/docs/8.x/routing</a></p>
+
+<p>El archivo web.php es mejor que procese las entradas pero que cada uno de las funciones se ejecuten en otro sitio, 
+es decir en diferentes controladores</p>
+
+<h2 id="controladores-1">Controladores</h2>
+<p>Lon controladores pueden crearse manualmente, pero tambien podemos crearlos usando la terminal, Laravel los crea dentro del directorio <code class="language-plaintext highlighter-rouge">/app/http/controller</code>
+Para crear uno usando la terminal usamos el comando<br />
+<code class="language-plaintext highlighter-rouge">php artisan make:controller PageController</code></p>
+
+
+
+
+<div class="PageNavigation">
+  
+    <a class="prev" href="/linux/2021/04/10/docker.html">&laquo; Previous Post</a>
+  
+  
+  
+</div>
+      
+      <span class="inner">
+      <footer>
+        <hr>
+        <p><small>Hosted on GitHub Pages </a></small></p>
+      </footer>
+      </span>
+
+    </div>
+
+	<!-- Font awesome icons -->
+    <link href="/assets/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/assets/css/syntax.css">
+    <!-- Bootstrap core CSS -->
+    
+    <!-- Fonts -->
+    
+  
+
+    <script src="/assets/js/scale.fix.js"></script>
+    
+  </body>
+</html>

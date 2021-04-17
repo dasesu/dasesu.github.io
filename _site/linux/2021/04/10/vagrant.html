@@ -177,6 +177,26 @@ end
    SHELL
 </code></pre></div></div>
 
+<h2 id="otro-metodo">Otro metodo</h2>
+
+<p><code class="language-plaintext highlighter-rouge">vagrant box add laravel/homestead</code>: Hace la descarga de la maquina, pero no estoy seguro de donde queda. en virtualbox no.</p>
+
+<p><code class="language-plaintext highlighter-rouge">git clone https://github.com/laravel/homestead.git Homestead</code> esto no tarda nada, lo que tarda es el comando anterior</p>
+
+<p>Entramos al directorio Homestead que se ha creado y ejecutamos init.sh
+<code class="language-plaintext highlighter-rouge">bash init.sh</code></p>
+
+<p>Esto crea un directorio Homestead.yaml 
+en este directorio tenemos configuraciones como la memoria, la cantdad de cpus que se van a asignar, las claves ssh, los directorios compartidos,</p>
+
+<p>la sección 
+folders:</p>
+<ul>
+  <li>map: ~/Code
+to: /home/vagrant/Code<br />
+Luego de hacer modificaciones si es necesario ejecutamos el comando:
+<code class="language-plaintext highlighter-rouge">vagrant up</code></li>
+</ul>
 
 
 
