@@ -3,7 +3,7 @@ layout: post
 title: "Free Disk Space"
 date: 2021-04-20 19:23:10 -0400
 relatives: free-space
-categories: [security]
+categories: [linux]
 ---
 
 ## free space

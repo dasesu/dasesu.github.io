@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Laravel 3 | Field Notes</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Laravel 3" />
+<meta name="author" content="dasesu" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Asignacion masiva:" />
+<meta property="og:description" content="Asignacion masiva:" />
+<link rel="canonical" href="http://localhost:4000/programming/php/2021/04/17/laravel.html" />
+<meta property="og:url" content="http://localhost:4000/programming/php/2021/04/17/laravel.html" />
+<meta property="og:site_name" content="Field Notes" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-04-17T16:23:10-04:00" />
+<script type="application/ld+json">
+{"datePublished":"2021-04-17T16:23:10-04:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/programming/php/2021/04/17/laravel.html"},"url":"http://localhost:4000/programming/php/2021/04/17/laravel.html","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/img/logo.png"},"name":"dasesu"},"author":{"@type":"Person","name":"dasesu"},"headline":"Laravel 3","dateModified":"2021-04-17T16:23:10-04:00","description":"Asignacion masiva:","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta name="author" content="dasesu" />
+    <meta name="description" content="Laravel 3" />
+    <meta name="keywords" content="Laravel 3, Field Notes, programming, php" />
+	
+	  <link rel="stylesheet" href="/assets/css/bootstrap.min.css?v=" >
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <link rel="stylesheet" href="/assets/css/mystyle.css?v=">
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+           
+        <nav>
+        <ul class="nav nav-pills pull-right">
+        	<li><a class="navigationside" href="/">Home</a></li>
+          
+              <li><a class="navigationside" href="/contact">Contact Me</a></li>
+            
+        </nav>
+        <h3 class="text-muted"><a href="/">Field Notes</a></h3>
+        <hr>
+
+      
+
+<h1 class="inner_post_title">Laravel 3</h1>
+<span class="view">by dasesu</span> - <span class="time">17 Apr 2021</span>
+
+<div class="tags"> Category
+&raquo; <a href="/category/programming">programming</a>, <a href="/category/php">php</a>
+</div>
+
+<br>
+
+<h2 id="asignacion-masiva">Asignacion masiva:</h2>
+
+<p>Para insertar un objeto en nuestro modelo habiamos creado la instancia de curso asi</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nv">$curso</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Curso</span><span class="p">();</span>
+    <span class="nv">$curso</span><span class="o">-&gt;</span><span class="n">name</span> <span class="o">=</span> <span class="nv">$request</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">;</span>
+    <span class="nv">$curso</span><span class="o">-&gt;</span><span class="n">descripcion</span> <span class="o">=</span> <span class="nv">$request</span><span class="o">-&gt;</span><span class="n">descripcion</span><span class="p">;</span>
+    <span class="nv">$curso</span><span class="o">-&gt;</span><span class="n">categoria</span> <span class="o">=</span> <span class="nv">$request</span><span class="o">-&gt;</span><span class="n">categoria</span><span class="p">;</span>
+    <span class="nv">$curso</span><span class="o">-&gt;</span><span class="nf">save</span><span class="p">();</span>
+</code></pre></div></div>
+
+<p>Laavel nos permite usar la función create que recibe un array asi:</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nv">$cuso</span> <span class="o">=</span> <span class="nc">Curso</span><span class="o">::</span><span class="nf">create</span><span class="p">([</span>
+    <span class="s1">'name'</span> <span class="o">=&gt;</span> <span class="nv">$request</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span>
+    <span class="s1">'descripcion'</span> <span class="o">=&gt;</span> <span class="nv">$request</span><span class="o">-&gt;</span><span class="n">descripcion</span><span class="p">,</span>
+    <span class="s1">'categoria'</span> <span class="o">=&gt;</span> <span class="nv">$request</span><span class="o">-&gt;</span><span class="n">categoria</span>
+    <span class="p">]);</span>
+</code></pre></div></div>
+
+<p>Como esta función recibe un array podemos pasarle <strong>$request-&gt;all()</strong> que tambien es un array y asi evitariamos tener que escribir todos los campos</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="cm">/*
+        $curso = new Curso();
+        $curso-&gt;name = $request-&gt;name;
+        $curso-&gt;descripcion = $request-&gt;descripcion;
+        $curso-&gt;categoria = $request-&gt;categoria;
+        $curso-&gt;save();
+        */</span>
+        <span class="c1">// Lo anterior es igual a esto</span>
+        <span class="cm">/*
+        $cuso = Curso::create([
+        'name' =&gt; $request-&gt;name,
+        'descripcion' =&gt; $request-&gt;descripcion,
+        'categoria' =&gt; $request-&gt;categoria
+        ]);
+        */</span>
+        <span class="c1">// Lo anterior es igual a esto</span>
+        <span class="nv">$cuso</span> <span class="o">=</span> <span class="nc">Curso</span><span class="o">::</span><span class="nf">create</span><span class="p">(</span><span class="nv">$request</span><span class="o">-&gt;</span><span class="nf">all</span><span class="p">());</span>
+</code></pre></div></div>
+
+<p>La asignación masiva por motivos de seguridad, y para evitar que otros usuarios creen nuevos campos con valores dados por ellos, requiere de la funcion fillable es decir llenable, esto se aplica a ciertos campos nada mas, es una forma de decirle que esta bien que se creen esos campos masivamente pero no otros, para poder aplicar esta funcion vamos a: App\Models\Curso ( O Modelo que se va a usar)</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+
+<span class="kd">class</span> <span class="nc">Curso</span> <span class="kd">extends</span> <span class="nc">Model</span>
+<span class="p">{</span>
+    <span class="kn">use</span> <span class="nc">HasFactory</span><span class="p">;</span>
+    <span class="k">protected</span> <span class="nv">$fillable</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'name'</span><span class="p">,</span><span class="s1">'descripcion'</span><span class="p">,</span><span class="s1">'categoria'</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>Otra opcion es evitar que ciertos campos no se creen por ejemplo un campo status, esto podemos conseguirlo agregando en lugar de la funcion $fillable, la funcion guarded</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+
+<span class="kd">class</span> <span class="nc">Curso</span> <span class="kd">extends</span> <span class="nc">Model</span>
+<span class="p">{</span>
+    <span class="kn">use</span> <span class="nc">HasFactory</span><span class="p">;</span>
+    <span class="c1">//rotected $fillable = ['name','descripcion','categoria'];</span>
+    <span class="k">protected</span> <span class="kt">guarded</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'status'</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Anteriormente usamos la asignación masiva con  el metodo create pero tambien es posible usar el metodo update, eso para funciones que ya tienen datos y lo que se desea es actualizar los valores</p>
+
+<p>Continuacion del archivo CursoController.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$curso</span><span class="o">-&gt;</span><span class="nf">update</span><span class="p">(</span><span class="nv">$request</span><span class="o">-&gt;</span><span class="nf">all</span><span class="p">());</span>
+<span class="k">return</span> <span class="nf">redirect</span><span class="p">()</span><span class="o">-&gt;</span><span class="nf">route</span><span class="p">(</span><span class="s1">'cursos.show'</span><span class="p">,</span><span class="nv">$curso</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h2 id="eliminar-registros">Eliminar Registros</h2>
+<p>Lo primero es indicar la accion desde una URL es decir tengo que indicar que voy a eliminar, creamos la ruta para esto</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Router::delete('cursos/{curso}',[CursoController::class, 'destroy'])-&gt;name('cursos.destroy');
+</code></pre></div></div>
+
+<p>Luego creamos la funcion en el controlador, por convención eliminar se llama destroy</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">function</span> <span class="n">destroy</span><span class="p">(</span><span class="kt">Curso</span> <span class="nv">$curso</span><span class="p">){</span>
+    <span class="nv">$curso</span><span class="o">-&gt;</span><span class="nb">delete</span><span class="p">();</span>
+    <span class="k">return</span> <span class="nf">redirect</span><span class="p">()</span><span class="o">-&gt;</span><span class="nf">route</span><span class="p">(</span><span class="s1">'cursos.index'</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="route-resources">Route resources</h2>
+<p>Podemos ver las rutas asignadas desde la terminal usando el comando</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>php artisan route:list
+</code></pre></div></div>
+<pre>
++--------+----------+---------------------+----------------+----------------------------------------------+------------+
+| Domain | Method   | URI                 | Name           | Action                                       | Middleware |
++--------+----------+---------------------+----------------+----------------------------------------------+------------+
+|        | GET|HEAD | /                   |                | App\Http\Controllers\PageController          | web        |
+|        | GET|HEAD | api/user            |                | Closure                                      | api        |
+|        |          |                     |                |                                              | auth:api   |
+|        | GET|HEAD | cursos              | cursos.index   | App\Http\Controllers\CursoController@index   | web        |
+|        | POST     | cursos              | cursos.store   | App\Http\Controllers\CursoController@store   | web        |
+|        | GET|HEAD | cursos/create       | cursos.create  | App\Http\Controllers\CursoController@create  | web        |
+|        | GET|HEAD | cursos/{curso}      | cursos.show    | App\Http\Controllers\CursoController@show    | web        |
+|        | PUT      | cursos/{curso}      | cursos.update  | App\Http\Controllers\CursoController@update  | web        |
+|        | DELETE   | cursos/{curso}      | cursos.destroy | App\Http\Controllers\CursoController@destroy | web        |
+|        | GET|HEAD | cursos/{curso}/edit | cursos.edit    | App\Http\Controllers\CursoController@edit    | web        |
++--------+----------+---------------------+----------------+----------------------------------------------+------------+
+</pre>
+
+<p>Conocer y adaptarse a las convenciones ayuda a ahorrar tiempo a la hora de hacer muchas tareas, por ejemplo definir las rutas.</p>
+
+<p>vamos a modificar el archivo routes/web.php para que en lugar de lucir asi:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+Route::get('/', PageController::Class);
+
+Route::get('cursos', [CursoController::Class, 'index'])-&gt;name('cursos.index');
+Route::get('cursos/create', [CursoController::Class, 'create'])-&gt;name('cursos.create');
+Route::post('cursos', [CursoController::Class, 'store'])-&gt;name('cursos.store');
+Route::get('cursos/{curso}', [CursoController::Class, 'show'])-&gt;name('cursos.show');
+Route::get('cursos/{curso}/edit', [CursoController::Class, 'edit'])-&gt;name('cursos.edit');
+Route::put('cursos/{curso}', [CursoController::Class, 'update'])-&gt;name('cursos.update');
+Route::delete('cursos/{curso}',[CursoController::class, 'destroy'])-&gt;name('cursos.destroy');
+</code></pre></div></div>
+<p>luzca asi</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Route::get('/', PageController::Class);
+Route::resource('cursos', CursoController::Class);    
+</code></pre></div></div>
+<p>La estructura recibe dos parametros, la url identificativa, en este caso cursos y el nombre del controlador esto hace que se tengan las mismas estructuras anteriores.</p>
+
+<p>Supongamos que queremos queremos cambiar posteriormente el nombre de algunas de las urls, por ejmplo de <strong>cursos/create</strong> a <strong>cursos/crear</strong> 
+Para eso vamos al archivo App/Providers/AppServiceProvider.php
+incluimos la llamada a:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use Illuminate\Support\Facades\Route;
+</code></pre></div></div>
+
+<p>Y en la funcion boot agregamos las lineas Route::resourceVerbs …. con las modificicaciones respectivas, indicando el nombre actual y el nombre que va a tomar</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public function boot()
+{
+    Route::resourceVerbs([
+        'create' =&gt; 'crear',
+        'edit' =&gt; 'editar',
+    ]);
+
+    // ...
+}
+</code></pre></div></div>
+
+<h2 id="cambiando-el-nombre-de-la-url">Cambiando el nombre de la URL</h2>
+<p>Supongamos ahora que queremos cambiar el nombre de la url de Cursos por ejemplo a Asignaturas
+Para eso debemos cambiar el nombre en la ruta asi</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Route::resource('asignaturas', CursoController::Class);
+</code></pre></div></div>
+<p>Esto convierte las rutas a la siguiente forma:</p>
+<pre>
++--------+-----------+---------------------------------+---------------------+----------------------------------------------+------------+
+| Domain | Method    | URI                             | Name                | Action                                       | Middleware |
++--------+-----------+---------------------------------+---------------------+----------------------------------------------+------------+
+|        | GET|HEAD  | /                               |                     | App\Http\Controllers\PageController          | web        |
+|        | GET|HEAD  | api/user                        |                     | Closure                                      | api        |
+|        |           |                                 |                     |                                              | auth:api   |
+|        | GET|HEAD  | asignaturas                     | asignaturas.index   | App\Http\Controllers\CursoController@index   | web        |
+|        | POST      | asignaturas                     | asignaturas.store   | App\Http\Controllers\CursoController@store   | web        |
+|        | GET|HEAD  | asignaturas/crear               | asignaturas.create  | App\Http\Controllers\CursoController@create  | web        |
+|        | GET|HEAD  | asignaturas/{asignatura}        | asignaturas.show    | App\Http\Controllers\CursoController@show    | web        |
+|        | PUT|PATCH | asignaturas/{asignatura}        | asignaturas.update  | App\Http\Controllers\CursoController@update  | web        |
+|        | DELETE    | asignaturas/{asignatura}        | asignaturas.destroy | App\Http\Controllers\CursoController@destroy | web        |
+|        | GET|HEAD  | asignaturas/{asignatura}/editar | asignaturas.edit    | App\Http\Controllers\CursoController@edit    | web        |
++--------+-----------+---------------------------------+---------------------+----------------------------------------------+------------+
+
+</pre>
+
+<p>Por ahora esto genera inconsistencias entre los nombres de rutas asignados y las llamadas a estas rutas en el codigo, para que funcione correctamente deberiamos conseguir que aunque las url hayan cambiado el nombre continue apuntando internamente a rutas con el prefijo cursos como <strong>cursos.index</strong> en lugar de asignaturas, para resolverlo definimos la ruta de la siguiente forma</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Route::resource('asignaturas', CursoController::Class)-&gt;names('cursos');
+</code></pre></div></div>
+<p>Lo anterior resuelve la llamada interna a direcciones como cursos.index, cursos.create, cursos.show etc mientras en las URL se sigue haciendo referencia a asignaturas.</p>
+
+<p>Otro problema que se desprende de esta modificación es los nombres de las variables esperadas, por ejemplo en algunos casos se pasan parametros con el nombre asignatura de la forma <code class="language-plaintext highlighter-rouge">/asignaturas{asignatura}</code> pero en muchos casos se recibe variables parametro {curso} el cual era la estructura antes de la modificación. esto puede corregirse redefiniedo el nombre de parametros. El metodo usado es el <strong>parameters</strong> que recibe un array con la url y el nombre que quiero dar
+asi: parameters([‘asignaturas’=&gt;’curso’])</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Route::resource('asignaturas', CursoController::Class)-&gt;parameters(['asignaturas'=&gt;'curso'])-&gt;names('cursos');
+</code></pre></div></div>
+<p>haciendo esto podemos ver nuevamente el estado de las url</p>
+<pre>
+dasesu@pchome:~/Desktop/Laravel$ php artisan r:l
++--------+-----------+----------------------------+----------------+----------------------------------------------+------------+
+| Domain | Method    | URI                        | Name           | Action                                       | Middleware |
++--------+-----------+----------------------------+----------------+----------------------------------------------+------------+
+|        | GET|HEAD  | /                          |                | App\Http\Controllers\PageController          | web        |
+|        | GET|HEAD  | api/user                   |                | Closure                                      | api        |
+|        |           |                            |                |                                              | auth:api   |
+|        | GET|HEAD  | asignaturas                | cursos.index   | App\Http\Controllers\CursoController@index   | web        |
+|        | POST      | asignaturas                | cursos.store   | App\Http\Controllers\CursoController@store   | web        |
+|        | GET|HEAD  | asignaturas/crear          | cursos.create  | App\Http\Controllers\CursoController@create  | web        |
+|        | GET|HEAD  | asignaturas/{curso}        | cursos.show    | App\Http\Controllers\CursoController@show    | web        |
+|        | PUT|PATCH | asignaturas/{curso}        | cursos.update  | App\Http\Controllers\CursoController@update  | web        |
+|        | DELETE    | asignaturas/{curso}        | cursos.destroy | App\Http\Controllers\CursoController@destroy | web        |
+|        | GET|HEAD  | asignaturas/{curso}/editar | cursos.edit    | App\Http\Controllers\CursoController@edit    | web        |
++--------+-----------+----------------------------+----------------+----------------------------------------------+------------+
+</pre>
+
+
+
+
+<div class="PageNavigation">
+  
+    <a class="prev" href="/programming/php/2021/04/16/laravel.html">&laquo; Previous Post</a>
+  
+  
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  
+  
+    <a class="next" href="/security/2021/04/18/dvwa.html">Next Post &raquo;</a>
+  
+</div>
+      
+      <span class="inner">
+      <footer>
+        <hr>
+        <p><small>Hosted on GitHub Pages </a></small></p>
+      </footer>
+      </span>
+
+    </div>
+
+	<!-- Font awesome icons -->
+    <link href="/assets/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/assets/css/syntax.css">
+    <!-- Bootstrap core CSS -->
+    
+    <!-- Fonts -->
+    
+  
+
+    <script src="/assets/js/scale.fix.js"></script>
+    
+  </body>
+</html>

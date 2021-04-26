@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Laravel 1 | Field Notes</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Laravel 1" />
+<meta name="author" content="dasesu" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Laraval:" />
+<meta property="og:description" content="Laraval:" />
+<link rel="canonical" href="http://localhost:4000/programming/php/2021/04/15/laravel.html" />
+<meta property="og:url" content="http://localhost:4000/programming/php/2021/04/15/laravel.html" />
+<meta property="og:site_name" content="Field Notes" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-04-15T16:23:10-04:00" />
+<script type="application/ld+json">
+{"datePublished":"2021-04-15T16:23:10-04:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/programming/php/2021/04/15/laravel.html"},"url":"http://localhost:4000/programming/php/2021/04/15/laravel.html","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/img/logo.png"},"name":"dasesu"},"author":{"@type":"Person","name":"dasesu"},"headline":"Laravel 1","dateModified":"2021-04-15T16:23:10-04:00","description":"Laraval:","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta name="author" content="dasesu" />
+    <meta name="description" content="Laravel 1" />
+    <meta name="keywords" content="Laravel 1, Field Notes, programming, php" />
+	
+	  <link rel="stylesheet" href="/assets/css/bootstrap.min.css?v=" >
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <link rel="stylesheet" href="/assets/css/mystyle.css?v=">
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+           
+        <nav>
+        <ul class="nav nav-pills pull-right">
+        	<li><a class="navigationside" href="/">Home</a></li>
+          
+              <li><a class="navigationside" href="/contact">Contact Me</a></li>
+            
+        </nav>
+        <h3 class="text-muted"><a href="/">Field Notes</a></h3>
+        <hr>
+
+      
+
+<h1 class="inner_post_title">Laravel 1</h1>
+<span class="view">by dasesu</span> - <span class="time">15 Apr 2021</span>
+
+<div class="tags"> Category
+&raquo; <a href="/category/programming">programming</a>, <a href="/category/php">php</a>
+</div>
+
+<br>
+
+<h2 id="laraval">Laraval:</h2>
+
+<h2 id="convenciones-de-nombrado">Convenciones de nombrado</h2>
+<p>Laravel como otros frameworks usa convención sobre configuración, en varios casos laravel se vale de estas convenciones para simplificar tareas ya que asume y hasta cierto punto impone su uso, conocer estas convenciones permite ahorrar mucho tiempo a la hora de programar.</p>
+
+<h3 id="controladores">Controladores</h3>
+<p>Por <strong>convención</strong> los controladores deben estar en <strong>singular</strong>, sin espacios entre palabras, y la primer letra de cada palabra debe ser mayuscula <strong>(PascalCase)</strong> y deben terminar con la palabra Controller.</p>
+<ul>
+  <li>UserController</li>
+  <li>OrderDetailController</li>
+</ul>
+
+<h3 id="funciones">Funciones</h3>
+<p>Las funciones deben ser nombradas aplicando camelCase.</p>
+<ul>
+  <li>getUser()</li>
+  <li>setIsAdminAttribute()</li>
+  <li>orderDetails()</li>
+</ul>
+
+<h3 id="modelos">Modelos</h3>
+<p>Para nombrar a los modelos tomamos el nombre de la entidad en singular y siempre aplicando PascalCase. Veamos algunos ejemplos:</p>
+<ul>
+  <li>User</li>
+  <li>OrderDetail</li>
+</ul>
+
+<h3 id="en-la-bd">En la BD</h3>
+<ul>
+  <li>Es recomendable el uso de sustantivos en idioma inglés.</li>
+  <li>Nombres de tablas: Usa sustantivos en <em>minúsculas</em> y en <em>plural</em>, y con snake_case.</li>
+  <li>Nombres de campos/columnas/atributos: Usa sustantivos en <em>minúsculas</em> y en <em>singular</em> y usando snake_case.</li>
+</ul>
+
+<h3 id="pruebas">Pruebas</h3>
+<p>Para nombras los métodos de prueba antepondremos test, el resto del nombre debe ser una descripción del tipo de prueba que se realice, siguiendo lo ya mencionado en la sección funciones. Para el estilo de nombrado se emplea camelCase.</p>
+<ul>
+  <li>testGetUserOrderHistory()</li>
+  <li>testCreateAndAssignRolesToAUser()</li>
+</ul>
+
+<h3 id="rutas">Rutas</h3>
+<p>Los sustantivos en las rutas deben ser indicadas en plural, aplicando durante todo esto kebab-case
+/customers/23
+/orders</p>
+
+<h3 id="vistas">Vistas</h3>
+<p>se usa la misma convención que para las rutas, mel sustantivo en minuscula y plural para crear el nombre del directorio que contiene las vistas. Cada uno de los archivos suelen llamarse como las funciones del controlador aunque no es necesario.</p>
+
+<h2 id="creación-de-un-proyecto">Creación de un proyecto</h2>
+<p>Creación de proyecto con composer
+<code class="language-plaintext highlighter-rouge">composer create-project laravel/laravel LaravelDeComposer</code></p>
+
+<p>Esto crea un proyecto laravel con los siguientes documentos.</p>
+<pre>
+app        composer.json  database      public     routes      tests
+artisan    composer.lock  package.json  README.md  server.php  vendor
+bootstrap  config         phpunit.xml   resources  storage     webpack.mix.js
+</pre>
+
+<p>Si queremos especifcar una versión de laravel:<br />
+<code class="language-plaintext highlighter-rouge">composer create-project laravel/laravel LaravelLTS 5.1.x</code></p>
+
+<p>Si usamos la box Homestead de vagrant, configuramos el espacio de trabajo y directorios compartidos entre la maquina host y la maquina guest, algunos parametros del archivo Homestead.yaml coresponden al nombre del proyecto en el host y el sitio de donde se va a tomar ese proyecto en la maquina guest.</p>
+<pre>
+sites:
+	- map: homestead.test
+	  to: /home/vagrant/code/blog/public
+</pre>
+
+<h2 id="route-files">Route Files</h2>
+<p>El archivo routes/web.php contiene las instrucciones de como deben ser procesadas las urls</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">use</span> <span class="nc">Illuminate\Support\Facades\Route</span><span class="p">;</span>
+
+<span class="nc">Route</span><span class="o">::</span><span class="nf">get</span><span class="p">(</span><span class="s1">'/greeting'</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="s1">'Hello World'</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>esta url tambien puede tener parametros variables</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">use</span> <span class="nc">Illuminate\Support\Facades\Route</span><span class="p">;</span>
+
+<span class="nc">Route</span><span class="o">::</span><span class="nf">get</span><span class="p">(</span><span class="s1">'/greeting/{name}'</span><span class="p">,</span> <span class="k">function</span> <span class="p">(</span><span class="nv">$name</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nv">$name</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>Mas opciones <a href="https://laravel.com/docs/8.x/routing">https://laravel.com/docs/8.x/routing</a></p>
+
+<p>El archivo web.php es mejor que procese las entradas pero que cada uno de las funciones se ejecuten en otro sitio, 
+es decir en diferentes controladores</p>
+
+<p>Laravel al igual que muchos otros frameworks usa el esquema MVC ( modelo-vista-controlador )</p>
+
+<p align="center">
+<img src="/assets/img/posts/laravel/mvc_01.png?raw=true" />
+</p>
+
+<h2 id="controladores-1">Controladores</h2>
+<p>Lon controladores pueden crearse manualmente al crear un archivo php con su respectivo nombre dentro del directorio <code class="language-plaintext highlighter-rouge">/app/http/controller</code>
+Tambien podemos hacerlo desde la terminal con el comando, por convención se coloca el nombre del controlador seguido de la palbra controller:	
+<code class="language-plaintext highlighter-rouge">php artisan make:controller PageController</code></p>
+
+<p>El archivo creado tiene algunas instrucciones, para hacer uso de ese controlador lo indicamos 
+incluyendo <code class="language-plaintext highlighter-rouge">use App\Http\Controllers\PageController</code> en el archivo routes/web.php y llamando a la función con <code class="language-plaintext highlighter-rouge">PageController::Class</code>  asi:</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+
+<span class="kn">use</span> <span class="nc">Illuminate\Support\Facades\Route</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">App\Http\Controllers\PageController</span><span class="p">;</span>
+
+
+<span class="nc">Route</span><span class="o">::</span><span class="nf">get</span><span class="p">(</span><span class="s1">'/'</span><span class="p">,</span> <span class="nc">PageController</span><span class="o">::</span><span class="nc">Class</span><span class="p">);</span>
+
+</code></pre></div></div>
+
+<p>y en la funcion que lo llama</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+
+<span class="kn">namespace</span> <span class="nn">App\Http\Controllers</span><span class="p">;</span>
+
+<span class="kn">use</span> <span class="nc">Illuminate\Http\Request</span><span class="p">;</span>
+
+<span class="kd">class</span> <span class="nc">PageController</span> <span class="kd">extends</span> <span class="nc">Controller</span>
+<span class="p">{</span>
+    <span class="c1">//</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">__invoke</span><span class="p">(){</span>
+    	<span class="k">return</span> <span class="s2">"hello World"</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p>Si  vamos a crar varias funciones las llamamos con su nombre y no usamos la función __invoke, esta funcion se usa cuando hay un unico metodo.</p>
+
+<p>Lo siguiente muestra un controlador con varias funciones, como es creado en el archivo controlador y como se escribe la llamada desde routes/web.php, pasando un aray formado por e controlador y la función a la cual va a acceder</p>
+
+<p>web.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+
+<span class="kn">use</span> <span class="nc">Illuminate\Support\Facades\Route</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">App\Http\Controllers\PageController</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">App\Http\Controllers\CursoController</span><span class="p">;</span>
+
+
+<span class="nc">Route</span><span class="o">::</span><span class="nf">get</span><span class="p">(</span><span class="s1">'/'</span><span class="p">,</span> <span class="nc">PageController</span><span class="o">::</span><span class="nc">Class</span><span class="p">);</span>
+
+<span class="nc">Route</span><span class="o">::</span><span class="nf">get</span><span class="p">(</span><span class="s1">'cursos'</span><span class="p">,</span> <span class="p">[</span><span class="nc">CursoController</span><span class="o">::</span><span class="nc">Class</span><span class="p">,</span> <span class="s1">'index'</span><span class="p">]);</span>
+
+<span class="nc">Route</span><span class="o">::</span><span class="nf">get</span><span class="p">(</span><span class="s1">'cursos/create'</span><span class="p">,</span> <span class="p">[</span><span class="nc">CursoController</span><span class="o">::</span><span class="nc">Class</span><span class="p">,</span> <span class="s1">'create'</span><span class="p">]);</span>
+
+<span class="nc">Route</span><span class="o">::</span><span class="nf">get</span><span class="p">(</span><span class="s1">'cursos/{curso}'</span><span class="p">,</span> <span class="p">[</span><span class="nc">CursoController</span><span class="o">::</span><span class="nc">Class</span><span class="p">,</span> <span class="s1">'show'</span><span class="p">]);</span>
+
+</code></pre></div></div>
+
+<p>CursoController.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+
+<span class="kn">namespace</span> <span class="nn">App\Http\Controllers</span><span class="p">;</span>
+
+<span class="kn">use</span> <span class="nc">Illuminate\Http\Request</span><span class="p">;</span>
+
+<span class="kd">class</span> <span class="nc">CursoController</span> <span class="kd">extends</span> <span class="nc">Controller</span>
+<span class="p">{</span>
+    <span class="c1">//</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">index</span><span class="p">()</span>
+    <span class="p">{</span>
+    	<span class="k">return</span> <span class="s2">"cursos "</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">create</span><span class="p">()</span>
+    <span class="p">{</span>
+    	<span class="k">return</span> <span class="s2">"curso creado con exito "</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">show</span><span class="p">(</span><span class="nv">$curso</span><span class="p">)</span>
+    <span class="p">{</span>
+    	<span class="k">return</span> <span class="s2">"el curso es </span><span class="nv">$curso</span><span class="s2"> "</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p>El modo usado anteriormente para invocar un controlador seria</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Route::get('/', 'PageController');
+
+Route::get('cursos', 'CursoController@index');
+
+Route::get('cursos/create', 'CursoController@create');
+</code></pre></div></div>
+
+<h2 id="vistas-1">Vistas</h2>
+
+<p>Las vistas se crean dentro del directoio resources/views/
+si el controlador tiene una unica funcion podemos simplemente crear dentro de views un archivo .php si el controlador tiee varias funciones se crea un subdirectorio que tiene por nombre el sustantivo usado en la url siguiendo su misma convención, en minuscula y plural dentro se crear archivos .php cada uno correspondiente a las funciones definidas en el controlador respectivo</p>
+
+<p>cada uno de estos archivos son vistas html con etiquetas php, estos archivos se llaman asi, para que el controlador pueda llamar a las vistas llamamos a la funcion view() a esta funcion le indicamos el nombre de la vista con el parametro, notese que cuando la funcion tiene parametro le indicamos como va a ser nombrada esa variable en la vista, la palabra ‘curso’ corresponde al nombre que va a tomar la variable $curso en la vista, podriamos haber asignado otro nombre
+ejemplos</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">return</span> <span class="nf">view</span><span class="p">(</span><span class="s1">'home'</span><span class="p">);</span>
+<span class="k">return</span> <span class="nf">view</span><span class="p">(</span><span class="s1">'cursos.index'</span><span class="p">);</span>
+<span class="k">return</span> <span class="nf">view</span><span class="p">(</span><span class="s1">'cursos.create'</span><span class="p">);</span>
+<span class="k">return</span> <span class="nf">view</span><span class="p">(</span><span class="s1">'cursos.show'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'curso'</span><span class="o">=&gt;</span> <span class="nv">$curso</span> <span class="p">]);</span>
+
+</code></pre></div></div>
+<p>Otra forma de mandar variables en caso de que el nombre coincida con la variable que queremos usar en la vista es usando la funcion compact() asi:</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="k">return</span> <span class="nf">view</span><span class="p">(</span><span class="s1">'cursos.show'</span><span class="p">,</span> <span class="nb">compact</span><span class="p">(</span><span class="s1">'curso'</span><span class="p">)</span> <span class="p">);</span>
+</code></pre></div></div>
+
+<h2 id="plantillas">plantillas</h2>
+<p>Para reutilizar codigo html comun a varias paginas usamos plantillas que en realidad son un tipo de archivo .blade.php</p>
+
+<p>dentro de la carpeta view creamos una carpeta llamada layouts, dentro de esta carpeta creamos las plantillas, por ejemplo plantilla.blade.php, este archivo tiene una estructura propria
+en esta plantilla copiamos nuestro codigo html, en las partes que queremos que sean variables usamos una etiqueta <strong>@yield</strong>
+por ejemplo el archivo plantilla.blade.php quedaria</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;title&gt;</span>@yield('title')<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+
+    @yield('content')
+
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>Luego a las vistas que quiero que hereden de esta plantilla se lo indicamos usando la etiqueta <strong>@extends(‘layouts/plantilla’)</strong>, y el respectivo contenido lo indicamos con <strong>@section(‘nombre’,’contenido’)</strong> o si el contenido es mas extenso con <strong>@section(‘nombre’)</strong> … <strong>@endsection</strong>.</p>
+
+<p>archivo plantilla.blade.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;title&gt;</span>@yield('title')<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+
+    @yield('content')
+
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>archivo page.blade.php, <strong>Notese que el archivo page.php cambia a page.blade.php</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@extends('layouts.plantilla')
+
+@section('title','Home')
+
+@section('content')
+&lt;?php echo "&lt;h1&gt;hello World&lt;/h1&gt;"; ?&gt;
+@endsection
+</code></pre></div></div>
+
+<p>si parte de la vista debe imprimir algo como &lt;?php echo $variable; ?&gt; blade provee un atajo para esto usando las etiquetas <strong>{{$variable }}</strong></p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="p">{</span> <span class="p">{</span><span class="nv">$curso</span><span class="p">}</span> <span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="modelos-1">Modelos</h2>
+
+<p>Creamos una base de datos, nos dirigimos al archivo config/databases para definir que tipo de base de datos vamos a usar asignando los valores manualmente o usando el archivo env, lo recomendable es usar el archivo env ya que de esta forma nos aseguramos que no estaremos subiendo credenciales a nuestros repositorios.</p>
+
+<p>A la hora de crear tablas podemos hacerlo de varias formas, una forma algo rudimentaria es crear las instrucciones sql manualmente e insertarlas en la base de datos, luego de esto hacemos las consultas usando ORM u algun otro metodo. Esta no es la mejor alternativa, lo mejor sería crear las instrucciones en el archivo database/migrations, este archivo define una estructura para crear las tablas desde laravel, y en caso de que queramos revertir un cambio tambien define mecanismos para hacerlo. el directorio database/migrations tiene archivos que corresponden a cada tabla, por ejemplo uno de estos archivos contiene</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+
+<span class="kn">use</span> <span class="nc">Illuminate\Database\Migrations\Migration</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Illuminate\Database\Schema\Blueprint</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Illuminate\Support\Facades\Schema</span><span class="p">;</span>
+
+<span class="kd">class</span> <span class="nc">CreateUsersTable</span> <span class="kd">extends</span> <span class="nc">Migration</span>
+<span class="p">{</span>
+    <span class="cd">/**
+     * Run the migrations.
+     *
+     * @return void
+     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">up</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nc">Schema</span><span class="o">::</span><span class="nf">create</span><span class="p">(</span><span class="s1">'users'</span><span class="p">,</span> <span class="k">function</span> <span class="p">(</span><span class="kt">Blueprint</span> <span class="nv">$table</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nv">$table</span><span class="o">-&gt;</span><span class="nf">id</span><span class="p">();</span>
+            <span class="nv">$table</span><span class="o">-&gt;</span><span class="nf">string</span><span class="p">(</span><span class="s1">'name'</span><span class="p">);</span>
+            <span class="nv">$table</span><span class="o">-&gt;</span><span class="nf">string</span><span class="p">(</span><span class="s1">'email'</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">unique</span><span class="p">();</span>
+            <span class="nv">$table</span><span class="o">-&gt;</span><span class="nf">timestamp</span><span class="p">(</span><span class="s1">'email_verified_at'</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">nullable</span><span class="p">();</span>
+            <span class="nv">$table</span><span class="o">-&gt;</span><span class="nf">string</span><span class="p">(</span><span class="s1">'password'</span><span class="p">);</span>
+            <span class="nv">$table</span><span class="o">-&gt;</span><span class="nf">rememberToken</span><span class="p">();</span>
+            <span class="nv">$table</span><span class="o">-&gt;</span><span class="nf">timestamps</span><span class="p">();</span>
+        <span class="p">});</span>
+    <span class="p">}</span>
+
+    <span class="cd">/**
+     * Reverse the migrations.
+     *
+     * @return void
+     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">down</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nc">Schema</span><span class="o">::</span><span class="nf">dropIfExists</span><span class="p">(</span><span class="s1">'users'</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+
+</code></pre></div></div>
+
+<p>De aqui nos interesan las funciones Up y Down.
+La función Up usa el metodo Blueprint que es el que indica que se va a crear una tabla en este caso llamada <code class="language-plaintext highlighter-rouge">users</code>y dispone de funciones que hacen referencia a los campos de una inserción en base de datos, por ejemplo <strong>$table-&gt;id()</strong> va a crear un identificador asociado a un primary key, la funcion string define un string de maximo 255 caracteres, timestamp hace referencia a fechas que en este caso son usadas para la verificación de correos, rememberToken es usado para recordar el acceso o las sesiones cada vez que un usuario inicia sesion. mas detalles de estos metodos pueden consutlarse en la sección migrations del sitio oficial de laravel.</p>
+
+<p>Para ejecutar una migración ejecutamos el comando, el cual crea las tablas en la base de datos</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>php artisan migrate
+</code></pre></div></div>
+
+<p>Para crear nuestras proprias migraciones, nuevamente podemos ejecutar un comando que simplifica la tarea de crear el archivo por nosotros. eso crea un archivo ya con los metodos para uqe nosotros completemos.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>php artisan make:migration cursos
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class Cursos extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        //
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        //
+    }
+}
+</code></pre></div></div>
+
+<p>PAra revertir los cambios realizados sobre lotes hacemos</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>php artisan migrate:rollback
+</code></pre></div></div>
+
+<p>Otra forma de crear archivos de migraciones mas acorde a convenciones es usando el comando:
+<code class="language-plaintext highlighter-rouge">php artisan make:migration create_cursos_table</code> esto crea el archivo pero ademas completa ciertos campos  completa ciertos campos</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>php artisan make:migration create_cursos_table
+</code></pre></div></div>
+
+<p>quedando asi:</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+
+<span class="kn">use</span> <span class="nc">Illuminate\Database\Migrations\Migration</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Illuminate\Database\Schema\Blueprint</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Illuminate\Support\Facades\Schema</span><span class="p">;</span>
+
+<span class="kd">class</span> <span class="nc">CreateCursosTable</span> <span class="kd">extends</span> <span class="nc">Migration</span>
+<span class="p">{</span>
+    <span class="cd">/**
+     * Run the migrations.
+     *
+     * @return void
+     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">up</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nc">Schema</span><span class="o">::</span><span class="nf">create</span><span class="p">(</span><span class="s1">'cursos'</span><span class="p">,</span> <span class="k">function</span> <span class="p">(</span><span class="kt">Blueprint</span> <span class="nv">$table</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nv">$table</span><span class="o">-&gt;</span><span class="nf">id</span><span class="p">();</span>
+            <span class="nv">$table</span><span class="o">-&gt;</span><span class="nf">string</span><span class="p">(</span><span class="s1">'name'</span><span class="p">);</span>
+            <span class="nv">$table</span><span class="o">-&gt;</span><span class="nf">text</span><span class="p">(</span><span class="s1">'descripcion'</span><span class="p">);</span>
+            <span class="nv">$table</span><span class="o">-&gt;</span><span class="nf">timestamps</span><span class="p">();</span>
+        <span class="p">});</span>
+    <span class="p">}</span>
+
+    <span class="cd">/**
+     * Reverse the migrations.
+     *
+     * @return void
+     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">down</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nc">Schema</span><span class="o">::</span><span class="nf">dropIfExists</span><span class="p">(</span><span class="s1">'cursos'</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p>Si realizo alguna modificación en los campos y quiero actualizar podría hacer rollback para luego volver a migrar, pero tambien puedo ejecutar el comando fresh que recorre una a una las migraciónes borrandolas y volviendolas a subir</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>php artisan migrate:fresh
+</code></pre></div></div>
+
+<p>Si queremos agregar un campo a una tabla sin borrar los datos lo indicamos con el comando make:migration pero debemos seguir una convención de nombrado, add_nombrecampo_to_enlatabla_table, el siguiente comando crea  un archivo que tiene una estructura diferente al create, que tiene el proposito de crear un campo avatar a la tabla users</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>php artisan make:migration add_avatar_to_users_table 
+</code></pre></div></div>
+
+<p>El archivo creado contiene</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    public function up()
+    {
+        Schema::table('users', function (Blueprint $table) {
+            //
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('users', function (Blueprint $table) {
+            //
+        });
+    }
+</code></pre></div></div>
+
+<p>dentro de la función up, podemos agregar el o los campos a modificar, debemos tener en cuenta tambien el proceso inverso quedando el archivo asi:</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+
+<span class="kn">use</span> <span class="nc">Illuminate\Database\Migrations\Migration</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Illuminate\Database\Schema\Blueprint</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Illuminate\Support\Facades\Schema</span><span class="p">;</span>
+
+<span class="kd">class</span> <span class="nc">AddAvatarToUsersTable</span> <span class="kd">extends</span> <span class="nc">Migration</span>
+<span class="p">{</span>
+    <span class="cd">/**
+     * Run the migrations.
+     *
+     * @return void
+     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">up</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nc">Schema</span><span class="o">::</span><span class="nf">table</span><span class="p">(</span><span class="s1">'users'</span><span class="p">,</span> <span class="k">function</span> <span class="p">(</span><span class="kt">Blueprint</span> <span class="nv">$table</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">//</span>
+            <span class="nv">$table</span><span class="o">-&gt;</span><span class="nf">string</span><span class="p">(</span><span class="s1">'avatar'</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">nullable</span><span class="p">();</span>
+        <span class="p">});</span>
+    <span class="p">}</span>
+
+    <span class="cd">/**
+     * Reverse the migrations.
+     *
+     * @return void
+     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">down</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nc">Schema</span><span class="o">::</span><span class="nf">table</span><span class="p">(</span><span class="s1">'users'</span><span class="p">,</span> <span class="k">function</span> <span class="p">(</span><span class="kt">Blueprint</span> <span class="nv">$table</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">//</span>
+            <span class="nv">$table</span><span class="o">-&gt;</span><span class="nf">dropColumn</span><span class="p">(</span><span class="s1">'avatar'</span><span class="p">);</span>
+        <span class="p">});</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Si quiero agregar el nuevo campo en un orden especifico, por ejemplo despues del campo email, en la función up la defino asi</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>...
+$table-&gt;string('avatar')-&gt;nullable()-&gt;after('email');
+...
+</code></pre></div></div>
+
+<p>Si lo que quiero es modificar un campo que ya existe, usando la convención ejecutaria el comando <code class="language-plaintext highlighter-rouge">php artisan make:migration cambiar_propiedades_to_users_table</code> y en la función up
+usaria la propiedad change, por ejemplo para cambiar la longitud del campo name</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$table-&gt;string('name',150)-&gt;change();
+</code></pre></div></div>
+
+
+
+<div class="PageNavigation">
+  
+    <a class="prev" href="/linux/2021/04/10/docker.html">&laquo; Previous Post</a>
+  
+  
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  
+  
+    <a class="next" href="/programming/php/2021/04/16/laravel.html">Next Post &raquo;</a>
+  
+</div>
+      
+      <span class="inner">
+      <footer>
+        <hr>
+        <p><small>Hosted on GitHub Pages </a></small></p>
+      </footer>
+      </span>
+
+    </div>
+
+	<!-- Font awesome icons -->
+    <link href="/assets/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/assets/css/syntax.css">
+    <!-- Bootstrap core CSS -->
+    
+    <!-- Fonts -->
+    
+  
+
+    <script src="/assets/js/scale.fix.js"></script>
+    
+  </body>
+</html>
