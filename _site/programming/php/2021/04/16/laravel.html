@@ -18,7 +18,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2021-04-16T16:23:10-04:00" />
 <script type="application/ld+json">
-{"datePublished":"2021-04-16T16:23:10-04:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/programming/php/2021/04/16/laravel.html"},"url":"http://localhost:4000/programming/php/2021/04/16/laravel.html","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/img/logo.png"},"name":"dasesu"},"author":{"@type":"Person","name":"dasesu"},"headline":"Laravel 2","dateModified":"2021-04-16T16:23:10-04:00","description":"Eloquent ORM:","@context":"https://schema.org"}</script>
+{"@type":"BlogPosting","headline":"Laravel 2","dateModified":"2021-04-16T16:23:10-04:00","datePublished":"2021-04-16T16:23:10-04:00","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/img/logo.png"},"name":"dasesu"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/programming/php/2021/04/16/laravel.html"},"author":{"@type":"Person","name":"dasesu"},"description":"Eloquent ORM:","url":"http://localhost:4000/programming/php/2021/04/16/laravel.html","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
     <meta name="author" content="dasesu" />
@@ -112,31 +112,31 @@ class Curso extends Model
 <h2 id="seeders">Seeders</h2>
 <p>Si quero poblar el contendo deuna tabla con texto de prueba, voy al directorio <strong>databases</strong> / <strong>seeders</strong> y abro el archivo <strong>Databaseseeders</strong>
 y dentro de la función run vamos a agregar el contenido que habiamos agregado anteriormente en tinker</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;?php
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
 
-namespace Database\Seeders;
+<span class="kn">namespace</span> <span class="nn">Database\Seeders</span><span class="p">;</span>
 
-use App\Models\Curso;
-use Illuminate\Database\Seeder;
+<span class="kn">use</span> <span class="nc">App\Models\Curso</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Illuminate\Database\Seeder</span><span class="p">;</span>
 
-class DatabaseSeeder extends Seeder
-{
-    /**
+<span class="kd">class</span> <span class="nc">DatabaseSeeder</span> <span class="kd">extends</span> <span class="nc">Seeder</span>
+<span class="p">{</span>
+    <span class="cd">/**
      * Seed the application's database.
      *
      * @return void
-     */
-    public function run()
-    {
-        $curso = new Curso;
+     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">run</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$curso</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Curso</span><span class="p">;</span>
 
-        $curso-&gt;name = 'Laravel';
-        $curso-&gt;descripcion = 'El mejor framework de php';
-        $curso-&gt;categoria = "Desarrollo Web";
+        <span class="nv">$curso</span><span class="o">-&gt;</span><span class="n">name</span> <span class="o">=</span> <span class="s1">'Laravel'</span><span class="p">;</span>
+        <span class="nv">$curso</span><span class="o">-&gt;</span><span class="n">descripcion</span> <span class="o">=</span> <span class="s1">'El mejor framework de php'</span><span class="p">;</span>
+        <span class="nv">$curso</span><span class="o">-&gt;</span><span class="n">categoria</span> <span class="o">=</span> <span class="s2">"Desarrollo Web"</span><span class="p">;</span>
 
-        $curso-&gt;save();
-    }
-}
+        <span class="nv">$curso</span><span class="o">-&gt;</span><span class="nf">save</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
 
 </code></pre></div></div>
@@ -167,70 +167,70 @@ php artisan db:seed
 </code></pre></div></div>
 <p>Esto crea dentro de la carpeta Database/Factory un nuevo documento llamado CursoFactory 
 este documento</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;?php
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
 
-namespace Database\Factories;
+<span class="kn">namespace</span> <span class="nn">Database\Factories</span><span class="p">;</span>
 
-use App\Models\Curso;
-use Illuminate\Database\Eloquent\Factories\Factory;
+<span class="kn">use</span> <span class="nc">App\Models\Curso</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Illuminate\Database\Eloquent\Factories\Factory</span><span class="p">;</span>
 
-class CursoFactory extends Factory
-{
-    /**
+<span class="kd">class</span> <span class="nc">CursoFactory</span> <span class="kd">extends</span> <span class="nc">Factory</span>
+<span class="p">{</span>
+    <span class="cd">/**
      * The name of the factory's corresponding model.
      *
      * @var string
-     */
-    protected $model = Curso::class;
+     */</span>
+    <span class="k">protected</span> <span class="nv">$model</span> <span class="o">=</span> <span class="nc">Curso</span><span class="o">::</span><span class="n">class</span><span class="p">;</span>
 
-    /**
+    <span class="cd">/**
      * Define the model's default state.
      *
      * @return array
-     */
-    public function definition()
-    {
-        return [
-            //
-        ];
-    }
-}
+     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">definition</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="c1">//</span>
+        <span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div></div>
 
 <p>À este documento debemos llenar el array return los campos que tiene la tabla,</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>...
-    public function definition()
-    {
-        return [
-            'name' =&gt; $this-&gt; faker-&gt;sentence(),
-            'descripcion' =&gt; $this-&gt; faker-&gt; paragraph(),
-            'categoria' =&gt; $this-&gt; faker-&gt; randomElement(['Desarrollo Web','Diseño Web'])
-        ];
-    }
-...
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="mf">...</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">definition</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="s1">'name'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span> <span class="n">faker</span><span class="o">-&gt;</span><span class="nf">sentence</span><span class="p">(),</span>
+            <span class="s1">'descripcion'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span> <span class="n">faker</span><span class="o">-&gt;</span> <span class="nf">paragraph</span><span class="p">(),</span>
+            <span class="s1">'categoria'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span> <span class="n">faker</span><span class="o">-&gt;</span> <span class="nf">randomElement</span><span class="p">([</span><span class="s1">'Desarrollo Web'</span><span class="p">,</span><span class="s1">'Diseño Web'</span><span class="p">])</span>
+        <span class="p">];</span>
+    <span class="p">}</span>
+<span class="mf">...</span>
 </code></pre></div></div>
 
 <p>Para llamarlo vamos a la Archivo CursoSeeder y desde ahi llamamos la clase Curso::factory(50)-&gt;create()</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;?php
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
 
-namespace Database\Seeders;
+<span class="kn">namespace</span> <span class="nn">Database\Seeders</span><span class="p">;</span>
 
-use App\Models\Curso;
-use Illuminate\Database\Seeder;
+<span class="kn">use</span> <span class="nc">App\Models\Curso</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Illuminate\Database\Seeder</span><span class="p">;</span>
 
-class CursoSeeder extends Seeder
-{
-    /**
+<span class="kd">class</span> <span class="nc">CursoSeeder</span> <span class="kd">extends</span> <span class="nc">Seeder</span>
+<span class="p">{</span>
+    <span class="cd">/**
      * Run the database seeds.
      *
      * @return void
-     */
-    public function run()
-    {
-        //
-        Curso::factory(50)-&gt;create();
-    }
-}
+     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">run</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">//</span>
+        <span class="nc">Curso</span><span class="o">::</span><span class="nf">factory</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">create</span><span class="p">();</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
 </code></pre></div></div>
 
@@ -244,10 +244,10 @@ class CursoSeeder extends Seeder
 </code></pre></div></div>
 
 <p>Si yo quisiera filtrar los registros a aquellos que coincidan con la categoria ‘Diseño Web’</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$curso = Curso::where('categoria','Diseño Web')-&gt;get();
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$curso</span> <span class="o">=</span> <span class="nc">Curso</span><span class="o">::</span><span class="nf">where</span><span class="p">(</span><span class="s1">'categoria'</span><span class="p">,</span><span class="s1">'Diseño Web'</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">get</span><span class="p">();</span>
 </code></pre></div></div>
 <p>Para ordenar el resultado de forma descendente</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$curso = Curso::where('categoria','Diseño Web')-&gt;orderBy('id',desc)-&gt;get();
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$curso</span> <span class="o">=</span> <span class="nc">Curso</span><span class="o">::</span><span class="nf">where</span><span class="p">(</span><span class="s1">'categoria'</span><span class="p">,</span><span class="s1">'Diseño Web'</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">orderBy</span><span class="p">(</span><span class="s1">'id'</span><span class="p">,</span><span class="n">desc</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">get</span><span class="p">();</span>
 </code></pre></div></div>
 <p>ordena por nombre de forma ascendente<br />
 <code class="language-plaintext highlighter-rouge">$curso = Curso::where('categoria','Diseño Web')-&gt;**orderBy('name',asc)**-&gt;get();</code></p>
@@ -271,7 +271,7 @@ $curso = Curso::find(5)</p>
 
 <h3 id="consultas-mas-completas">Consultas mas completas</h3>
 <p>Todos los valores con id mayor a 45</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Curso::where('id','&gt;',45)-&gt;get(); 
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Curso</span><span class="o">::</span><span class="nf">where</span><span class="p">(</span><span class="s1">'id'</span><span class="p">,</span><span class="s1">'&gt;'</span><span class="p">,</span><span class="mi">45</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">get</span><span class="p">();</span> 
 </code></pre></div></div>
 
 <p>Curso::where(‘name’,’like’,’%olup%’)-&gt;get();</p>
@@ -289,43 +289,43 @@ return $cursos;
 </code></pre></div></div>
 
 <p>si queremos pasarlo a una vista</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$cursos = Curso::all();
-return view('cursos.index', ['cursos' =&gt; $cursos ] );
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$cursos</span> <span class="o">=</span> <span class="nc">Curso</span><span class="o">::</span><span class="nf">all</span><span class="p">();</span>
+<span class="k">return</span> <span class="nf">view</span><span class="p">(</span><span class="s1">'cursos.index'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'cursos'</span> <span class="o">=&gt;</span> <span class="nv">$cursos</span> <span class="p">]</span> <span class="p">);</span>
 </code></pre></div></div>
 
 <p>luego desde la vista si es del formato blade.php recuperamos la variable con { { $cursos }}</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@extends('layouts.plantilla')
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="k">extends</span><span class="p">(</span><span class="s1">'layouts.plantilla'</span><span class="p">)</span>
 
-@section('title','Home')
+<span class="o">@</span><span class="nf">section</span><span class="p">(</span><span class="s1">'title'</span><span class="p">,</span><span class="s1">'Home'</span><span class="p">)</span>
 
-@section('content')
-&lt;h1&gt; Bienvenidos&lt;/h1&gt;
-&lt;ul&gt;
+<span class="o">@</span><span class="nf">section</span><span class="p">(</span><span class="s1">'content'</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span> <span class="nc">Bienvenidos</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="n">ul</span><span class="o">&gt;</span>
 
-    @foreach( $cursos as $curso )
-        &lt;li&gt;{ {$curso}}&lt;/li&gt;
-    @endforeach
+    <span class="o">@</span><span class="k">foreach</span><span class="p">(</span> <span class="nv">$cursos</span> <span class="k">as</span> <span class="nv">$curso</span> <span class="p">)</span>
+        <span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;</span><span class="p">{</span> <span class="p">{</span><span class="nv">$curso</span><span class="p">}}</span><span class="o">&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+    <span class="o">@</span><span class="k">endforeach</span>
 
-&lt;/ul&gt;
-@endsection
+<span class="o">&lt;/</span><span class="n">ul</span><span class="o">&gt;</span>
+<span class="o">@</span><span class="n">endsection</span>
 </code></pre></div></div>
 <p>podemos mostrar algunos campos en particular asi.</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>...
- @foreach( $cursos as $curso )
-        &lt;li&gt;{ {$curso-&gt;name}}&lt;/li&gt;
-    @endforeach
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="mf">...</span>
+ <span class="o">@</span><span class="k">foreach</span><span class="p">(</span> <span class="nv">$cursos</span> <span class="k">as</span> <span class="nv">$curso</span> <span class="p">)</span>
+        <span class="o">&lt;</span><span class="n">li</span><span class="o">&gt;</span><span class="p">{</span> <span class="p">{</span><span class="nv">$curso</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">}}</span><span class="o">&lt;/</span><span class="n">li</span><span class="o">&gt;</span>
+    <span class="o">@</span><span class="k">endforeach</span>
 
-&lt;/ul&gt;
-...
+<span class="o">&lt;/</span><span class="n">ul</span><span class="o">&gt;</span>
+<span class="mf">...</span>
 </code></pre></div></div>
 
 <p>Lo anterior traeria todos los cursos, algo ma correcto sería paginar el resultado, para conseguir esto desde el controlador hacemos</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    public function index()
-    {
-        $cursos = Curso::paginate();
-        return view('cursos.index', ['cursos' =&gt; $cursos ] );
-        //view('cursos.index');
-    }
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">public</span> <span class="k">function</span> <span class="n">index</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$cursos</span> <span class="o">=</span> <span class="nc">Curso</span><span class="o">::</span><span class="nf">paginate</span><span class="p">();</span>
+        <span class="k">return</span> <span class="nf">view</span><span class="p">(</span><span class="s1">'cursos.index'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'cursos'</span> <span class="o">=&gt;</span> <span class="nv">$cursos</span> <span class="p">]</span> <span class="p">);</span>
+        <span class="c1">//view('cursos.index');</span>
+    <span class="p">}</span>
 
 </code></pre></div></div>
 <p>luego desde la url podemos ingresar a la ruta  <strong>http://localhost:8000/cursos?page=2</strong> para mostrar los siguientes resultados</p>
@@ -354,10 +354,10 @@ Route::get('cursos/{curso}', [CursoController::Class, 'show'])-&gt;name('cursos.
 </code></pre></div></div>
 
 <p>Para recibir los datos del formulario en el controlador uso el recurso request de la siguiente forma</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public function store(Request $request)
-    {
-    return $request -&gt; all();
-    }
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">function</span> <span class="n">store</span><span class="p">(</span><span class="kt">Request</span> <span class="nv">$request</span><span class="p">)</span>
+    <span class="p">{</span>
+    <span class="k">return</span> <span class="nv">$request</span> <span class="o">-&gt;</span> <span class="nf">all</span><span class="p">();</span>
+    <span class="p">}</span>
 </code></pre></div></div>
 
 <p>al hacer un envio podemos ver</p>
@@ -376,24 +376,24 @@ categoria   "Desarrollo Web"
     }
 </pre>
 <p>Puedo en realidad pedir el $id e indicarle que se trata de tipo curso, laravel automaticamente hace la busqueda de el curso que tiene ese $id, el siguiente codigo daria el mismo resultado que lo anterior</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>public function edit(Curso $id)
-    {
-        return $id;
-    }
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">function</span> <span class="n">edit</span><span class="p">(</span><span class="kt">Curso</span> <span class="nv">$id</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$id</span><span class="p">;</span>
+    <span class="p">}</span>
 
 </code></pre></div></div>
 
 <p>Para forzar la directiva del metodo put en actualizaciones de formulario indicamos a Laravel dentro del formulario <code class="language-plaintext highlighter-rouge">@method('put')</code> tal que asi:</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
 
-&lt;form action="{ {route('cursos.update', $curso)}}" method="post"&gt;
+<span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"{ {route('cursos.update', $curso)}}"</span> <span class="na">method=</span><span class="s">"post"</span><span class="nt">&gt;</span>
     @csrf
     @method('put')
-    &lt;label&gt;
-        Nombre:&lt;br&gt;
-        &lt;input type="text" name="name" value="{ { $curso-&gt;name }}"&gt;&lt;br&gt;
-    &lt;/label&gt;
-    &lt;label&gt;
+    <span class="nt">&lt;label&gt;</span>
+        Nombre:<span class="nt">&lt;br&gt;</span>
+        <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"name"</span> <span class="na">value=</span><span class="s">"{ { $curso-&gt;name }}"</span><span class="nt">&gt;&lt;br&gt;</span>
+    <span class="nt">&lt;/label&gt;</span>
+    <span class="nt">&lt;label&gt;</span>
     ...
 </code></pre></div></div>
 
@@ -445,7 +445,7 @@ y modificamos donde dice <code class="language-plaintext highlighter-rouge">loca
 <p>Por defecto cada vez que se envia el formulario cuando falta algun campo todo el formulario se vacia, aun cuando se captuaran los errores, lo correcto seria conservar los campos que hayan sido lleados, esto se consigue con la propiedad <strong>old</strong> en el formulario. por ejemplo para create.
 los campos quedarian  quedarian de la siguiente forma</p>
 
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &lt;form action="" method="post"&gt;
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &lt;form action="{ {route('cursos.store')} }" method="post"&gt;
     @csrf
     &lt;label&gt;
         Nombre:&lt;br&gt;
@@ -453,7 +453,7 @@ los campos quedarian  quedarian de la siguiente forma</p>
     &lt;/label&gt;
     &lt;br&gt;
     @error('name')
-    * 
+    * { {$message} }
     @enderror
     &lt;br&gt;
     &lt;button type="submit"&gt;Enviar formulario&lt;/button&gt;
@@ -480,88 +480,89 @@ para eso usamos un segundo parametro</p>
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>php artisan make:request StoreCurso
 </code></pre></div></div>
 <p>Esto crea un archivo App/Http/Request/StoreCurso.php que luce asi:</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;?php
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
 
-namespace App\Http\Requests;
+<span class="kn">namespace</span> <span class="nn">App\Http\Requests</span><span class="p">;</span>
 
-use Illuminate\Foundation\Http\FormRequest;
+<span class="kn">use</span> <span class="nc">Illuminate\Foundation\Http\FormRequest</span><span class="p">;</span>
 
-class StoreCurso extends FormRequest
-{
-    /**
+<span class="kd">class</span> <span class="nc">StoreCurso</span> <span class="kd">extends</span> <span class="nc">FormRequest</span>
+<span class="p">{</span>
+    <span class="cd">/**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
-     */
-    public function authorize()
-    {
-        return false;
-    }
+     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">authorize</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    /**
+    <span class="cd">/**
      * Get the validation rules that apply to the request.
      *
      * @return array
-     */
-    public function rules()
-    {
-        return [
-            //
-        ];
-    }
-}
+     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">rules</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="c1">//</span>
+        <span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div></div>
 
 <p>Este archivo se separa en 2 partes una para las reglas de atenticacion que se deben cumplir, le indicamos en la funcion authorize que retorne true, ya que no vamos a usar esas reglas.</p>
 
 <p>en la funcion rules definimos las relgas que habriamos definido en un validate. y luego le pasamos el Request al Controlador para que pueda usar estas reglas. luego terminamos incluyendolo en el tipo de dato del request
-asi:
-Archivo storeCurso.php</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;?php
+asi:</p>
 
-namespace App\Http\Requests;
+<p>Archivo storeCurso.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
 
-use Illuminate\Foundation\Http\FormRequest;
+<span class="kn">namespace</span> <span class="nn">App\Http\Requests</span><span class="p">;</span>
 
-class StoreCurso extends FormRequest
-{
-    /**
+<span class="kn">use</span> <span class="nc">Illuminate\Foundation\Http\FormRequest</span><span class="p">;</span>
+
+<span class="kd">class</span> <span class="nc">StoreCurso</span> <span class="kd">extends</span> <span class="nc">FormRequest</span>
+<span class="p">{</span>
+    <span class="cd">/**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
-     */
-    public function authorize()
-    {
-        return true;
-    }
+     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">authorize</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    /**
+    <span class="cd">/**
      * Get the validation rules that apply to the request.
      *
      * @return array
-     */
-    public function rules()
-    {
-        return [
-            'name' =&gt; 'required',
-            'descripcion' =&gt; 'required',
-            'categoria' =&gt; 'required'
-        ];
-    }
-}
+     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">rules</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="s1">'name'</span> <span class="o">=&gt;</span> <span class="s1">'required'</span><span class="p">,</span>
+            <span class="s1">'descripcion'</span> <span class="o">=&gt;</span> <span class="s1">'required'</span><span class="p">,</span>
+            <span class="s1">'categoria'</span> <span class="o">=&gt;</span> <span class="s1">'required'</span>
+        <span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 </code></pre></div></div>
 
 <p>en el controlador usamos este archivo</p>
-<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;?php
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
 
-namespace App\Http\Controllers;
+<span class="kn">namespace</span> <span class="nn">App\Http\Controllers</span><span class="p">;</span>
 
-use App\Models\Curso;
-use Illuminate\Http\Request;
-use App\Http\Requests\StoreCurso           &lt;===== HERE
+<span class="kn">use</span> <span class="nc">App\Models\Curso</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Illuminate\Http\Request</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">App\Http\Requests\StoreCurso</span>           <span class="o">&lt;=====</span> <span class="no">HERE</span>
 
-class CursoController extends Controller
-{
+<span class="kd">class</span> <span class="nc">CursoController</span> <span class="kd">extends</span> <span class="nc">Controller</span>
+<span class="p">{</span>
 </code></pre></div></div>
 
 <p>y luego eliminamos las reglas validate y cambiamos el parametro en la funcion store

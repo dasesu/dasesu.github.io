@@ -18,7 +18,7 @@
 <meta property="og:type" content="article" />
 <meta property="article:published_time" content="2021-04-17T16:23:10-04:00" />
 <script type="application/ld+json">
-{"datePublished":"2021-04-17T16:23:10-04:00","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/programming/php/2021/04/17/laravel.html"},"url":"http://localhost:4000/programming/php/2021/04/17/laravel.html","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/img/logo.png"},"name":"dasesu"},"author":{"@type":"Person","name":"dasesu"},"headline":"Laravel 3","dateModified":"2021-04-17T16:23:10-04:00","description":"Asignacion masiva:","@context":"https://schema.org"}</script>
+{"@type":"BlogPosting","headline":"Laravel 3","dateModified":"2021-04-17T16:23:10-04:00","datePublished":"2021-04-17T16:23:10-04:00","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/img/logo.png"},"name":"dasesu"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/programming/php/2021/04/17/laravel.html"},"author":{"@type":"Person","name":"dasesu"},"description":"Asignacion masiva:","url":"http://localhost:4000/programming/php/2021/04/17/laravel.html","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 
     <meta name="author" content="dasesu" />
@@ -244,6 +244,119 @@ dasesu@pchome:~/Desktop/Laravel$ php artisan r:l
 +--------+-----------+----------------------------+----------------+----------------------------------------------+------------+
 </pre>
 
+<h2 id="pretty-urls">Pretty URLS</h2>
+<p>En el modelo creamos una tabla llamada <code class="language-plaintext highlighter-rouge">slug</code>, para eso vamos a database/migration y seleccionamos el archivo que nos interesa y agregamos en el un campo slug :</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    public function up()
+    {
+        Schema::create('cursos', function (Blueprint $table) {
+            $table-&gt;id();
+            $table-&gt;string('name');
+            $table-&gt;string('slug');
+            $table-&gt;text('descripcion');
+            $table-&gt;text('categoria');
+            $table-&gt;timestamps();
+        });
+    }
+</code></pre></div></div>
+
+<p>Luego vamos al Factory factorise/CursoFactory y modificamos la definición  agregando un helper que va a reemplazar espacios por guiones: 
+Debemos incluir en el archivo la llamada a Illuminate\Support\Str</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">use</span> <span class="nc">Illuminate\Support\Str</span>
+<span class="mf">...</span>
+
+    
+    <span class="k">public</span> <span class="k">function</span> <span class="n">definition</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$name</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span> <span class="n">faker</span><span class="o">-&gt;</span><span class="nf">sentence</span><span class="p">();</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="s1">'name'</span> <span class="o">=&gt;</span> <span class="nv">$name</span><span class="p">,</span>
+            <span class="s1">'slug'</span> <span class="o">=&gt;</span>  <span class="nc">Str</span><span class="o">::</span><span class="nf">slug</span><span class="p">(</span><span class="nv">$name</span><span class="p">,</span> <span class="s1">'-'</span><span class="p">),</span>
+            <span class="s1">'descripcion'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span> <span class="n">faker</span><span class="o">-&gt;</span> <span class="nf">paragraph</span><span class="p">(),</span>
+            <span class="s1">'categoria'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span> <span class="n">faker</span><span class="o">-&gt;</span> <span class="nf">randomElement</span><span class="p">([</span><span class="s1">'Desarrollo Web'</span><span class="p">,</span><span class="s1">'Diseño Web'</span><span class="p">])</span>
+        <span class="p">];</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p>Luego realizamos la migracion con</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>php artisan migrate:fresh --seed
+</code></pre></div></div>
+
+<p>Hasta ahora se ha creado el slug correctamente en base de datos, pero no le he indicado a Laravel que use el campo slug para recuperar el objeto tal como hace con el id, basicamente latex hace algo parecido a Curso::find($curso) donde curso es una id, pero si le digo que busque por otro campo que no vaya a repetirse, laravel deberia resolver la misma situación, para hacer esto vamos al modelo Curso en App/Models/Curso.php . ese objeto hereda de Illuminate\Database\Eloquent\Model que contiene metodos que definen el comportamiento de los modelos para laravel, alli buscamos la función  getRouteKeyname()</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">public</span> <span class="k">function</span> <span class="n">getRouteKeyName</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">getKeyName</span><span class="p">();</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p>getKeyName le indica a Laravel que tome il Id como clave para definir la url, si cambio el contenido a la siguiente forma, las urls se generarian por el slug y no mas por el id. Para conseguir las urls amigables no vamos a reemplazar codigo de latex, pero vamos a reescribir esa funcion dentro de nuestro modelo Curso.</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">public</span> <span class="k">function</span> <span class="n">getRouteKeyName</span><span class="p">()</span>
+    <span class="p">{</span>
+    <span class="c1">//    return $this-&gt;getKeyName();</span>
+          <span class="k">return</span> <span class="s1">'slug'</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p>Model\Curso.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+
+<span class="kn">namespace</span> <span class="nn">App\Models</span><span class="p">;</span>
+
+<span class="kn">use</span> <span class="nc">Illuminate\Database\Eloquent\Factories\HasFactory</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Illuminate\Database\Eloquent\Model</span><span class="p">;</span>
+
+<span class="kd">class</span> <span class="nc">Curso</span> <span class="kd">extends</span> <span class="nc">Model</span>
+<span class="p">{</span>
+    <span class="kn">use</span> <span class="nc">HasFactory</span><span class="p">;</span>
+    <span class="k">protected</span> <span class="nv">$fillable</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'name'</span><span class="p">,</span><span class="s1">'descripcion'</span><span class="p">,</span><span class="s1">'categoria'</span><span class="p">];</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">getRouteKeyName</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="s1">'slug'</span><span class="p">;</span>
+    <span class="p">}</span>
+    
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Esto deja un problema presente y es que cuando se crean nuevos Cursos no se está creando el slug correspondiente, una solución es crear el campo slug en el formulario, una mejor idea es usar una función que autogenere el nombre del campo automaticamente y lo muestre al usuario, para que el usuario no tenga que reescribir la url que va a quedar.</p>
+
+<p>Otra solución puede ser modificar el Controlador para que tome la variable antes de crearla en el modelo y cree el campo slug de la siguiente forma:</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">public</span> <span class="k">function</span> <span class="n">store</span><span class="p">(</span><span class="kt">Request</span> <span class="nv">$request</span><span class="p">)</span>
+    <span class="p">{</span>
+
+        
+        <span class="nv">$curso</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">Curso</span><span class="p">();</span>
+        <span class="nv">$curso</span><span class="o">-&gt;</span><span class="n">name</span> <span class="o">=</span> <span class="nv">$request</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">;</span>
+        <span class="nv">$curso</span><span class="o">-&gt;</span><span class="n">slug</span> <span class="o">=</span> <span class="nc">Str</span><span class="o">::</span><span class="nf">slug</span><span class="p">(</span><span class="nv">$request</span><span class="o">-&gt;</span><span class="n">name</span><span class="p">,</span> <span class="s1">'-'</span><span class="p">);</span>
+        <span class="nv">$curso</span><span class="o">-&gt;</span><span class="n">descripcion</span> <span class="o">=</span> <span class="nv">$request</span><span class="o">-&gt;</span><span class="n">descripcion</span><span class="p">;</span>
+        <span class="nv">$curso</span><span class="o">-&gt;</span><span class="n">categoria</span> <span class="o">=</span> <span class="nv">$request</span><span class="o">-&gt;</span><span class="n">categoria</span><span class="p">;</span>
+        <span class="nv">$curso</span><span class="o">-&gt;</span><span class="nf">save</span><span class="p">();</span>
+
+</code></pre></div></div>
+<p>Un problema con la solución anterior es que nuevamente la variable $request es del tipo Request y no del tipo StoreCurso, asi que  se pierde la posibilidad de hacer asignación masiva.
+ Mas adelante se veran otras soluciones para esto.</p>
+
+<h2 id="navegavilidad">Navegavilidad</h2>
+
+<p>Para poder accionar segun la url en la que nos encontremos necesitamos un metodo que nos permita preguntar donde estamos, laravel provee este metodo, en nuetra vista *.blade.php , la funcion routeIs devuelve true si me encuentro en la url que le paso por parametro y false en caso contrario</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;?php
+    dump(request()-&gt;routeIs('home')); 
+?&gt;
+</code></pre></div></div>
+
+<p>Blade además me permite abreviar un poco esa instruccion asi</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@dump(request()-&gt;routeIs('home')); 
+</code></pre></div></div>
+
+<p>Usando estilos usariamos esto de esta forma</p>
+<div class="language-css highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">&lt;</span><span class="nt">class</span><span class="o">=</span><span class="p">{</span> <span class="err">{</span> <span class="err">request()-&gt;routeIs('home')</span> <span class="err">?</span> <span class="err">'active'</span> <span class="err">:</span> <span class="err">''</span> <span class="p">}</span> <span class="err">}</span> <span class="o">//</span> <span class="nt">esto</span> <span class="nt">es</span> <span class="nt">como</span> <span class="nt">preguntar</span> <span class="nt">if</span> <span class="s2">'active'</span> <span class="nt">else</span> <span class="s2">''</span>
+</code></pre></div></div>
+
+<p>Con esto en mente podemos agregar estilos y mostrar lo que queramos segun la url en la que nos encontremos, el metodo routeIs puede ademas recibir parametros de la forma (‘cursos.*’) es decir cualquier pagina que tenga empiece por cursos.</p>
+
+<h2 id="incluir-archivos--en-blade">Incluir archivos  en blade</h2>
+<p>Supongamos que queremos separar la estructura de una plantilla en header, body, footer, creamos estos archivos en views/layouts/partials/ y alli creamos archivos header, body, footer, para llamar header por ejemplo desde plantilla.blade.php usamos la primitiva @include() y debemos indicarle la ruta donde se encuentra el archivo a incluir, viendola partiendo de la carpeta views asi:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@include('layout.partials.header')
+</code></pre></div></div>
 
 
 
@@ -255,7 +368,7 @@ dasesu@pchome:~/Desktop/Laravel$ php artisan r:l
   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
   
   
-    <a class="next" href="/security/2021/04/18/dvwa.html">Next Post &raquo;</a>
+    <a class="next" href="/programming/php/2021/04/18/laravel.html">Next Post &raquo;</a>
   
 </div>
       

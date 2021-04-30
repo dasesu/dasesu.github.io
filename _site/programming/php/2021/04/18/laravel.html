@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Laravel 4 | Field Notes</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Laravel 4" />
+<meta name="author" content="dasesu" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Enviar Emails: Conectarnos con proveedor de correo electronico, por ejemplo Gmail es decir SMTP Para configurar el proyecto laravel para que nos permita enviar correos electronicos desde una cuenta SMTP tenemos que ir al archivo config/mail.php estos archivos de configuración suelen tomar muchas variables del archivo ENV en su defecto toma a configuración definida en el archivo mail.php" />
+<meta property="og:description" content="Enviar Emails: Conectarnos con proveedor de correo electronico, por ejemplo Gmail es decir SMTP Para configurar el proyecto laravel para que nos permita enviar correos electronicos desde una cuenta SMTP tenemos que ir al archivo config/mail.php estos archivos de configuración suelen tomar muchas variables del archivo ENV en su defecto toma a configuración definida en el archivo mail.php" />
+<link rel="canonical" href="http://localhost:4000/programming/php/2021/04/18/laravel.html" />
+<meta property="og:url" content="http://localhost:4000/programming/php/2021/04/18/laravel.html" />
+<meta property="og:site_name" content="Field Notes" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-04-18T16:23:10-04:00" />
+<script type="application/ld+json">
+{"@type":"BlogPosting","headline":"Laravel 4","dateModified":"2021-04-18T16:23:10-04:00","datePublished":"2021-04-18T16:23:10-04:00","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/img/logo.png"},"name":"dasesu"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/programming/php/2021/04/18/laravel.html"},"author":{"@type":"Person","name":"dasesu"},"description":"Enviar Emails: Conectarnos con proveedor de correo electronico, por ejemplo Gmail es decir SMTP Para configurar el proyecto laravel para que nos permita enviar correos electronicos desde una cuenta SMTP tenemos que ir al archivo config/mail.php estos archivos de configuración suelen tomar muchas variables del archivo ENV en su defecto toma a configuración definida en el archivo mail.php","url":"http://localhost:4000/programming/php/2021/04/18/laravel.html","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta name="author" content="dasesu" />
+    <meta name="description" content="Laravel 4" />
+    <meta name="keywords" content="Laravel 4, Field Notes, programming, php" />
+	
+	  <link rel="stylesheet" href="/assets/css/bootstrap.min.css?v=" >
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <link rel="stylesheet" href="/assets/css/mystyle.css?v=">
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+           
+        <nav>
+        <ul class="nav nav-pills pull-right">
+        	<li><a class="navigationside" href="/">Home</a></li>
+          
+              <li><a class="navigationside" href="/contact">Contact Me</a></li>
+            
+        </nav>
+        <h3 class="text-muted"><a href="/">Field Notes</a></h3>
+        <hr>
+
+      
+
+<h1 class="inner_post_title">Laravel 4</h1>
+<span class="view">by dasesu</span> - <span class="time">18 Apr 2021</span>
+
+<div class="tags"> Category
+&raquo; <a href="/category/programming">programming</a>, <a href="/category/php">php</a>
+</div>
+
+<br>
+
+<h2 id="enviar-emails">Enviar Emails:</h2>
+<p>Conectarnos con proveedor de correo electronico, por ejemplo Gmail  es decir SMTP
+Para configurar  el proyecto laravel para que nos permita enviar correos electronicos desde  una cuenta SMTP tenemos que ir al archivo <strong>config/mail.php</strong> estos archivos de configuración suelen tomar muchas variables del archivo ENV en su defecto toma a configuración definida en el archivo mail.php</p>
+
+<p>Para pruebas usamos <a href="mailtrap.io">mailtrap.io</a></p>
+
+<p>dentro de las opciones tengo un correo de pruebas entre las opciones de lenguaje o tecnologia aparecen las de laravel</p>
+<pre>
+MAIL_MAILER=smtp
+MAIL_HOST=smtp.mailtrap.io
+MAIL_PORT=2525
+MAIL_USERNAME=17ae643a49da25
+MAIL_PASSWORD=c316a1953dc441
+MAIL_ENCRYPTION=tls
+</pre>
+
+<p>Para poder enviar un email creamos un mailable</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>php artisan make:mail ContactanosMailable
+</code></pre></div></div>
+
+<p>El comando anterior crea un archivo <strong>Mail/ContactanosMailable.php</strong> dentro de la carpeta App</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+
+<span class="kn">namespace</span> <span class="nn">App\Mail</span><span class="p">;</span>
+
+<span class="kn">use</span> <span class="nc">Illuminate\Bus\Queueable</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Illuminate\Contracts\Queue\ShouldQueue</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Illuminate\Mail\Mailable</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Illuminate\Queue\SerializesModels</span><span class="p">;</span>
+
+<span class="kd">class</span> <span class="nc">ContactanosMailable</span> <span class="kd">extends</span> <span class="nc">Mailable</span>
+<span class="p">{</span>
+    <span class="kn">use</span> <span class="nc">Queueable</span><span class="p">,</span> <span class="nc">SerializesModels</span><span class="p">;</span>
+
+    <span class="cd">/**
+     * Create a new message instance.
+     *
+     * @return void
+     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">__construct</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">//</span>
+    <span class="p">}</span>
+
+    <span class="cd">/**
+     * Build the message.
+     *
+     * @return $this
+     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">build</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">view</span><span class="p">(</span><span class="s1">'view.name'</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p>En este archivo podemos agregar vistas e información por ejemplo el <strong>subject</strong>, y el contenido del email. La funcion build retorna una vista, tal como si de un controlador se tratase carga la vista posteriormente para enviarla al correo, estas vistas tambien son del tipo blade.php y se cren dentro de la carpeta viwes, por ejemplo si creamos una vista dentro del <strong>emails</strong> llamada <strong>contactanos.blade.php</strong> en la funcion build la llamariamos $this-&gt;view(‘<strong>emails.contactanos</strong>’), estos cambios basicos lucirian asi:</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+
+<span class="kn">namespace</span> <span class="nn">App\Mail</span><span class="p">;</span>
+
+<span class="kn">use</span> <span class="nc">Illuminate\Bus\Queueable</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Illuminate\Contracts\Queue\ShouldQueue</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Illuminate\Mail\Mailable</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Illuminate\Queue\SerializesModels</span><span class="p">;</span>
+
+<span class="kd">class</span> <span class="nc">ContactanosMailable</span> <span class="kd">extends</span> <span class="nc">Mailable</span>
+<span class="p">{</span>
+    <span class="kn">use</span> <span class="nc">Queueable</span><span class="p">,</span> <span class="nc">SerializesModels</span><span class="p">;</span>
+    <span class="k">public</span> <span class="nv">$subject</span> <span class="o">=</span> <span class="s2">"información de contacto"</span><span class="p">;</span>
+    <span class="cd">/**
+     * Create a new message instance.
+     *
+     * @return void
+     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">__construct</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">//</span>
+    <span class="p">}</span>
+
+    <span class="cd">/**
+     * Build the message.
+     *
+     * @return $this
+     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">build</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">view</span><span class="p">(</span><span class="s1">'emails.contactanos'</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p>El archivo contactanos.blade.php contiene un archivo html por ejmplo asi:</p>
+
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;title&gt;</span>contactanos<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+    <span class="nt">&lt;h1&gt;</span>Correo Electronico<span class="nt">&lt;/h1&gt;</span>
+    <span class="nt">&lt;p&gt;</span>Este es el primer correo que mandaré por laravel<span class="nt">&lt;/p&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>Para enviar el correo creo por ejemplo una ruta dentro de <strong>routes/web.php</strong> debo incluir las llamadas</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>use App\Mail\ContactanosMailable;
+use Illuminate\Support\Facades\Mail;
+</code></pre></div></div>
+
+<p>y luego crea una instancia de <code class="language-plaintext highlighter-rouge">ContactanosMailable</code> , y definimos con la clase mail a quien enviaremos el correo junto con el correo.</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code> <span class="nv">$correo</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ContactanosMailable</span><span class="p">;</span>
+    <span class="nc">Mail</span><span class="o">::</span><span class="nf">to</span><span class="p">(</span><span class="s1">'dasesumail@gmail.com'</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">send</span><span class="p">(</span><span class="nv">$correo</span><span class="p">);</span>
+    <span class="k">return</span> <span class="s2">"mensaje enviado"</span><span class="p">;</span>
+</code></pre></div></div>
+
+<p>El archivo de rutas quedaria asi, pero por supuesto esto podria llevarse a un controlador:</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+
+<span class="kn">use</span> <span class="nc">Illuminate\Support\Facades\Route</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">App\Http\Controllers\PageController</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">App\Http\Controllers\CursoController</span><span class="p">;</span>
+
+<span class="kn">use</span> <span class="nc">App\Mail\ContactanosMailable</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Illuminate\Support\Facades\Mail</span><span class="p">;</span>
+
+<span class="nc">Route</span><span class="o">::</span><span class="nf">get</span><span class="p">(</span><span class="s1">'/'</span><span class="p">,</span> <span class="nc">PageController</span><span class="o">::</span><span class="nc">Class</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">name</span><span class="p">(</span><span class="s1">'home'</span><span class="p">);</span>
+
+<span class="nc">Route</span><span class="o">::</span><span class="nf">resource</span><span class="p">(</span><span class="s1">'cursos'</span><span class="p">,</span> <span class="nc">CursoController</span><span class="o">::</span><span class="nc">Class</span><span class="p">);</span>
+
+<span class="nc">Route</span><span class="o">::</span><span class="nf">get</span><span class="p">(</span><span class="s1">'contactanos'</span><span class="p">,</span> <span class="k">function</span><span class="p">(){</span>
+    <span class="nv">$correo</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ContactanosMailable</span><span class="p">;</span>
+    <span class="nc">Mail</span><span class="o">::</span><span class="nf">to</span><span class="p">(</span><span class="s1">'dasesumail@gmail.com'</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">send</span><span class="p">(</span><span class="nv">$correo</span><span class="p">);</span>
+    <span class="k">return</span> <span class="s2">"mensaje enviado"</span><span class="p">;</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<h2 id="enviando-mensajes-desde-un-formulario">enviando mensajes desde un formulario</h2>
+
+<p>Creamos un controlador llamado ContactanosController, alli creo dos funciones una index que se va a encargar de llamar a la vista y una store que se va a encargar de procesar el envio</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+
+<span class="kn">namespace</span> <span class="nn">App\Http\Controllers</span><span class="p">;</span>
+
+<span class="kn">use</span> <span class="nc">Illuminate\Http\Request</span><span class="p">;</span>
+
+<span class="c1"># Mail </span>
+<span class="kn">use</span> <span class="nc">App\Mail\ContactanosMailable</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Illuminate\Support\Facades\Mail</span><span class="p">;</span>
+
+<span class="kd">class</span> <span class="nc">ContactanosController</span> <span class="kd">extends</span> <span class="nc">Controller</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">index</span><span class="p">(){</span>
+        <span class="k">return</span> <span class="nf">view</span><span class="p">(</span><span class="s1">'contactanos.index'</span><span class="p">);</span>
+    <span class="p">}</span>
+    
+    <span class="k">public</span> <span class="k">function</span> <span class="n">store</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$correo</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ContactanosMailable</span><span class="p">;</span>
+        <span class="nc">Mail</span><span class="o">::</span><span class="nf">to</span><span class="p">(</span><span class="s1">'dasesumail@gmail.com'</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">send</span><span class="p">(</span><span class="nv">$correo</span><span class="p">);</span>
+        <span class="k">return</span> <span class="s2">"mensaje enviado"</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Modificamos nuestro archivo de ruta para que la funcion se encuentre en el controlador y no en las rutas:</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+
+<span class="kn">use</span> <span class="nc">Illuminate\Support\Facades\Route</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">App\Http\Controllers\PageController</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">App\Http\Controllers\CursoController</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">App\Http\Controllers\ContactanosController</span><span class="p">;</span>
+
+<span class="nc">Route</span><span class="o">::</span><span class="nf">get</span><span class="p">(</span><span class="s1">'/'</span><span class="p">,</span> <span class="nc">PageController</span><span class="o">::</span><span class="nc">Class</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">name</span><span class="p">(</span><span class="s1">'home'</span><span class="p">);</span>
+
+<span class="nc">Route</span><span class="o">::</span><span class="nf">get</span><span class="p">(</span><span class="s1">'cursos'</span><span class="p">,</span> <span class="p">[</span><span class="nc">CursoController</span><span class="o">::</span><span class="nc">Class</span><span class="p">,</span> <span class="s1">'index'</span><span class="p">])</span><span class="o">-&gt;</span><span class="nf">name</span><span class="p">(</span><span class="s1">'cursos.index'</span><span class="p">);</span>
+<span class="nc">Route</span><span class="o">::</span><span class="nf">get</span><span class="p">(</span><span class="s1">'cursos/create'</span><span class="p">,</span> <span class="p">[</span><span class="nc">CursoController</span><span class="o">::</span><span class="nc">Class</span><span class="p">,</span> <span class="s1">'create'</span><span class="p">])</span><span class="o">-&gt;</span><span class="nf">name</span><span class="p">(</span><span class="s1">'cursos.create'</span><span class="p">);</span>
+<span class="nc">Route</span><span class="o">::</span><span class="nf">post</span><span class="p">(</span><span class="s1">'cursos'</span><span class="p">,</span> <span class="p">[</span><span class="nc">CursoController</span><span class="o">::</span><span class="nc">Class</span><span class="p">,</span> <span class="s1">'store'</span><span class="p">])</span><span class="o">-&gt;</span><span class="nf">name</span><span class="p">(</span><span class="s1">'cursos.store'</span><span class="p">);</span>
+<span class="nc">Route</span><span class="o">::</span><span class="nf">get</span><span class="p">(</span><span class="s1">'cursos/{curso}'</span><span class="p">,</span> <span class="p">[</span><span class="nc">CursoController</span><span class="o">::</span><span class="nc">Class</span><span class="p">,</span> <span class="s1">'show'</span><span class="p">])</span><span class="o">-&gt;</span><span class="nf">name</span><span class="p">(</span><span class="s1">'cursos.show'</span><span class="p">);</span>
+<span class="nc">Route</span><span class="o">::</span><span class="nf">get</span><span class="p">(</span><span class="s1">'cursos/{curso}/edit'</span><span class="p">,</span> <span class="p">[</span><span class="nc">CursoController</span><span class="o">::</span><span class="nc">Class</span><span class="p">,</span> <span class="s1">'edit'</span><span class="p">])</span><span class="o">-&gt;</span><span class="nf">name</span><span class="p">(</span><span class="s1">'cursos.edit'</span><span class="p">);</span>
+<span class="nc">Route</span><span class="o">::</span><span class="nf">put</span><span class="p">(</span><span class="s1">'cursos/{curso}'</span><span class="p">,</span> <span class="p">[</span><span class="nc">CursoController</span><span class="o">::</span><span class="nc">Class</span><span class="p">,</span> <span class="s1">'update'</span><span class="p">])</span><span class="o">-&gt;</span><span class="nf">name</span><span class="p">(</span><span class="s1">'cursos.update'</span><span class="p">);</span>
+<span class="nc">Route</span><span class="o">::</span><span class="nb">delete</span><span class="p">(</span><span class="s1">'cursos/{curso}'</span><span class="p">,[</span><span class="nc">CursoController</span><span class="o">::</span><span class="nc">Class</span><span class="p">,</span> <span class="s1">'destroy'</span><span class="p">])</span><span class="o">-&gt;</span><span class="nf">name</span><span class="p">(</span><span class="s1">'cursos.destroy'</span><span class="p">);</span>
+
+<span class="nc">Route</span><span class="o">::</span><span class="nf">get</span><span class="p">(</span><span class="s1">'contactanos'</span><span class="p">,</span> <span class="p">[</span><span class="nc">ContactanosController</span><span class="o">::</span><span class="nc">Class</span><span class="p">,</span> <span class="s1">'index'</span><span class="p">])</span><span class="o">-&gt;</span><span class="nf">name</span><span class="p">(</span><span class="s1">'contactanos.index'</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>y creamos la vista dentro **/resources/views/contactanos/indx,blade.php</p>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@extends('layouts.plantilla')
+
+@section('title','Contactanos')
+
+@section('content')
+<span class="cp">&lt;?php echo "&lt;h1&gt;Dejanos un mensaje&lt;/h1&gt;"; ?&gt;</span>
+
+<span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">" { {route('contactanos.store')} }"</span> <span class="na">method=</span><span class="s">"post"</span><span class="nt">&gt;</span>
+    
+    @csrf
+
+    <span class="nt">&lt;label&gt;</span>
+        Nombre:
+        <span class="nt">&lt;br&gt;</span>
+        <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"name"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;br&gt;</span>
+    <span class="nt">&lt;/label&gt;</span>
+
+    <span class="nt">&lt;label&gt;</span>
+        Correo:
+        <span class="nt">&lt;br&gt;</span>
+        <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"correo"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;br&gt;</span>
+    <span class="nt">&lt;/label&gt;</span>
+
+    <span class="nt">&lt;label&gt;</span>
+        Mensajes:
+        <span class="nt">&lt;br&gt;</span>
+        <span class="nt">&lt;textarea</span> <span class="na">name=</span><span class="s">"mensaje"</span> <span class="na">rows=</span><span class="s">4</span><span class="nt">&gt;&lt;/textarea&gt;</span>
+        <span class="nt">&lt;br&gt;</span>
+    <span class="nt">&lt;/label&gt;</span>
+
+    <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"submit"</span><span class="nt">&gt;</span>Enviar mensaje<span class="nt">&lt;/button&gt;</span>
+    
+<span class="nt">&lt;/form&gt;</span>
+
+@endsection
+</code></pre></div></div>
+<p>Este formulario se envia a la función contactanos.store  pero debemos aregar la ruta en web.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+<span class="mf">...</span>
+<span class="nc">Route</span><span class="o">::</span><span class="nf">get</span><span class="p">(</span><span class="s1">'contactanos'</span><span class="p">,</span> <span class="p">[</span><span class="nc">ContactanosController</span><span class="o">::</span><span class="nc">Class</span><span class="p">,</span> <span class="s1">'index'</span><span class="p">])</span><span class="o">-&gt;</span><span class="nf">name</span><span class="p">(</span><span class="s1">'contactanos.index'</span><span class="p">);</span>
+<span class="nc">Route</span><span class="o">::</span><span class="nf">post</span><span class="p">(</span><span class="s1">'contactanos'</span><span class="p">,</span> <span class="p">[</span><span class="nc">ContactanosController</span><span class="o">::</span><span class="nc">Class</span><span class="p">,</span> <span class="s1">'store'</span><span class="p">])</span><span class="o">-&gt;</span><span class="nf">name</span><span class="p">(</span><span class="s1">'contactanos.store'</span><span class="p">);</span>
+</code></pre></div></div>
+<p>Y modificamos la función contactanos.store para que sea capaz de recibir esos campos y reenviarlos a  ContactanosMailable.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+
+<span class="kn">namespace</span> <span class="nn">App\Http\Controllers</span><span class="p">;</span>
+
+<span class="kn">use</span> <span class="nc">Illuminate\Http\Request</span><span class="p">;</span>
+
+<span class="c1"># Mail </span>
+<span class="kn">use</span> <span class="nc">App\Mail\ContactanosMailable</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Illuminate\Support\Facades\Mail</span><span class="p">;</span>
+
+<span class="kd">class</span> <span class="nc">ContactanosController</span> <span class="kd">extends</span> <span class="nc">Controller</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">index</span><span class="p">(){</span>
+        <span class="k">return</span> <span class="nf">view</span><span class="p">(</span><span class="s1">'contactanos.index'</span><span class="p">);</span>
+    <span class="p">}</span>
+    
+    <span class="k">public</span> <span class="k">function</span> <span class="n">store</span><span class="p">(</span><span class="kt">Request</span> <span class="nv">$request</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$correo</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ContactanosMailable</span><span class="p">(</span><span class="nv">$request</span><span class="o">-&gt;</span><span class="nf">all</span><span class="p">());</span>
+        <span class="nc">Mail</span><span class="o">::</span><span class="nf">to</span><span class="p">(</span><span class="s1">'dasesumail@gmail.com'</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">send</span><span class="p">(</span><span class="nv">$correo</span><span class="p">);</span>
+        <span class="k">return</span> <span class="s2">"mensaje enviado"</span><span class="p">;</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</code></pre></div></div>
+<p>y en el constructor de la función ContactanosMailable.php recibimos esos datos quedando asi</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+
+<span class="kn">namespace</span> <span class="nn">App\Mail</span><span class="p">;</span>
+
+<span class="kn">use</span> <span class="nc">Illuminate\Bus\Queueable</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Illuminate\Contracts\Queue\ShouldQueue</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Illuminate\Mail\Mailable</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Illuminate\Queue\SerializesModels</span><span class="p">;</span>
+
+<span class="kd">class</span> <span class="nc">ContactanosMailable</span> <span class="kd">extends</span> <span class="nc">Mailable</span>
+<span class="p">{</span>
+    <span class="kn">use</span> <span class="nc">Queueable</span><span class="p">,</span> <span class="nc">SerializesModels</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nv">$subject</span> <span class="o">=</span> <span class="s2">"información de contacto"</span><span class="p">;</span>
+    <span class="k">public</span> <span class="nv">$contacto</span><span class="p">;</span>
+    <span class="cd">/**
+     * Create a new message instance.
+     *
+     * @return void
+     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">__construct</span><span class="p">(</span><span class="nv">$contacto</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">contacto</span> <span class="o">=</span> <span class="nv">$contacto</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="cd">/**
+     * Build the message.
+     *
+     * @return $this
+     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">build</span><span class="p">()</span>
+    <span class="p">{</span>
+
+        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">view</span><span class="p">(</span><span class="s1">'emails.contactanos'</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+<p>En el codigo anterior recuperamos los campos del formulario por la variable $contacto, que a su vez se encuentra definida en la clase de forma publica asi, al reescribir el contenido de la variable con el <code class="language-plaintext highlighter-rouge">$this-&gt;contacto = $contacto</code> recibe lo que recibiimos del formulario, luego desde <strong>emails.contactanos</strong> podemos enviar cada dato de este arreglo de valores asi:</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">{</span> <span class="p">{</span> <span class="nv">$contacto</span><span class="p">[</span><span class="s1">'name'</span><span class="p">]</span> <span class="p">}</span> <span class="p">}</span>
+<span class="p">{</span> <span class="p">{</span> <span class="nv">$contacto</span><span class="p">[</span><span class="s1">'correo'</span><span class="p">]</span> <span class="p">}</span> <span class="p">}</span>
+<span class="p">{</span> <span class="p">{</span> <span class="nv">$contacto</span><span class="p">[</span><span class="s1">'mensaje'</span><span class="p">]</span> <span class="p">}</span> <span class="p">}</span>
+</code></pre></div></div>
+
+<p>Para mejorar esto podriamos agregar un validate al formulario en el contactanos.store</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    
+    <span class="k">public</span> <span class="k">function</span> <span class="n">store</span><span class="p">(</span><span class="kt">Request</span> <span class="nv">$request</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$request</span><span class="o">-&gt;</span><span class="nf">validate</span><span class="p">([</span>
+            <span class="s1">'name'</span> <span class="o">=&gt;</span> <span class="s1">'required'</span><span class="p">,</span>
+            <span class="s1">'correo'</span> <span class="o">=&gt;</span> <span class="s1">'required|email'</span><span class="p">,</span>
+            <span class="s1">'mensaje'</span> <span class="o">=&gt;</span> <span class="s1">'required'</span>
+        <span class="p">]);</span>
+        <span class="nv">$correo</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ContactanosMailable</span><span class="p">(</span><span class="nv">$request</span><span class="o">-&gt;</span><span class="nf">all</span><span class="p">());</span>
+        <span class="nc">Mail</span><span class="o">::</span><span class="nf">to</span><span class="p">(</span><span class="s1">'dasesumail@gmail.com'</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">send</span><span class="p">(</span><span class="nv">$correo</span><span class="p">);</span>
+        <span class="k">return</span> <span class="s2">"mensaje enviado"</span><span class="p">;</span>
+    <span class="p">}</span>
+
+</code></pre></div></div>
+<p>luego en el formulario mostramos los posibles mensajes de error para cada uno de los campos</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@error('name')
+    { { $message } }
+@enderror
+</code></pre></div></div>
+
+<p>Ahora para que en lugar de llevarnos a una pagina en blanco que nos diga mensaje enviado, aparezca una alerta o un mensaje en la misma pagina del formulario</p>
+
+<p>Para eso vamos a pedirle que nos redireccione a la ruta contacto.index pero ademas le vamos a pasar un mensaje de sesion <strong>return redirect()-&gt;route(‘contactanos.index’)-&gt;with(‘info’,’mensaje enviado’)</strong></p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="mf">...</span>
+<span class="s1">'correo'</span> <span class="o">=&gt;</span> <span class="s1">'required|email'</span><span class="p">,</span>
+            <span class="s1">'mensaje'</span> <span class="o">=&gt;</span> <span class="s1">'required'</span>
+        <span class="p">]);</span>
+        <span class="nv">$correo</span> <span class="o">=</span> <span class="k">new</span> <span class="nc">ContactanosMailable</span><span class="p">(</span><span class="nv">$request</span><span class="o">-&gt;</span><span class="nf">all</span><span class="p">());</span>
+        <span class="nc">Mail</span><span class="o">::</span><span class="nf">to</span><span class="p">(</span><span class="s1">'dasesumail@gmail.com'</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">send</span><span class="p">(</span><span class="nv">$correo</span><span class="p">);</span>
+        <span class="k">return</span> <span class="s2">"mensaje enviado"</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nf">redirect</span><span class="p">()</span><span class="o">-&gt;</span><span class="nf">route</span><span class="p">(</span><span class="s1">'contactanos.index'</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">with</span><span class="p">(</span><span class="s1">'info'</span><span class="p">,</span><span class="s1">'mensaje enviado'</span><span class="p">);</span>
+</code></pre></div></div>
+
+<p>y luego hay que capturar esto desde contactanos.index asi::</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@if( session('info'))
+    &lt;script&gt;
+        alert("{ { session('info') } }");
+    &lt;/script&gt;
+@endif
+</code></pre></div></div>
+
+
+
+<div class="PageNavigation">
+  
+    <a class="prev" href="/programming/php/2021/04/17/laravel.html">&laquo; Previous Post</a>
+  
+  
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  
+  
+    <a class="next" href="/security/2021/04/18/dvwa.html">Next Post &raquo;</a>
+  
+</div>
+      
+      <span class="inner">
+      <footer>
+        <hr>
+        <p><small>Hosted on GitHub Pages </a></small></p>
+      </footer>
+      </span>
+
+    </div>
+
+	<!-- Font awesome icons -->
+    <link href="/assets/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/assets/css/syntax.css">
+    <!-- Bootstrap core CSS -->
+    
+    <!-- Fonts -->
+    
+  
+
+    <script src="/assets/js/scale.fix.js"></script>
+    
+  </body>
+</html>
