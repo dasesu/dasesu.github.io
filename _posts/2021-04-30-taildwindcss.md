@@ -9,9 +9,7 @@ categories: [linux]
 
 ## Taildwind CSS
 
-laravel 
-
-Es necesario nodejs
+Uso en Laravel. requiere de nodejs
 ```
 npm install tailwindcss
 ```
