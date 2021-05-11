@@ -8,10 +8,15 @@ categories: [linux]
 
 
 ## Taildwind CSS
-
-Uso en Laravel. requiere de nodejs
 ```
+composer create-project laravel/laravel tailwind
+npm install
 npm install tailwindcss
 ```
 
- 
+agregamos lo siguiente a nuestro archivo resources/css/app.css
+```
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+```
