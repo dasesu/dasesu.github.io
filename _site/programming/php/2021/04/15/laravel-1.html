@@ -1846,6 +1846,20 @@ MustVerifyEmail, para hacerlo vamos al modelo user y agregamos ` implements Must
 
 <p>Opciones que permite breeze son: modificar la cantidad de intentos fallidos antes de ejecutar otra accion, se pueden personalizar los mensajes, entre otras</p>
 
+<p>En jetstream que usa fortify 
+Open config/fortify.php file and uncomment the Features::emailVerification(), line.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>'features' =&gt; [
+    Features::registration(),
+    Features::resetPasswords(),
+    // Features::emailVerification(),
+    Features::updateProfileInformation(),
+    Features::updatePasswords(),
+    Features::twoFactorAuthentication([
+        'confirmPassword' =&gt; true,
+    ]),
+],
+</code></pre></div></div>
+
 <h2 id="confirmación-por-contraseña">Confirmación por contraseña</h2>
 <p>Esto consist en que ciertas tareas delicadas pueden requerir que el usuario introduzca nuevamente su contraseña</p>
 
