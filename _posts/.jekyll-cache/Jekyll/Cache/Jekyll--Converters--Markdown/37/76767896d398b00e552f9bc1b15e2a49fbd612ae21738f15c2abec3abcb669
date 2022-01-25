@@ -1,0 +1,10 @@
+I"Å<h2 id="cortar-y-volver-a-unir-archivos">Cortar y volver a unir archivos</h2>
+
+<p>Cortar: Corta un archivo en partes de 10mb</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>split -b 10m archivo prefijo
+</code></pre></div></div>
+
+<p>Unir</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cat prefijo* &gt; archivo
+</code></pre></div></div>
+:ET

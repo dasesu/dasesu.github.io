@@ -1,0 +1,283 @@
+I"�;<h2 id="taildwind-css">Taildwind CSS</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>composer create-project laravel/laravel tailwind
+npm install
+npm install tailwindcss
+</code></pre></div></div>
+
+<p>agregamos lo siguiente a nuestro archivo resources/css/app.css</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+</code></pre></div></div>
+
+<p>Luego si estamos usando laravel mix agregamos <code class="language-plaintext highlighter-rouge">require("tailwindcss"),</code> a nuestro archivo <code class="language-plaintext highlighter-rouge">webpack.mix.js</code> de modo que quede asi:</p>
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="nx">mix</span><span class="p">.</span><span class="nx">js</span><span class="p">(</span><span class="dl">'</span><span class="s1">resources/js/app.js</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">public/js</span><span class="dl">'</span><span class="p">)</span>
+    <span class="p">.</span><span class="nx">postCss</span><span class="p">(</span><span class="dl">'</span><span class="s1">resources/css/app.css</span><span class="dl">'</span><span class="p">,</span> <span class="dl">'</span><span class="s1">public/css</span><span class="dl">'</span><span class="p">,</span> <span class="p">[</span>
+        <span class="nx">require</span><span class="p">(</span><span class="dl">"</span><span class="s2">tailwindcss</span><span class="dl">"</span><span class="p">),</span>
+    <span class="p">]);</span>
+</code></pre></div></div>
+
+<p>Luego compilamos, eso va a generar una carpeta css y una js dentro del directorio public</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm run dev
+</code></pre></div></div>
+
+<p>Para incluirlo en nuestro proyecto usamos la vista welcome.blade.php por ejemplo con el siguiente contenido</p>
+<div class="language-html highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+    <span class="nt">&lt;title&gt;</span>Taildwind<span class="nt">&lt;/title&gt;</span>
+    <span class="nt">&lt;link</span> <span class="na">rel=</span><span class="s">"stylesheet"</span> <span class="na">type=</span><span class="s">"text/css"</span> <span class="na">href=</span><span class="s">"{ {asset('css/app.css')}}"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre></div></div>
+
+<p>Para comprobar que funciona agregamos las etiquetas</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;body&gt;
+  &lt;h1&gt;Este es un h1&lt;/h1&gt;    
+  &lt;h2&gt;Este es un h2&lt;/h2&gt;    
+  &lt;h3&gt;Este es un h3&lt;/h3&gt;    
+  &lt;h4&gt;Este es un h4&lt;/h4&gt;    
+  &lt;h5&gt;Este es un h5&lt;/h5&gt;    
+  &lt;h6&gt;Este es un h6&lt;/h6&gt;    
+&lt;/body&gt;
+</code></pre></div></div>
+
+<h2 id="clases-de-tailwindcss">Clases de Tailwindcss</h2>
+
+<p><strong>clase container</strong>
+Funciona similar al container de bootstrap pero no impone su diseño por lo qu ecrea un contenedor que no tiene estilo tampoco esa centrado, para centrar el contenido de un div agregamos la clase <code class="language-plaintext highlighter-rouge">mx-auto</code></p>
+
+<p>Para crear nuestro propio archivo de configuración de las clases que vienen por defecto en tailwind usamos el comando, esto crea un archivo de configuracion : tailwind.config.js lo agrega en la raiz del proyecto</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npx tailwindcss init
+</code></pre></div></div>
+
+<p>en ese archivo en el objeto theme agregamos la clase que queremos modificar, por ejemplo para modificar un container</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  theme: {
+    extend: {},
+  },
+</code></pre></div></div>
+
+<p>quedando asi</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>theme: {
+    container: {
+      center: true,
+    },
+    extend: {},
+  },
+</code></pre></div></div>
+
+<p>Para la maquetación de las grid le indicamos a tailwind en cuantas columnas quiero dividir la sección usando la instrucción <code class="language-plaintext highlighter-rouge">grid grid-cols-4</code> por ejemplo</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  &lt;div class="container grid grid-cols-4"&gt;
+    &lt;h1&gt;Este es un h1&lt;/h1&gt;
+    &lt;h2&gt;Este es un h2&lt;/h2&gt;
+    &lt;h3&gt;Este es un h3&lt;/h3&gt;
+    &lt;h4&gt;Este es un h4&lt;/h4&gt;
+    &lt;h5&gt;Este es un h5&lt;/h5&gt;
+    &lt;h6&gt;Este es un h6&lt;/h6&gt;
+  &lt;/div&gt;
+
+</code></pre></div></div>
+
+<p>Taildwind ofrece colores por defecto que van por tonalidades <a href="https://tailwindcss.com/docs/background-color">https://tailwindcss.com/docs/background-color</a></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  &lt;div class="container"&gt;
+    &lt;div class="grid grid-cols-4" &gt;
+      &lt;div class="bg-blue-200"&gt;A&lt;/div&gt;
+      &lt;div class="bg-blue-300"&gt;B&lt;/div&gt;
+      &lt;div class="bg-blue-400"&gt;C&lt;/div&gt;
+      &lt;div class="bg-blue-500"&gt;D&lt;/div&gt;
+      &lt;div class="bg-blue-600"&gt;D&lt;/div&gt;
+      &lt;div class="bg-blue-700"&gt;D&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+</code></pre></div></div>
+
+<p>Si quiero agregar espaciado entre filas y columnas <code class="language-plaintext highlighter-rouge">gap-4</code> si quiero que sea solo entre las columnas <code class="language-plaintext highlighter-rouge">gap-x-4</code> si quiero que sea en el eje y <code class="language-plaintext highlighter-rouge">gap-y-4</code></p>
+
+<p>Tailwind se apega al principio de mobile first asi que quando definimos vistas responsivas definimos la pequeña primero y luego lo indicamos con las instrucciones</p>
+<pre>
+sm  640px @media (min-width: 640px) { ... }
+md  768px @media (min-width: 768px) { ... }
+lg  1024px  @media (min-width: 1024px) { ... }
+xl  1280px  @media (min-width: 1280px) { ... }
+2xl 1536px  @media (min-width: 1536px) { ... }
+</pre>
+
+<p>asi si queremos definir que se vea con una columna en pequeño pero un poco mas grande con 2 columnas hacemos</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>grid grid-cols-1 sm:grid-cols-2
+</code></pre></div></div>
+
+<p>Tailwind se puede dividir hasta n 12 columnas pero si quisieramos que se divida en mas columnas podemos hacerlo modificando la propieda</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  // tailwind.config.js
+  module.exports = {
+    theme: {
+      extend: {
+        gridTemplateColumns: {
+          // Simple 16 column grid
+
+         '16': 'repeat(16, minmax(0, 1fr))',
+
+          // Complex site-specific column configuration
+
+         'footer': '200px minmax(900px, 1fr) 100px',
+        }
+      }
+    }
+  }
+</code></pre></div></div>
+
+<p>Luego de realizar los cambios volvemos a compilar con</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm run dev
+</code></pre></div></div>
+
+<p>Luego de hacer esto podríamos dividir en 16 columnas</p>
+
+<p>Con la instrucción <code class="language-plaintext highlighter-rouge">ccol-span-x</code> podemos indicarle a un div que ocupe x cantidad de espacios por ejemplo si tienemos esto</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  
+  &lt;div class="container"&gt;
+    &lt;div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2" &gt;
+      &lt;div class="bg-blue-200 lg:col-span-2"&gt;A&lt;/div&gt;
+      &lt;div class="bg-blue-300"&gt;B&lt;/div&gt;
+      &lt;div class="bg-blue-400"&gt;C&lt;/div&gt;
+      &lt;div class="bg-blue-500"&gt;D&lt;/div&gt;
+      &lt;div class="bg-blue-600"&gt;D&lt;/div&gt;
+      &lt;div class="bg-blue-700"&gt;D&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+
+</code></pre></div></div>
+
+<p>el campo A ocuparia 2 columnas, a esto tambien le podemos aplicar la especificación md: lg: sm: etc asi podria tomar una cantidad diferente de espacios segun sea la resolución del dispositivo</p>
+
+<p>La etiqueta start le indica desde donde quiero que empiece desde la columna numero 2, taildwind enumera las columnas donde la primera es 1 la segunda es 2 y asi sucesivamente</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;div class="bg-blue-200 col-span-2 col-start-2"&gt;A&lt;/div&gt;
+</code></pre></div></div>
+
+<p>Si ademas indicamos la cantidad de filas que tiene un campo podemos tambien pedir que un determinado campo ocupe varias filas de la misma forma que hicimos con las columnas por ejemplo el campo C ocuparia 2 filas</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  &lt;div class="container"&gt;
+    &lt;div class="grid grid-cols-1  grid-cols-4 grid-rows-2 gap-2" &gt;
+      &lt;div class="bg-blue-200"&gt;A&lt;/div&gt;
+      &lt;div class="bg-blue-300"&gt;B&lt;/div&gt;
+      &lt;div class="bg-blue-400 col-span-2 row-span-2"&gt;C&lt;/div&gt;
+      &lt;div class="bg-blue-500"&gt;D&lt;/div&gt;
+      &lt;div class="bg-blue-600"&gt;D&lt;/div&gt;
+      &lt;div class="bg-blue-700"&gt;D&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+</code></pre></div></div>
+
+<p>La instrucción <code class="language-plaintext highlighter-rouge">grid-fow-col</code> hace que el contenido se despliegue verticalmente en lugar de horizontalmente
+en lugar de quedar</p>
+<pre>
+  a b c 
+  d e f
+</pre>
+
+<p>quedaria</p>
+<pre>
+a c e
+b d f
+</pre>
+
+<p>por ejemplo:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  &lt;div class="container"&gt;
+    &lt;div class="grid grid-flow-col grid-rows-3" &gt;
+      &lt;div class="bg-blue-200"&gt;A&lt;/div&gt;
+      &lt;div class="bg-blue-300"&gt;B&lt;/div&gt;
+      &lt;div class="bg-blue-400"&gt;C&lt;/div&gt;
+      &lt;div class="bg-blue-500"&gt;D&lt;/div&gt;
+      &lt;div class="bg-blue-600"&gt;E&lt;/div&gt;
+      &lt;div class="bg-blue-700"&gt;F&lt;/div&gt;
+      &lt;div class="bg-blue-800"&gt;G&lt;/div&gt;
+      &lt;div class="bg-blue-900"&gt;H&lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+</code></pre></div></div>
+
+<h2 id="formateado-y-tipografias">Formateado y tipografias</h2>
+
+<p>Tailwind ofrece 3 tipografias por defecto que se incluyen como clases en nuestras etiquetas
+por ejemplo <code class="language-plaintext highlighter-rouge">div class=font-sans</code></p>
+
+<ul>
+  <li>
+    <p>font-sans
+font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, “Segoe UI”, Roboto, “Helvetica Neue”, Arial, “Noto Sans”, sans-serif, “Apple Color Emoji”, “Segoe UI Emoji”, “Segoe UI Symbol”, “Noto Color Emoji”;</p>
+  </li>
+  <li>
+    <p>font-serif
+font-family: ui-serif, Georgia, Cambria, “Times New Roman”, Times, serif;</p>
+  </li>
+  <li>
+    <p>font-mono
+font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, “Liberation Mono”, “Courier New”, monospace;</p>
+  </li>
+</ul>
+
+<p>indicamos el tamaño de las fuentes con las directivas</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>text-xs
+text-sm
+text-base
+text-lg
+text-xl
+text-2xl
+text-3xl
+text-4xl
+text-5xl
+</code></pre></div></div>
+
+<p>Supongamos que quiero definir el estilo que deseo que tenga mi h1 asi</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>font-sans text-6xl md:text-3xl font-bold mb-4
+</code></pre></div></div>
+
+<p>Para estandarizar eso, o colocarlo en un unico sitio nos vamos al archivo resources como si fuese nuestra definición css
+en resources/css/app.css aqui originalmente esabamos importando todos los estilos de tailwind  y lo definiriamos similar a como hemos hecho en nuestra etiqueta pero eliminando las indicaciones del responsive sm md lg etc  asi para el ejemplo anterior de un h1 quedaria asi, luego de hacer los cambios es necesario recompilar con <code class="language-plaintext highlighter-rouge">npm run dev</code></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>// file resources/css/app.css
+@layer base {
+  h1 {
+    @apply font-sans text-3xl font-bold mb-4;
+  }
+
+  h2 {
+    @apply text-xl;
+  }
+}
+</code></pre></div></div>
+
+<p>Ahora como podemos hacer para que conserve el responsive al agregar a app.css¿</p>
+
+<p>Agregar mis propias fuentes
+Una forma rapida es usar las fuentes de google asi <a href="https://fonts.google.com/">https://fonts.google.com/</a> seleccionar la fuente en sus diferentes grosores y a la derecha tengo la opción <code class="language-plaintext highlighter-rouge">use on the web</code>, alli selecciono <code class="language-plaintext highlighter-rouge">@import</code> y selecciono lo que se encuentra dentro de la etiqueta style</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&amp;display=swap');
+</code></pre></div></div>
+
+<p>Esto lo agregamos en resources/css/app.css y luego necesitamos indicar un nombre con el cual vamos a usar esa fuente
+esto lo hacemos en el archivo de configuración tailwind <code class="language-plaintext highlighter-rouge">tailwind.config.js</code> dentro de la instrucción theme asi, Despue de agregar esto es necesario recompilar con <code class="language-plaintext highlighter-rouge">npm run dev</code>:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>module.exports = {
+  purge: [],
+  darkMode: false, // or 'media' or 'class'
+  theme: {
+
+    fontFamily: {
+      'robot': ['Roboto']
+    },
+
+    container: {
+      center: true,
+    },
+
+    ...
+</code></pre></div></div>
+
+<p>Para incluir la fuente en el contenido usamos la clase <code class="language-plaintext highlighter-rouge">font-&lt;nombre-asignado&gt;</code> por ejemplo <code class="language-plaintext highlighter-rouge">font-robot</code> asi:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  &lt;p class="font-robot"&gt; Hola mundo &lt;/p&gt;
+</code></pre></div></div>
+
+<p>Si queremos compilar un archivo adicional por ejemplo nuestro proprio archivo style.css lo incluimos en nuestro archivo app.css asi</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@import "style.css"
+</code></pre></div></div>
+:ET

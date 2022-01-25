@@ -1,0 +1,21 @@
+I"�<p>Para crear una sub terminal por nombre:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>screen -S name
+</code></pre></div></div>
+<p>por ejemplo:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>screen -S sshterminal
+</code></pre></div></div>
+
+<p>Para minimizar esa sesión</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Ctrl + a + d 
+</code></pre></div></div>
+
+<p>Para recuperar esa sesión por nombre, buscamos entre las terminales screen abiertas</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>screen -r [tab][tab] 
+</code></pre></div></div>
+
+<p>por ejemplo:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>screen -S codigo
+Ctrl + a + d
+screen -r codigo
+</code></pre></div></div>
+:ET

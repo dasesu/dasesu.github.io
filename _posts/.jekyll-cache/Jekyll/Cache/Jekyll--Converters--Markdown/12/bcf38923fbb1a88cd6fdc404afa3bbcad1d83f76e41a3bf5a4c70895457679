@@ -1,0 +1,181 @@
+I"T<p>Fuentes importantes:</p>
+
+<p><a href="https://docs.docker.com/compose/compose-file/compose-file-v3/">!https://docs.docker.com/compose/compose-file/compose-file-v3/</a><br />
+<a href="https://takacsmark.com/docker-compose-tutorial-beginners-by-example-basics/">!https://takacsmark.com/docker-compose-tutorial-beginners-by-example-basics/</a></p>
+
+<h2 id="docker-compose">Docker compose</h2>
+<p>Orquestra un conjunto de contenedores que trabajan en conjunto para realizar una tarea, tal como ocurre con aplicaciones reales en ejecución, por ejemplo un sitio web requiere de archivos, de un servidor que interprete esos archivos pero tambien de consultas a bases de datos. en la practica como se junta todo esto? gracias a docker compose.</p>
+
+<p>Supongamos que queremos ejecutar los siguientes contenedores</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run mmumshad/simple-webapp  
+docker run mongodb  
+docker run redis:alpine  
+docker run ansible  
+</code></pre></div></div>
+
+<p>Docker entiende cada uno de estos contenedores como servicios y los agrupa en una etiqueta <code class="language-plaintext highlighter-rouge">servicios</code> asi<br />
+ejemplo de un archivo docker-compose-yml:</p>
+<pre>
+services:
+  web:_
+    imaage:"mmumshad/simple-webapp"
+  database:
+    image: "mongodb"
+  messaging:
+    image: "redis:alpine"
+  orchestration:
+    image: "ansible"
+</pre>
+
+<p>Luego ejecutamos el comando:<br />
+<code class="language-plaintext highlighter-rouge">docker-compose up</code></p>
+
+<p>Veamos otro ejemplo:<br />
+Supongamos la ejecución de los siguientes contenedores:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -d --name=redis redis  
+docker run -d --name=db postgres:9.4  
+docker run -d --name=vote -o 5000:80 voting-app  
+docker run -d --name=result -p 5001:80  
+docker run -d --name=worker worker  
+</code></pre></div></div>
+
+<p>Para conseguir que los contenedores se vean entre si podemos asociar vinculos entre ellos con la opcion links, asi:</p>
+
+<h1 id="docker-run-links">docker run –links</h1>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>docker run -d --name=redis redis  
+docker run -d --name=db  --link=db:db postgres:9.4  
+docker run -d --name=vote -o 5000:80 --link redis:redis voting-app  
+docker run -d --name=result -p 5001:80  
+docker run -d --name=worker  --link db:db -link redis:redis  worker  
+</code></pre></div></div>
+
+<p>Esto que hacemos por comandos está desactualizado (deprecated), lo que se recomienda hacer es incluir esto mismo en el archivo compose-yml asi:</p>
+
+<p>docker-compose.yml</p>
+<pre>
+redis:
+  image: redis
+db:
+  image: postgres:9.4
+vote:
+  image: voting-app
+  ports:
+    - 5000:80
+  links:
+    - redis
+result:
+  image: result-app
+  ports:
+    - 5001:80
+  links:
+    - db
+worker:
+  image: worker
+  links:
+    - redis
+    - db
+</pre>
+
+<p>a lo que luego ejecutamos el comando:
+<code class="language-plaintext highlighter-rouge">docker-compose up</code></p>
+
+<p>El archivo anterior corresponde a la versión 1 de docker-compose, en versiones recientes estos parametros se incluyen a un campo llamado servicio y se crea por defecto una red comun a los contenedores, asi que lo siguiente seria mas correcto:</p>
+
+<pre>
+service:
+  redis:
+    image: redis
+  db:
+    image: postgres:9.4
+  vote:
+    image: voting-app
+    ports:
+      - 5000:80
+    depends_on:
+      - redis
+</pre>
+
+<p>En la versión 2 docker crea un contenedor especifico para el proyecto lo que evita tener que hacer la definicion de links. Además si debe espeficarse que servicio debe cargarse primero esto se consigue con el parametro depends_on.</p>
+
+<p>Docker compose herada muchos de los comandos de Docker, muchos de ellos deben ser ejecutados en el directorio que contiene el docker-compose.yml o no será reconocido.</p>
+
+<p>Por ejemplo si queremos listar los procesos del contenedor, dentro del directorio que contiene el proyecto hacemos:<br />
+<code class="language-plaintext highlighter-rouge">docker-compose ps</code></p>
+
+<p>Si queremos entrar en la termial de algun servicio:<br />
+<code class="language-plaintext highlighter-rouge">docker-compose exec nombre_servicio /bin/bash</code></p>
+
+<p>si queremos listar las redes lo hacemos directamente con comandos docker<br />
+<code class="language-plaintext highlighter-rouge">docker network ls</code></p>
+
+<p>Si queremos ver la estructura de una red en particular. pero debems tener en cuenta que la red por defecto se crea con el nombre del proyecto con el sufijo <code class="language-plaintext highlighter-rouge">_default</code> a menos que le indiquemos explicitamente el nombre. por ejemplo:<br />
+<code class="language-plaintext highlighter-rouge">docker  network inspect dctest_default</code></p>
+
+<p>Un aspecto importante de docker compose es que podemos referirnos al servicio directamente con el nombre del servicio que definamos por ejemplo en el caso</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: "3"
+
+services:
+  webserver:
+    image: nginx
+    restart: always
+    ports:
+      - "8000:80"
+    volumes:
+      - ./websites:/usr/share/nginx/html
+    depends_on:
+      - db
+    links:
+      - db
+
+  db:
+    image: mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=redes123
+    restart: always
+    volumes:
+      - db_vol:/var/lib/mysql
+
+volumes:
+  db_vol:
+</code></pre></div></div>
+
+<p>El servidor puede llamar a la base de datos directamente haciendo referencia a <code class="language-plaintext highlighter-rouge">db</code> que es  el nombre que hemos indicado para el servicio de base de datos.</p>
+
+<p>Si queremos especificar nuestra propia red definimos la red asi:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>version: "3"
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        - IMAGE_VERSION=3.7.0-alpine3.8
+    image: takacsmark/flask-redis:1.0
+    environment:
+      - FLASK_ENV=development
+    ports:
+      - 80:5000
+    networks:
+      - mynet
+  redis:
+    image: redis:4.0.11-alpine
+    networks:
+      - mynet
+
+networks:
+  mynet:
+</code></pre></div></div>
+
+<p>Otra cosa que nos permite docker compose es escalar los servicios, por jeemplo en situaciones donde un servicio funcione como un worker podemos indicarle que escale el numero de servicios. Esto dependerá tambien de la configuración de puertos o e que el servicio en cuestión no necesite hacer uso de un puerto en particular, por ejemplo, el siguiente comando lanza el servicio escalando el servicio app a 3 replicas:<br />
+<code class="language-plaintext highlighter-rouge">docker-compose up --scale app=3</code></p>
+
+<p>Si queremos relizar algun cambio o sobreescribir alguna configuracion, docker-compose admite el uso de <code class="language-plaintext highlighter-rouge">docker-compose.override.yaml</code> que basicamente hereda los atributos definidos en docker-compose.yaml pero si se agregan cambios en docker-compose.override.yaml estos se escriben por encima de lo que se encuentra en docker-compose.yaml, es decir los cambios en override tienen mayor precedencia, esto se usa cuando se estan haciendo pruebas en entornos de desarrollo y no se querien modificar los valores de producción.</p>
+
+<p>Fuentes importantes:</p>
+
+<p><a href="https://docs.docker.com/compose/compose-file/compose-file-v3/">!https://docs.docker.com/compose/compose-file/compose-file-v3/</a><br />
+<a href="https://takacsmark.com/docker-compose-tutorial-beginners-by-example-basics/">!https://takacsmark.com/docker-compose-tutorial-beginners-by-example-basics/</a></p>
+:ET

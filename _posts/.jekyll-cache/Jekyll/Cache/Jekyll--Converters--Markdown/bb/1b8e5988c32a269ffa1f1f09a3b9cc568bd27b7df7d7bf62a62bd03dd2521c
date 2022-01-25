@@ -1,0 +1,142 @@
+I"W<h2 id="vagrant">Vagrant:</h2>
+
+<p>Mas información en : <a href="https://www.vagrantup.com/">https://www.vagrantup.com/!</a></p>
+
+<p>Vagrant es una herramienta que nos ayuda a crear y manejar máquinas virtuales con un mismo entorno de trabajo. Nos permite definir los servicios a instalar así como también sus configuraciones. Está pensado para trabajar en entornos locales.</p>
+
+<p>Existe un catalogo de maquinas preconfiguradas para diferentes propositos, este catalogo lo podemos encontrar en:<br />
+<a href="https://app.vagrantup.com/boxes/search?page=2&amp;provider=virtualbox">https://app.vagrantup.com/boxes/search?page=2&amp;provider=virtualbox!</a></p>
+
+<p>Ya elegida la maquina que queremos usar se posible que necesitemos realizar algunas modificaciones.</p>
+
+<p>Los siguientes comandos corresponden a diferentes opciones de la configuración.</p>
+
+<p><strong>config.vm.box</strong> - Operative System</p>
+
+<p><strong>config.vm.provider</strong> - virtualbox</p>
+
+<p><strong>config.vm.network</strong> How your host computer sees your box</p>
+
+<p><strong>config.vm.synced_folder</strong> - How you access files from your computer</p>
+
+<p><strong>config.vm.provision</strong> - what we want setup</p>
+
+<p>Importar una maquina virtual puede conseguirse de diferentes formas:</p>
+
+<p>1) Creamos un directorio de trabajo por ejemplo vgdemo, dentro de este directorio ejecutamos el comando <strong>vagrant init ubuntu/trusty64</strong>. Aqui ubuntu/trusty64 es el nombre de la box que queremos usar en el catalogo</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vagrant init ubuntu/trusty64
+</code></pre></div></div>
+
+<p>Una vez ejecutado el comando se crea un archivo llamado Vagrantfile que tiene varias opciones, entre ellos los valores de configuración anteriores.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+
+Vagrant.configure("2") do |config|
+
+  # Box Settings  
+  config.vm.box = "ubuntu/trusty64"
+
+  # NEtwork Settings
+  config.vm.network "forwarded_port", guest: 80, host: 8080
+  # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+  # config.vm.network "private_network", ip: "192.168.33.10"
+  # config.vm.network "public_network"
+
+  # Folder Settings
+  config.vm.synced_folder "./html", "/var/www/html"
+
+  
+  # Providing Settings 
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = 2048
+    vb.cpus = 2
+  end
+  
+  # Provisions
+  # config.vm.provision "shell", inline: &lt;&lt;-SHELL
+  #   apt-get update
+  #   apt-get install -y apache2
+  # SHELL
+end
+
+</code></pre></div></div>
+
+<h1 id="comandos">Comandos</h1>
+
+<p>Comienza a hacerse la descarga de la box y directamente se asocia a nuestra virtualbox</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vagrant up
+</code></pre></div></div>
+
+<p>Elimina la maquina virtual</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vagrant destroy
+</code></pre></div></div>
+
+<p>Apagar la maquina o suspenderla</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vagrant suspend   
+</code></pre></div></div>
+
+<p>Reinicia o reactiva la maquina</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vagrant resume   
+</code></pre></div></div>
+
+<p>Reinicia la maquina luego de que se han realizado cambios en las caracteristicas de configuración como memoria, configuraciones de red, entre otras.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vagrant reload
+</code></pre></div></div>
+
+<p>Nos conectamos por ssh a la maquina</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vagrant ssh
+</code></pre></div></div>
+
+<p>Supongamos que instalo apache, no puedo conectarme porque como tal no tengo definida una ruta hacia la maquina virtual, tampoco esta en la misma red pues la maquina virtual tiene una conexión NAT.</p>
+
+<p>Para poder tener acceso coloco el siguiente comando en el archivo Vagrantfile.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>config.vm.network "forwarded_port", guest: 80, host: 8080
+</code></pre></div></div>
+
+<p>Crea una carpeta compartida entre maquina host y guest. En este comando ./ corresponde a la maquina anfitriona y var/www/html a la maquina guest, si al principio está vacio va a sobreescribir lo que ocurre en la maquina virtual.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>config.vm.synced_folder "./", "/var/www/html/"
+</code></pre></div></div>
+
+<p>En esta sección definimos caracteristicas de la maquia virtual como memoria y cantidad de procesadores.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  # Providing Settings 
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = 2048
+    vb.cpus = 2
+  end
+</code></pre></div></div>
+
+<p>Define permisos permisos adicionales para directorios y archivos asignando 777 para directorios y 666 para archivos en el directorio ./</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>config.vm.synced_folder "./", "/var/www/html/", :mount_options =&gt; ["dmode=777","fmode=666"]
+</code></pre></div></div>
+
+<p>Si quisieramos realizar una configuración o instalación automaticamente al iniciar la box modificamos las provisiones con los siguientes comandos</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   config.vm.provision "shell", inline: &lt;&lt;-SHELL
+     apt-get update
+     apt-get install -y apache2
+   SHELL
+</code></pre></div></div>
+
+<h2 id="otro-metodo">Otro metodo</h2>
+
+<p><code class="language-plaintext highlighter-rouge">vagrant box add laravel/homestead</code>: Hace la descarga de la maquina, pero no estoy seguro de donde queda. en virtualbox no.</p>
+
+<p><code class="language-plaintext highlighter-rouge">git clone https://github.com/laravel/homestead.git Homestead</code> esto no tarda nada, lo que tarda es el comando anterior</p>
+
+<p>Entramos al directorio Homestead que se ha creado y ejecutamos init.sh
+<code class="language-plaintext highlighter-rouge">bash init.sh</code></p>
+
+<p>Esto crea un directorio Homestead.yaml 
+en este directorio tenemos configuraciones como la memoria, la cantdad de cpus que se van a asignar, las claves ssh, los directorios compartidos,</p>
+
+<p>la sección 
+folders:</p>
+<ul>
+  <li>map: ~/Code
+to: /home/vagrant/Code<br />
+Luego de hacer modificaciones si es necesario ejecutamos el comando:
+<code class="language-plaintext highlighter-rouge">vagrant up</code></li>
+</ul>
+:ET

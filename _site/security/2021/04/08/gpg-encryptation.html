@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Encrypted messages and digital signatures | Notes</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Encrypted messages and digital signatures" />
+<meta name="author" content="dasesu" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="GPG la versión GNu de PGP ( Pritty Good Privacy ) nos permite cifrar información mediante el uso de criptografía de clave pública, así como facilitar la autenticación de documentos gracias a firmas digitales." />
+<meta property="og:description" content="GPG la versión GNu de PGP ( Pritty Good Privacy ) nos permite cifrar información mediante el uso de criptografía de clave pública, así como facilitar la autenticación de documentos gracias a firmas digitales." />
+<link rel="canonical" href="http://localhost:4000/security/2021/04/08/gpg-encryptation.html" />
+<meta property="og:url" content="http://localhost:4000/security/2021/04/08/gpg-encryptation.html" />
+<meta property="og:site_name" content="Notes" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-04-08T11:22:00-04:00" />
+<script type="application/ld+json">
+{"headline":"Encrypted messages and digital signatures","dateModified":"2021-04-08T11:22:00-04:00","datePublished":"2021-04-08T11:22:00-04:00","author":{"@type":"Person","name":"dasesu"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/security/2021/04/08/gpg-encryptation.html"},"description":"GPG la versión GNu de PGP ( Pritty Good Privacy ) nos permite cifrar información mediante el uso de criptografía de clave pública, así como facilitar la autenticación de documentos gracias a firmas digitales.","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/img/logo.png"},"name":"dasesu"},"@type":"BlogPosting","url":"http://localhost:4000/security/2021/04/08/gpg-encryptation.html","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta name="author" content="dasesu" />
+    <meta name="description" content="Encrypted messages and digital signatures" />
+    <meta name="keywords" content="Encrypted messages and digital signatures, Notes, security" />
+	
+	  <link rel="stylesheet" href="/assets/css/bootstrap.min.css?v=" >
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <link rel="stylesheet" href="/assets/css/mystyle.css?v=">
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+           
+        <nav>
+        <ul class="nav nav-pills pull-right">
+        	<li><a class="navigationside" href="/">Home</a></li>
+          
+              <li><a class="navigationside" href="/contact">Contact Me</a></li>
+            
+        </nav>
+        <h3 class="text-muted"><a href="/">Notes</a></h3>
+        <hr>
+
+      
+
+<h1 class="inner_post_title">Encrypted messages and digital signatures</h1>
+<span class="view">by dasesu</span> - <span class="time">08 Apr 2021</span>
+
+<div class="tags"> Category
+&raquo; <a href="/category/security">security</a>
+</div>
+
+<br>
+
+<p>GPG la versión GNu de PGP ( Pritty Good Privacy ) nos permite cifrar información mediante el uso de criptografía de clave pública, así como facilitar la autenticación de documentos gracias a firmas digitales.</p>
+
+<p>Entre sus opciones podemos simplemente encriptar datos , cifrar mensajes para una persona en especifico, firmar digitalmente información y que luego pueda verificarse que los datos firmados no han sido modificada, entre otras.</p>
+
+<p>Supongamos un archivo cualquiera que deba ser cifrado:</p>
+
+<hr />
+
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus aliquam varius pellentesque. Suspendisse potenti. In euismod fermentum laoreet. Ut vehicula, sapien nec vehicula aliquam, nibh est feugiat nisi, ut iaculis sem libero eget metus. Duis vehicula ultrices felis, eu vulputate purus scelerisque eget. Vivamus in ex commodo ipsum vehicula malesuada. Vestibulum aliquam sit amet risus a sodales.</p>
+
+<hr />
+
+<h2 id="cifrado-simetrico">Cifrado simetrico:</h2>
+<p>La opción <code class="language-plaintext highlighter-rouge">-c</code> nos permite proteger el archivo con cifrado simetrico, es decir cualquier persona con la misma contraseña podría desencriptar el archivo.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gpg -c mensaje.txt
+</code></pre></div></div>
+
+<p>Esta opción requiere una contraseña con la cual se va a proteger el archivo, y una vez hecho esto se creará un segundo archivo cifrado con extensión .gpg.</p>
+
+<p align="center">
+<img src="/assets/img/posts/gpg-encryptation/01_simetrico.png?raw=true" />
+</p>
+
+<p>Puede verse que el resultado de mensaje.txt.gpg es ilegible, en caso de que queramos un cifrado equivalente legible podríamos usamos la opcion <code class="language-plaintext highlighter-rouge">-a</code>, la cual crea el cifrado usando caracteres ascii asi:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gpg -c -a mensaje.txt
+</code></pre></div></div>
+<p>Esto crearía un archivo cifrado .asc, al abrirlo se vería asi:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-----BEGIN PGP MESSAGE-----
+
+jA0ECQMCfLu69I04w8D/0sBxAeWSJJoW1s62zIPebiZ//UCeoRbj/95U+tI4/XME
+w2L1geSffC2hQ98F8sg7edS/HPU+aP7GaJE7al8YwDB53dAp84NJ33m1jUcFtCwX
+56l+O//sm6tbkqEK52xDIuRoGfom2k26QJZJ5l8bn2Gg0XMe1Ktp8xvEL1i9O9rX
+xXEFvC9d8B6rxBGpTGsPReuA0srjZUMF+F4Du+Qh5K1x11Apqr3ij0COXQb5cjYX
+RrlP5bgxTTNb1TA/Kr54yit7a+a/dIRL5zyyM/pNV/k8/HKBCyVhb7aiOtQ9SJBq
+AmNZua+W2J3voqBSOaRHzrcQNKUUFe58l8WdEc6rNVjAhG8vBIbZz1/ceRGydkGe
+8ZbzYvKgBTsVy+d8dJHhvedPcAootFNlAnfO7DZFe8LsG6M=
+=Gq/o
+-----END PGP MESSAGE-----
+
+</code></pre></div></div>
+
+<p>Para descifrar el contenido del archivo usamos la opción -d. Lo que retornaria el contenido del archivo original.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gpg -d mensaje.txt.asc
+</code></pre></div></div>
+<p align="center">
+<img src="/assets/img/posts/gpg-encryptation/02_simetrico.png?raw=true" />
+</p>
+
+<h2 id="cifrado-asimétrico">Cifrado Asimétrico</h2>
+<p>La criptografía de clave publica usa un par de claves, una clave pública y una privada. En pocas palabras la clave pública se comporta como una dirección hacia donde otras personas pueden cifrar mensajes, y unicamente el poseedor de la clave privada asociada a esa clave pùblica pueda descifrar.</p>
+
+<p>Es necesario definir algunos comandos antes de continuar con el cifrado de nuestro mensaje esta vez de forma asimetrica.</p>
+
+<p>Generar par de claves publica y privada</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gpg --gen-key
+</code></pre></div></div>
+
+<p>Podemos ver las claves pùblicas que tenemos almacenadas o han sido creadas con el comando:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gpg --list-keys
+</code></pre></div></div>
+
+<p>Para ver ver las claves privadas que tenemos almacenadas:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gpg --list-secret-keys
+</code></pre></div></div>
+
+<p>Para exportar la clave publica para almacenarla o compartirla con otras personas</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gpg --armor --output output_file.asc --export "Some name"
+</code></pre></div></div>
+
+<p>Para exportar la clave privada para almacenarla o guardarla de forma segura</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gpg --armor --output output_file_secret.asc --secret-key --export "Some name"
+</code></pre></div></div>
+
+<p>En caso de que tengamos claves previamente guardadas y queramos importarlas hacemos</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gpg --import public.asc
+gpg --import private.asc
+</code></pre></div></div>
+
+<p><strong>Cifrar documento</strong><br />
+Imaginemos que Alice quiere compartir el mensaje con Bob. Alice necesita tener la clave pública de Bob, importarla a su directorio de claves públicas y cifrar el mensaje hacia esa clave pública con el comando:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gpg --armor --output file_to_send.gpg --encrypt --recipient "Bob Name"
+</code></pre></div></div>
+
+<p>Bob al recibir el mensaje lo descifraría con el comando</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gpg --output file --decrypt file_to_send.gpg
+</code></pre></div></div>
+
+<p><strong>Firmar documentos:</strong> 
+Para evitar  modificaciones del mensaje que puedan comprometer a Alice. Se puede firmar el mensaje para dar fe de que es versión válida, para eso utiliza las firmas digitales, esto crea una huella digital de los datos que contiene la mensaje y su firma asociada generada a partir de la clave privada de Alice, luego cualquiera puede verificar que Alice ha firmado esos datos, no importa si están cifrados o no.</p>
+
+<p>Firma digital y cifrado en binario, esto genera un archivo ilegible como el que vimos anteriormente.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gpg --output doc.sig --sign mensaje.txt
+</code></pre></div></div>
+
+<p>Si queremos firmar en ascii usamos</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gpg --clearsign mensaje.txt
+</code></pre></div></div>
+
+<p>Esto genera un archivo dividido en dos partes, la primera es el mensaje exacto que se esta firmando, cualquier modificación por pequeña que sea hara que la firma sea inválida, la segunda es la firma de dicho mensaje.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus aliquam varius pellentesque. Suspendisse potenti. In euismod fermentum laoreet. Ut vehicula, sapien nec vehicula aliquam, nibh est feugiat nisi, ut iaculis sem libero eget metus. Duis vehicula ultrices felis, eu vulputate purus scelerisque eget. Vivamus in ex commodo ipsum vehicula malesuada. Vestibulum aliquam sit amet risus a sodales. 
+
+-----BEGIN PGP SIGNATURE-----
+
+iQGzBAEBCgAdFiEECQrDeIyWOB3x1EdWt98kgJAC7JAFAl8KZy0ACgkQt98kgJAC
+7JBBdAwAwSZqYodiL2AgB35JCQoon4QJKedoNS8PrtpetVoH+c/JeNUNi5HD4c6M
+brWLglZKMSdgkIBr5QE841a249Ujy5eAN7y9+PpOJm+Q6LdeSx/IZ1j89bRscacP
+0BV6qExgoCNE7xmbvNjCwdIoeyvA6/SVpfqRDhdI3yM8BJVPLCep+70Yv4sM6TY7
+06lCTtNSAq2vSYHnsRBhbZZ2hsx7kYvPa6ScfXNyBAl0bBJNeCdZJ3Iu7ofA47Rk
+kL/7l4md9jO2H6LSR1aVVmlv4ApiB1PK+PmqtLiY6ortd2bTU5YrRsCwk7j99Hst
+vpcTAn48fVgSeQM9Uay7S0xpWM/LSDE4kGvjvb3OeKcTcga5+GzOGf7KeUlc5rdg
+NyT45BQHQkqf8SsvGTuf/5nhL3I+c9dIiBAdRB5Av2YdpTJJA94XuT+NmAEQjA+2
+bgNC0frPtj1rpvjgjTYY59cN/rf5930o2Ey+fEikRcH03PzRAX8vgOWShilu0ZJD
+5PiBbCrF
+=J6sM
+-----END PGP SIGNATURE-----
+</code></pre></div></div>
+
+<p>Si unicamente queremos verificar la firma se usa la opción</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gpg --verify doc.sig
+</code></pre></div></div>
+
+<p>Esto mostraría algo como lo siguiente:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gpg: Signature made sáb 11 jul 2020 21:28:13 -04
+gpg:                using RSA key 090AC3788C96381DF1D44756B7DF24809002EC90
+gpg: Good signature from "Some name &lt;someemail@gmail.com&gt;" [ultimate]
+gpg: WARNING: not a detached signature; file 'mensaje.txt' was NOT verified!
+</code></pre></div></div>
+
+<p>En caso de que exista una modificación, diría algo asi:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gpg: Signature made sáb 11 jul 2020 21:28:13 -04
+gpg:                using RSA key 090AC3788C96381DF1D44756B7DF24809002EC90
+gpg: BAD signature from "Some name &lt;someemail@gmail.com&gt;" [ultimate]
+</code></pre></div></div>
+
+<p>Si queremos verificar la firma y decriptar un archivo.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>gpg --output doc --decrypt mensaje.sig
+</code></pre></div></div>
+
+
+
+<div class="PageNavigation">
+  
+    <a class="prev" href="/bitcoin/python/2021/04/08/bitcoin-address-creation.html">&laquo; Previous Post</a>
+  
+  
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  
+  
+    <a class="next" href="/linux/commands/2021/04/08/divide-join-files.html">Next Post &raquo;</a>
+  
+</div>
+      
+      <span class="inner">
+      <footer>
+        <hr>
+        <p><small>Hosted on GitHub Pages </a></small></p>
+      </footer>
+      </span>
+
+    </div>
+
+	<!-- Font awesome icons -->
+    <link href="/assets/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/assets/css/syntax.css">
+    <!-- Bootstrap core CSS -->
+    
+    <!-- Fonts -->
+    
+  
+
+    <script src="/assets/js/scale.fix.js"></script>
+    
+  </body>
+</html>

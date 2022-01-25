@@ -1,0 +1,96 @@
+I"³<h2 id="metodo-1-livewire-with-bootstrap">Metodo 1 Livewire with Bootstrap</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>composer create-project laravel/laravel testbootstrap
+cd testbootstrap
+composer require livewire/livewire
+</code></pre></div></div>
+
+<p>creamos un archivo el archivo resources/Views/layout.blade.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">"{ { str_replace('_', '-', app()-&gt;getLocale()) }}"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;head&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">"utf-8"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;meta</span> <span class="na">name=</span><span class="s">"viewport"</span> <span class="na">content=</span><span class="s">"width=device-width, initial-scale=1"</span><span class="nt">&gt;</span>
+
+        <span class="nt">&lt;title&gt;</span>Laravel<span class="nt">&lt;/title&gt;</span>
+
+        <span class="c">&lt;!-- Fonts --&gt;</span>
+        <span class="nt">&lt;link</span> <span class="na">href=</span><span class="s">"https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&amp;display=swap"</span> <span class="na">rel=</span><span class="s">"stylesheet"</span><span class="nt">&gt;</span>
+
+        <span class="c">&lt;!-- Styles --&gt;</span>
+        
+        @livewireStyles
+        <span class="nt">&lt;style&gt;</span>
+            <span class="nt">body</span> <span class="p">{</span>
+                <span class="nl">font-family</span><span class="p">:</span> <span class="s2">'Nunito'</span><span class="p">,</span> <span class="nb">sans-serif</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="nt">&lt;/style&gt;</span>
+    <span class="nt">&lt;/head&gt;</span>
+    <span class="nt">&lt;body&gt;</span>
+        
+        @yield('content')
+        
+        @livewireScripts
+    <span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+
+</code></pre></div></div>
+
+<p>Modificamos las rutas para que carguen la vista post en lugar de la vista welcome</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nc">Route</span><span class="o">::</span><span class="nf">get</span><span class="p">(</span><span class="s1">'/'</span><span class="p">,</span> <span class="k">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nf">view</span><span class="p">(</span><span class="s1">'posts'</span><span class="p">);</span>
+<span class="p">});</span>
+</code></pre></div></div>
+
+<p>y Cramos el archivo resources/Views/psot.blade.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="k">extends</span><span class="p">(</span><span class="s1">'layout'</span><span class="p">)</span>
+
+<span class="o">@</span><span class="nf">section</span><span class="p">(</span><span class="s1">'content'</span><span class="p">)</span>
+
+<span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s2">"container"</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="n">h1</span><span class="o">&gt;</span><span class="nc">Hola</span> <span class="nc">Livewire</span><span class="o">&lt;/</span><span class="n">h1</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+
+<span class="o">@</span><span class="n">endsection</span>
+</code></pre></div></div>
+
+<p>Si vamos a package.json vemos que no se incluye bootstrap</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">npm</span> <span class="n">install</span>
+<span class="n">npm</span> <span class="n">install</span> <span class="o">--</span><span class="n">save</span><span class="o">-</span><span class="n">dev</span> <span class="n">bootstrap</span>
+</code></pre></div></div>
+
+<p>Si volvemos a package.json podemos ver que ahora si se incluye bootstrap</p>
+
+<p>abrimos el archivo resources/css/app.css e importamos ~bootstrap/dist/css/bootstrap.css</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="n">import</span> <span class="s2">"~bootstrap/dist/css/bootstrap.css"</span>
+</code></pre></div></div>
+
+<p>y luego hacemos</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm run dev
+</code></pre></div></div>
+
+<h2 id="metodo-2--este-metodo-instal-bootstrap-46-">Metodo 2 ( este metodo instal bootstrap 4.6 )</h2>
+<p>Ademas este metodo ya tiene un sitio preconstruido de login</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>composer create-project laravel/laravel laravel-bootstrap-metodo2
+cd laravel-bootstrap-metodo2
+composer require laravel/ui
+php artisan ui bootstrap
+php artisan ui bootstrap --auth
+npm install &amp;&amp; npm run dev
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>php artisan migrate
+</code></pre></div></div>
+
+<h2 id="metodo-3--jetstrap-">Metodo 3 ( Jetstrap )</h2>
+<p><a href="https://github.com/nascent-africa/jetstrap">https://github.com/nascent-africa/jetstrap</a></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>composer create-project laravel/laravel site-jetstrap
+cd site-jetstrap
+composer require nascent-africa/jetstrap --dev
+php artisan jetstrap:swap livewire
+npm install &amp;&amp; npm run dev
+npm install &amp;&amp; npm run dev
+php artisan migrate
+</code></pre></div></div>
+:ET

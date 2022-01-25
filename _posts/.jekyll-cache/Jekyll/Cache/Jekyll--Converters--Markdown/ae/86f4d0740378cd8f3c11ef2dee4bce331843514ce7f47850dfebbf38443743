@@ -1,0 +1,50 @@
+I"p<p>Se asume una raspberry con interfaz de red inalámbrica, y una microsd con una distro raspbian (2020-02-13-raspbian-buster ) aunque esto funciona también en otras distros de raspbian.</p>
+
+<p>Insertamos la microsd en nuestro sistema operativo para realizar algunos cambios previos, observamos dos particiones boot y rootfs, dentro de la partición boot y crearmos un archivo llamandolo ssh, y agregamos el valor “1” como contenido. Esto habilitará el protocolo ssh para poder acceder remotamente cuando se cargue el sistema operativo.</p>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cd</span> /media/myuser/boot/
+<span class="nv">$ </span><span class="nb">sudo touch </span>ssh
+<span class="nv">$ </span><span class="nb">echo</span> <span class="s2">"1"</span> <span class="o">&gt;</span> ssh
+</code></pre></div></div>
+
+<p>Dentro de la partición rootfs, editamos el archivo wpa_supplicant.conf que se encuentra dentro del directorio /etc/wpa_supplicant</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span><span class="nb">cd</span> /media/myuser/rootfs/etc/wpa_supplicant
+<span class="nv">$ </span><span class="nb">sudo </span>vi wpa_supplicant.conf
+</code></pre></div></div>
+
+<p>Agregamos la configuración de red para que se conecte a nuestra red wifi automaticamente al iniciar el sistema operativo.</p>
+<div class="language-vim highlighter-rouge"><div class="highlight"><pre class="highlight"><code>ctrl_interface<span class="p">=</span>DIR<span class="p">=</span><span class="sr">/var/</span>run/wpa_supplicant GROUP<span class="p">=</span>netdev
+update_config<span class="p">=</span><span class="m">1</span>
+country<span class="p">=</span>VE
+
+network<span class="p">={</span>
+   ssid<span class="p">=</span><span class="s2">"NETWORK-NAME"</span>
+   psk<span class="p">=</span><span class="s2">"NWTWORK-PASSWORD"</span>
+   key_mgmt<span class="p">=</span>WPA<span class="p">-</span>PSK
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Extraemos la microsd y la insertamos en nuestra raspberry pi, conectamos la raspberry a la corriente para que inicie el sistema operativo, esperamos un momento hasta que haya terminado de cargar, aproximadamente 2 minutos</p>
+
+<p>Para poder conectarnos a la raspberry tenemos que encontrar que dirección ha tomado, hay muchas formas de hacer esto, podemos acceder a la configuración de nuestro router y buscar la raspberry entre los dispositivos conectados, probar con varias direcciones IPs hasta encontrar la correcta, en redes pequeñas esto no deberia toma mucho. Nosotros usaremos el comando nmap, cambiando la dirección de red por la que tenga nuestra red, en mi caso la dirección de red es 192.168.0.1</p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">sudo </span>nmap 192.168.0.100-255
+</code></pre></div></div>
+
+<p>Entre el resultado que arroja este comando podemos ver algo parecido a lo siguiente, lo que nos indica que la raspberry se encuentra en la dirección <code class="language-plaintext highlighter-rouge">192.168.0.101</code></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Nmap scan report for 192.168.0.101
+Host is up (0.019s latency).
+Not shown: 999 closed ports
+PORT   STATE SERVICE
+22/tcp open  ssh
+MAC Address: B8:27:EB:FF:3A:EC (Raspberry Pi Foundation)
+</code></pre></div></div>
+
+<p>Nos conectamos usando ssh a la raspberry desde nuestro pc, usando el usuario <code class="language-plaintext highlighter-rouge">pi</code> y contraseña <code class="language-plaintext highlighter-rouge">raspberry</code></p>
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$ </span>ssh pi@192.168.0.101
+</code></pre></div></div>
+
+<p>Ya conectados a la raspberry podemos realizar el resto de configuraciones con el comando:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo raspi-config
+</code></pre></div></div>
+
+:ET

@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>RVM | Notes</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="RVM" />
+<meta name="author" content="dasesu" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Install RVM" />
+<meta property="og:description" content="Install RVM" />
+<link rel="canonical" href="http://localhost:4000/programming/2021/05/10/rvm.html" />
+<meta property="og:url" content="http://localhost:4000/programming/2021/05/10/rvm.html" />
+<meta property="og:site_name" content="Notes" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-05-10T12:23:10-04:00" />
+<script type="application/ld+json">
+{"headline":"RVM","dateModified":"2021-05-10T12:23:10-04:00","datePublished":"2021-05-10T12:23:10-04:00","author":{"@type":"Person","name":"dasesu"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/programming/2021/05/10/rvm.html"},"description":"Install RVM","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/img/logo.png"},"name":"dasesu"},"@type":"BlogPosting","url":"http://localhost:4000/programming/2021/05/10/rvm.html","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta name="author" content="dasesu" />
+    <meta name="description" content="RVM" />
+    <meta name="keywords" content="RVM, Notes, programming" />
+	
+	  <link rel="stylesheet" href="/assets/css/bootstrap.min.css?v=" >
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <link rel="stylesheet" href="/assets/css/mystyle.css?v=">
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+           
+        <nav>
+        <ul class="nav nav-pills pull-right">
+        	<li><a class="navigationside" href="/">Home</a></li>
+          
+              <li><a class="navigationside" href="/contact">Contact Me</a></li>
+            
+        </nav>
+        <h3 class="text-muted"><a href="/">Notes</a></h3>
+        <hr>
+
+      
+
+<h1 class="inner_post_title">RVM</h1>
+<span class="view">by dasesu</span> - <span class="time">10 May 2021</span>
+
+<div class="tags"> Category
+&raquo; <a href="/category/programming">programming</a>
+</div>
+
+<br>
+
+<h2 id="install-rvm">Install RVM</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get install software-properties-common
+
+sudo apt-add-repository -y ppa:rael-gc/rvm
+sudo apt-get update
+sudo apt-get install rvm
+
+sudo usermod -a -G rvm &lt;yourusername&gt;
+
+</code></pre></div></div>
+
+<p>Luego agregar la opcion <code class="language-plaintext highlighter-rouge">run command as a login shell</code> a la terminal window, click Edit &gt; Profile Preferences, click on Title and Command tab and check Run command as login shell.</p>
+
+<p align="center">
+<img src="/assets/img/posts/rvm/login.png?raw=true" />
+</p>
+
+<p>Reboot</p>
+
+<h2 id="instalar-diferentes-versiones-de-ruby">Instalar diferentes versiones de Ruby</h2>
+
+<p>Si quueremos agregar una nueva versión de ruby</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rvm install 2.1.0
+</code></pre></div></div>
+
+<p>Si queremos crear un entorno</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rvm gemset create &lt;nombre_del_gemset&gt;
+</code></pre></div></div>
+
+<p>Si queremos usar una versión o un entorno</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rvm use 2.1.0
+
+rvm gemset use &lt;nombre_del_gemset&gt;
+</code></pre></div></div>
+
+<p>por ejemplo:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rvm install 2.1.0 
+rvm gemset create envios
+rvm gemset use 2.1.0@envios
+</code></pre></div></div>
+
+<p>Para usar una versión especifica por defecto</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rvm --default use 2.7
+</code></pre></div></div>
+
+<p>Para listar las versiones instaladas</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> rvm list
+
+ rvm list rubies
+</code></pre></div></div>
+
+<p>Si queremos verificar cual estamos usando por defecto</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>rvm list default
+</code></pre></div></div>
+
+
+
+<div class="PageNavigation">
+  
+    <a class="prev" href="/linux/2021/04/30/tracker-miner-fs.html">&laquo; Previous Post</a>
+  
+  
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  
+  
+    <a class="next" href="/programming/2021/05/10/nvm.html">Next Post &raquo;</a>
+  
+</div>
+      
+      <span class="inner">
+      <footer>
+        <hr>
+        <p><small>Hosted on GitHub Pages </a></small></p>
+      </footer>
+      </span>
+
+    </div>
+
+	<!-- Font awesome icons -->
+    <link href="/assets/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/assets/css/syntax.css">
+    <!-- Bootstrap core CSS -->
+    
+    <!-- Fonts -->
+    
+  
+
+    <script src="/assets/js/scale.fix.js"></script>
+    
+  </body>
+</html>

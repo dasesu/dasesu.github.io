@@ -1,0 +1,49 @@
+I"�	<h2 id="configurar-dvwa">Configurar DVWA</h2>
+
+<p>Descargamos el proyecto dvwa de <a href="https://dvwa.co.uk/">https://dvwa.co.uk/</a></p>
+
+<p><a href="https://github.com/digininja/DVWA/archive/master.zip">https://github.com/digininja/DVWA/archive/master.zip</a></p>
+
+<p>Extraemos el contenido y lo movemos a nuesto servidor y les damos permisos 777 a su contenido.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd /var/www/html/dvwa/
+sudo chmod 777 -R *
+</code></pre></div></div>
+
+<p>Modificamos el nombre del archivo dento del directorio config.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd config
+mv config.inc.php.dist config.inc.php
+</code></pre></div></div>
+
+<p>y dentro de este archivo modificamos usuario que tiene acceso a la base de datos y las credenciales para recaptcha</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$_DVWA[ 'recaptcha_public_key' ]  = '6LdK7xITAAzzAAJQTfL7fu6I-0aPl8KHHieAT_yJg';
+$_DVWA[ 'recaptcha_private_key' ] = '6LdK7xITAzzAAL_uw9YXVUOPoIHPZLfw2K1n5NVQ';
+</code></pre></div></div>
+
+<p>Creamos una base de datos ‘dvwa’ 
+Modificamos el usuario que va a tener acceso a la base de datos.</p>
+
+<p>Entramos a localhost/dvwa, colocamos usuario y contraseña</p>
+<p align="center">
+<img src="/assets/img/posts/dvwa/config_01.png?raw=true" />
+</p>
+
+<p>Paa corregir el erro ranterior modificamos el archivo php.ini</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd /etc/php/7.4/apache2
+vi php.ini
+</code></pre></div></div>
+
+<p>y modificamos la linea</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>allow_url_include = Off
+</code></pre></div></div>
+<p>por</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>allow_url_include = On
+</code></pre></div></div>
+
+<p>reiniciamos el servicio de apache para reflejar los cambios</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo service apache2 restart
+</code></pre></div></div>
+
+<p>Entramos nuevamente a nuestro sitio y linkeamos ‘crear base de datos’</p>
+
+<p>luego entramos con usuario: admin//password ( usuario:admin y password: password)</p>
+:ET

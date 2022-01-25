@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Vagrant | Notes</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Vagrant" />
+<meta name="author" content="dasesu" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Vagrant:" />
+<meta property="og:description" content="Vagrant:" />
+<link rel="canonical" href="http://localhost:4000/linux/2021/04/10/vagrant.html" />
+<meta property="og:url" content="http://localhost:4000/linux/2021/04/10/vagrant.html" />
+<meta property="og:site_name" content="Notes" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-04-10T19:31:10-04:00" />
+<script type="application/ld+json">
+{"headline":"Vagrant","dateModified":"2021-04-10T19:31:10-04:00","datePublished":"2021-04-10T19:31:10-04:00","author":{"@type":"Person","name":"dasesu"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/linux/2021/04/10/vagrant.html"},"description":"Vagrant:","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/img/logo.png"},"name":"dasesu"},"@type":"BlogPosting","url":"http://localhost:4000/linux/2021/04/10/vagrant.html","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta name="author" content="dasesu" />
+    <meta name="description" content="Vagrant" />
+    <meta name="keywords" content="Vagrant, Notes, linux" />
+	
+	  <link rel="stylesheet" href="/assets/css/bootstrap.min.css?v=" >
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <link rel="stylesheet" href="/assets/css/mystyle.css?v=">
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+           
+        <nav>
+        <ul class="nav nav-pills pull-right">
+        	<li><a class="navigationside" href="/">Home</a></li>
+          
+              <li><a class="navigationside" href="/contact">Contact Me</a></li>
+            
+        </nav>
+        <h3 class="text-muted"><a href="/">Notes</a></h3>
+        <hr>
+
+      
+
+<h1 class="inner_post_title">Vagrant</h1>
+<span class="view">by dasesu</span> - <span class="time">10 Apr 2021</span>
+
+<div class="tags"> Category
+&raquo; <a href="/category/linux">linux</a>
+</div>
+
+<br>
+
+<h2 id="vagrant">Vagrant:</h2>
+
+<p>Mas información en : <a href="https://www.vagrantup.com/">https://www.vagrantup.com/!</a></p>
+
+<p>Vagrant es una herramienta que nos ayuda a crear y manejar máquinas virtuales con un mismo entorno de trabajo. Nos permite definir los servicios a instalar así como también sus configuraciones. Está pensado para trabajar en entornos locales.</p>
+
+<p>Existe un catalogo de maquinas preconfiguradas para diferentes propositos, este catalogo lo podemos encontrar en:<br />
+<a href="https://app.vagrantup.com/boxes/search?page=2&amp;provider=virtualbox">https://app.vagrantup.com/boxes/search?page=2&amp;provider=virtualbox!</a></p>
+
+<p>Ya elegida la maquina que queremos usar se posible que necesitemos realizar algunas modificaciones.</p>
+
+<p>Los siguientes comandos corresponden a diferentes opciones de la configuración.</p>
+
+<p><strong>config.vm.box</strong> - Operative System</p>
+
+<p><strong>config.vm.provider</strong> - virtualbox</p>
+
+<p><strong>config.vm.network</strong> How your host computer sees your box</p>
+
+<p><strong>config.vm.synced_folder</strong> - How you access files from your computer</p>
+
+<p><strong>config.vm.provision</strong> - what we want setup</p>
+
+<p>Importar una maquina virtual puede conseguirse de diferentes formas:</p>
+
+<p>1) Creamos un directorio de trabajo por ejemplo vgdemo, dentro de este directorio ejecutamos el comando <strong>vagrant init ubuntu/trusty64</strong>. Aqui ubuntu/trusty64 es el nombre de la box que queremos usar en el catalogo</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vagrant init ubuntu/trusty64
+</code></pre></div></div>
+
+<p>Una vez ejecutado el comando se crea un archivo llamado Vagrantfile que tiene varias opciones, entre ellos los valores de configuración anteriores.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code># -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+
+Vagrant.configure("2") do |config|
+
+  # Box Settings  
+  config.vm.box = "ubuntu/trusty64"
+
+  # NEtwork Settings
+  config.vm.network "forwarded_port", guest: 80, host: 8080
+  # config.vm.network "forwarded_port", guest: 80, host: 8080, host_ip: "127.0.0.1"
+  # config.vm.network "private_network", ip: "192.168.33.10"
+  # config.vm.network "public_network"
+
+  # Folder Settings
+  config.vm.synced_folder "./html", "/var/www/html"
+
+  
+  # Providing Settings 
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = 2048
+    vb.cpus = 2
+  end
+  
+  # Provisions
+  # config.vm.provision "shell", inline: &lt;&lt;-SHELL
+  #   apt-get update
+  #   apt-get install -y apache2
+  # SHELL
+end
+
+</code></pre></div></div>
+
+<h1 id="comandos">Comandos</h1>
+
+<p>Comienza a hacerse la descarga de la box y directamente se asocia a nuestra virtualbox</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vagrant up
+</code></pre></div></div>
+
+<p>Elimina la maquina virtual</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vagrant destroy
+</code></pre></div></div>
+
+<p>Apagar la maquina o suspenderla</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vagrant suspend   
+</code></pre></div></div>
+
+<p>Reinicia o reactiva la maquina</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vagrant resume   
+</code></pre></div></div>
+
+<p>Reinicia la maquina luego de que se han realizado cambios en las caracteristicas de configuración como memoria, configuraciones de red, entre otras.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vagrant reload
+</code></pre></div></div>
+
+<p>Nos conectamos por ssh a la maquina</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>vagrant ssh
+</code></pre></div></div>
+
+<p>Supongamos que instalo apache, no puedo conectarme porque como tal no tengo definida una ruta hacia la maquina virtual, tampoco esta en la misma red pues la maquina virtual tiene una conexión NAT.</p>
+
+<p>Para poder tener acceso coloco el siguiente comando en el archivo Vagrantfile.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>config.vm.network "forwarded_port", guest: 80, host: 8080
+</code></pre></div></div>
+
+<p>Crea una carpeta compartida entre maquina host y guest. En este comando ./ corresponde a la maquina anfitriona y var/www/html a la maquina guest, si al principio está vacio va a sobreescribir lo que ocurre en la maquina virtual.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>config.vm.synced_folder "./", "/var/www/html/"
+</code></pre></div></div>
+
+<p>En esta sección definimos caracteristicas de la maquia virtual como memoria y cantidad de procesadores.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  # Providing Settings 
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = 2048
+    vb.cpus = 2
+  end
+</code></pre></div></div>
+
+<p>Define permisos permisos adicionales para directorios y archivos asignando 777 para directorios y 666 para archivos en el directorio ./</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>config.vm.synced_folder "./", "/var/www/html/", :mount_options =&gt; ["dmode=777","fmode=666"]
+</code></pre></div></div>
+
+<p>Si quisieramos realizar una configuración o instalación automaticamente al iniciar la box modificamos las provisiones con los siguientes comandos</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>   config.vm.provision "shell", inline: &lt;&lt;-SHELL
+     apt-get update
+     apt-get install -y apache2
+   SHELL
+</code></pre></div></div>
+
+<h2 id="otro-metodo">Otro metodo</h2>
+
+<p><code class="language-plaintext highlighter-rouge">vagrant box add laravel/homestead</code>: Hace la descarga de la maquina, pero no estoy seguro de donde queda. en virtualbox no.</p>
+
+<p><code class="language-plaintext highlighter-rouge">git clone https://github.com/laravel/homestead.git Homestead</code> esto no tarda nada, lo que tarda es el comando anterior</p>
+
+<p>Entramos al directorio Homestead que se ha creado y ejecutamos init.sh
+<code class="language-plaintext highlighter-rouge">bash init.sh</code></p>
+
+<p>Esto crea un directorio Homestead.yaml 
+en este directorio tenemos configuraciones como la memoria, la cantdad de cpus que se van a asignar, las claves ssh, los directorios compartidos,</p>
+
+<p>la sección 
+folders:</p>
+<ul>
+  <li>map: ~/Code
+to: /home/vagrant/Code<br />
+Luego de hacer modificaciones si es necesario ejecutamos el comando:
+<code class="language-plaintext highlighter-rouge">vagrant up</code></li>
+</ul>
+
+
+
+<div class="PageNavigation">
+  
+    <a class="prev" href="/security/2021/04/08/onion-site.html">&laquo; Previous Post</a>
+  
+  
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  
+  
+    <a class="next" href="/security/2021/04/18/dvwa.html">Next Post &raquo;</a>
+  
+</div>
+      
+      <span class="inner">
+      <footer>
+        <hr>
+        <p><small>Hosted on GitHub Pages </a></small></p>
+      </footer>
+      </span>
+
+    </div>
+
+	<!-- Font awesome icons -->
+    <link href="/assets/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/assets/css/syntax.css">
+    <!-- Bootstrap core CSS -->
+    
+    <!-- Fonts -->
+    
+  
+
+    <script src="/assets/js/scale.fix.js"></script>
+    
+  </body>
+</html>

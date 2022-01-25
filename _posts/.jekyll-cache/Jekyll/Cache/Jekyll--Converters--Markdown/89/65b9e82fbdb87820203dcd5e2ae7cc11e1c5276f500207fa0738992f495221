@@ -1,0 +1,184 @@
+I"�S<h2 id="wallets">Wallets</h2>
+<p>Las Wallets llamadas también Carteras o monederos, son algo asi como el sitio donde “almacenamos” criptomonedas, en realidad las criptomonedas no se almacenan en la cartera, la propiedad de criptomonedas queda registrada en la red bitcoin que se encuentra distribuida alrededor del mundo en forma de registros de transacciones.</p>
+
+<p>Bitcoin y otras criptomonedas usan protocolos y algoritmos reconocidos internacionalmente para el cifrado de la información. Bitcoin usa el crifrado de clave pública, es decir que para garantizar la pertenencia de criptomonedas y realizar transferencias de estas, se necesitan dos claves únicas: clave pública y clave privada. Básicamente un wallet es poseer estas dos claves.</p>
+
+<p>Podemos ver la clave pública como una dirección que podemos compartir libremente y que nos permite la recepción de monedas. Es como el número de cuenta del banco, cualquiera que lo tenga puede enviarte dinero, pero no puede disponer de lo que tengas allí ahorrado.</p>
+
+<p>La clave privada se parece mas a la contraseña que nos da total acceso a las criptomonedas transferidas hacia una clave pública. La clave pública se genera a partir de la clave privada, y solo con la clave privada pueden firmarse las transacciones salientes desde una clave pública.</p>
+
+<p>Los usuarios comunmente no necesitan comprender como funcionan estos algoritmos, de la misma forma que no necesitmos comprender la tecnología magnetica o chip asociada a las tarjetas de debito o crédito, sin embargo, si queremos desarrollar aplicaciones o sacar el maximo provecho de las que existen es importante conocer mejor su funcionamiento.</p>
+
+<h2 id="como-se-genera-una-dirección-bitcoin">Como se genera una dirección bitcoin</h2>
+
+<p><strong>Claves Privadas</strong> <br />
+Las claves privadas son usadas para comprobar la pertenencia de los fondos usados en una transacción, estas claves permiten crear firmas que son requeridas para transferir fondos.</p>
+
+<p>Es importante que estas claves se mantengan secretas de lo contrario cualquier persona puede retirar los fondos.</p>
+
+<p>Es importante generar las claves de forma realmente aleatoria, basicamente la clave privada consiste en un número entre 1 y 2^256</p>
+
+<p><strong>Wallet Import Format (WIF)</strong> <br />
+Las Wallet Import Format(<code class="language-plaintext highlighter-rouge">WIF</code>) son una manera mas compacta de representar las claves privadas. consisten en la codificación Base58 de <code class="language-plaintext highlighter-rouge">Prefijo</code> + <code class="language-plaintext highlighter-rouge">clave privada</code> + <code class="language-plaintext highlighter-rouge">checksum</code>.</p>
+
+<p>Este incorpora dígitos de control para la detección de errores, que en el formato hexadecimal no podrían ser detectados. El WIF es la notación mas habitual para las claves privadas Bitcoin.</p>
+
+<p>Las claves privadas asociadas a claves públicas no comprimidas constan de 51 caracteres que comienzan siempre por el número 5. Las claves privadas asociadas a claves públicas comprimidas constan de 52 caracteres y comienzan por una L o K mayúscula.</p>
+
+<p>Cuando se importa una clave privada, esta corresponde siempre exactamente a una dirección Bitcoin. Cualquier herramienta que lleve a cabo la conversión ha de ser capaz de mostrar la dirección Bitcoin correspondiente. Las reglas matemáticas de conversión son complicadas y es mejor dejar el cálculo en manos de un ordenador, pero todo programa que sepa manejar claves privadas y direcciones Bitcoin deducirá exactamente la misma dirección Bitcoin a partir de una clave privada dada.</p>
+
+<p><strong>Codificación Base58</strong> <br />
+Es una codificación para representar grandes numeros enteros como texto alfanumerico. Es similar a Base64, pero ha sido modificado para evitar ambiguedades de caracteres que pueden parecer el mismo, por lo tanto está diseñado para facilitar su lectura una vez ha sido impreso. Comparado con Base64 se excluyen los caracteres 0 (cero), O (o mayuscula), I (i mayuscula) y l (L minuscula) además de caracteres no alfanumericos como el + y el /.</p>
+
+<p><strong>Clave Pública</strong> <br />
+ La clave pública es generada a partir de la clave privada usando algoritmos de curvas elipticas. Lo importante de estos algoritmos es que es facil generar una clave pública a partir de la clave privada pero la operación inversa es prácticamente imposible. Bitcoin usa el algoritmo de curva eliptica de <code class="language-plaintext highlighter-rouge">secp256k1</code>.</p>
+
+<p>Veamos el proceso y que otras cosas ocurren para la generación de un par de claves pùblica y privada.</p>
+
+<p align="center">
+<img src="/assets/img/posts/bitcoin-address-creation/Address_map.jpg?raw=true" />
+</p>
+
+<h2 id="generando-una-clave-privada">Generando una clave Privada</h2>
+<p>Generamos una clave privada aleatoria a partir de 32 bytes.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">os</span><span class="p">,</span> <span class="n">binascii</span><span class="p">,</span> <span class="n">hashlib</span><span class="p">,</span> <span class="n">base58</span><span class="p">,</span> <span class="n">ecdsa</span>
+
+<span class="c1"># Generar la clave privada
+</span><span class="n">priv_key</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">urandom</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">priv_key</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'hex'</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>Esto retorna una clave aleatoria similar a esta: <code class="language-plaintext highlighter-rouge">5af0367c0a9c051a973c8718b2c94cfed82df17dff79994211145643fe24f492</code></p>
+
+<p>Se agrega el prefijo respectivo, para una Main Network en Bitcoin se usa el prefijo “<code class="language-plaintext highlighter-rouge">0x80</code>”, en el caso de una testnet el prefijo es <code class="language-plaintext highlighter-rouge">0xEF</code>.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">os</span><span class="p">,</span> <span class="n">binascii</span><span class="p">,</span> <span class="n">hashlib</span><span class="p">,</span> <span class="n">base58</span><span class="p">,</span> <span class="n">ecdsa</span>
+
+<span class="c1"># Generar la clave privada
+</span><span class="n">priv_key</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">urandom</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">priv_key</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'hex'</span><span class="p">))</span>
+
+<span class="c1"># Se agrega el prefijo correspondiente, ver el listado de prefijos.
+</span><span class="n">ptwifprefix</span> <span class="o">=</span> <span class="s">'</span><span class="se">\x80</span><span class="s">'</span> <span class="o">+</span> <span class="n">priv_key</span>
+<span class="k">print</span><span class="p">(</span><span class="n">ptwifprefix</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'hex'</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>Obtenemos el código de comprobación obtenido de realizar la operación hash sha256 2 veces consecutivas sobre la clave privada con su prefijo. Este código de comprobación consiste en tomar los primeros 4 bytes (8 dígitos del hexadecimal).</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">os</span><span class="p">,</span> <span class="n">binascii</span><span class="p">,</span> <span class="n">hashlib</span><span class="p">,</span> <span class="n">base58</span><span class="p">,</span> <span class="n">ecdsa</span>
+
+<span class="c1"># Generar la clave privada
+</span><span class="n">priv_key</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">urandom</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">priv_key</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'hex'</span><span class="p">))</span>
+
+<span class="c1"># Se agrega el prefijo correspondiente, ver el listado de prefijos.
+</span><span class="n">ptwifprefix</span> <span class="o">=</span> <span class="s">'</span><span class="se">\x80</span><span class="s">'</span> <span class="o">+</span> <span class="n">priv_key</span>
+<span class="k">print</span><span class="p">(</span><span class="n">ptwifprefix</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'hex'</span><span class="p">))</span>
+
+<span class="c1"># SHA-256 hash del resultado de la operacion anterior
+</span><span class="n">wif1sha256</span> <span class="o">=</span> <span class="n">hashlib</span><span class="p">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">ptwifprefix</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">wif1sha256</span><span class="p">.</span><span class="n">digest</span><span class="p">().</span><span class="n">encode</span><span class="p">(</span><span class="s">'hex'</span><span class="p">))</span>
+
+<span class="c1"># SHA-256 hash del resultado de la operacion anterior                                                 4
+</span><span class="n">wif2sha256</span> <span class="o">=</span> <span class="n">hashlib</span><span class="p">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">wif1sha256</span><span class="p">.</span><span class="n">digest</span><span class="p">())</span>                                         
+<span class="k">print</span><span class="p">(</span><span class="n">wif2sha256</span><span class="p">.</span><span class="n">digest</span><span class="p">().</span><span class="n">encode</span><span class="p">(</span><span class="s">'hex'</span><span class="p">))</span>
+
+ <span class="c1"># Se toman los 4 primeros bytes como checksum
+</span><span class="n">wifchecksum</span> <span class="o">=</span> <span class="n">wif2sha256</span><span class="p">.</span><span class="n">digest</span><span class="p">()[:</span><span class="mi">4</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span> <span class="n">wifchecksum</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'hex'</span><span class="p">)</span> <span class="p">)</span>
+
+<span class="c1"># Concatenamos la clave privada que incluye el prefijo mas el checksum obtenido previamente
+</span><span class="n">addwifchecksum</span> <span class="o">=</span> <span class="n">ptwifprefix</span> <span class="o">+</span> <span class="n">wifchecksum</span>
+<span class="k">print</span><span class="p">(</span> <span class="n">addwifchecksum</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'hex'</span><span class="p">)</span> <span class="p">)</span>
+
+</code></pre></div></div>
+
+<p>Finalmente codificamos a Base58 la clave privada con su prefijo + código de comprobación, el resultado de esto es la clave privada en notación WIF.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">...</span>
+<span class="c1"># Convertimos a base58 el resultado del paso anterior
+</span><span class="n">WIF</span> <span class="o">=</span> <span class="n">base58</span><span class="p">.</span><span class="n">b58encode</span><span class="p">(</span> <span class="n">addwifchecksum</span> <span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">"Wallet Import Format "</span> <span class="o">+</span> <span class="n">WIF</span><span class="p">)</span>
+<span class="p">...</span>
+</code></pre></div></div>
+
+<p>Obteniendo por ejemplo una clave similar la siguiente: <code class="language-plaintext highlighter-rouge">529r39Bz9hgY2Wb7JWjxdFbk6aFtmhxP9wa234GfXAwmrPuWZgH</code>, notese que esta clave comienza por 5</p>
+
+<h2 id="generando-una-clave-pública">Generando una clave Pública</h2>
+<p>Continuando a partir del resultado anterior veamos como es el proceso de generar una clave pública.</p>
+
+<p>Obtenemos la firma de la clave privada aplicando el algoritmo de curva elíptica a la representación hexadecimal de original sin prefijo agregado ni modificación de formato.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">os</span><span class="p">,</span> <span class="n">binascii</span><span class="p">,</span> <span class="n">hashlib</span><span class="p">,</span> <span class="n">base58</span><span class="p">,</span> <span class="n">ecdsa</span>
+
+<span class="c1"># Generar la clave privada
+</span><span class="n">priv_key</span> <span class="o">=</span> <span class="n">os</span><span class="p">.</span><span class="n">urandom</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">priv_key</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'hex'</span><span class="p">))</span>
+
+<span class="n">sk</span> <span class="o">=</span> <span class="n">ecdsa</span><span class="p">.</span><span class="n">SigningKey</span><span class="p">.</span><span class="n">from_string</span><span class="p">(</span><span class="n">priv_key</span><span class="p">,</span> <span class="n">curve</span><span class="o">=</span><span class="n">ecdsa</span><span class="p">.</span><span class="n">SECP256k1</span><span class="p">)</span>
+<span class="n">vk</span> <span class="o">=</span> <span class="n">sk</span><span class="p">.</span><span class="n">verifying_key</span>
+<span class="n">pubKey</span><span class="o">=</span><span class="p">(</span><span class="s">'</span><span class="se">\04</span><span class="s">'</span><span class="o">+</span><span class="n">sk</span><span class="p">.</span><span class="n">verifying_key</span><span class="p">.</span><span class="n">to_string</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span> <span class="n">pubKey</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'hex'</span><span class="p">)</span> <span class="p">)</span>
+</code></pre></div></div>
+
+<p>Los algoritmos usados para obtener la dirección bitcoin a partir de la clave pública son el Secure Hash Algorithm (SHA) y el RACE Integrity Primitives Evolution Message Digest (RIPEMD), especificamente <code class="language-plaintext highlighter-rouge">SHA256</code> y <code class="language-plaintext highlighter-rouge">RIPEMD160</code>.</p>
+
+<p>Realizamos una operación hash sha256 sobre la clave pública obtenida en el paso anterior</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">...</span>
+
+<span class="c1"># 2 SHA-256 hash de pubKey
+</span><span class="n">ptafirstsha256</span> <span class="o">=</span> <span class="n">hashlib</span><span class="p">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">pubKey</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span> <span class="n">ptafirstsha256</span><span class="p">.</span><span class="n">digest</span><span class="p">().</span><span class="n">encode</span><span class="p">(</span><span class="s">'hex'</span><span class="p">)</span> <span class="p">)</span>
+<span class="p">...</span>
+</code></pre></div></div>
+
+<p>Al resultado anterior se le aplica la función hash ripem160.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">...</span>
+<span class="c1"># 3 RIPEMD-160 Hash a la variable ptafirstsha256
+</span><span class="n">hash160</span> <span class="o">=</span> <span class="n">ripemd160</span><span class="p">(</span> <span class="n">ptafirstsha256</span><span class="p">.</span><span class="n">digest</span><span class="p">()</span> <span class="p">)</span>
+<span class="k">print</span><span class="p">(</span> <span class="n">hash160</span><span class="p">.</span><span class="n">digest</span><span class="p">().</span><span class="n">encode</span><span class="p">(</span><span class="s">'hex'</span><span class="p">)</span> <span class="p">)</span>
+<span class="p">...</span>
+</code></pre></div></div>
+
+<p>Agregamos el prefijo asociado al tipo de dirección que queramos generar ( ver la lista de prefijos ), y aplicamos la función hash sha256 una segunda y una tercera vez.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">...</span>
+<span class="c1"># Agregamos el prefijo para la red que estemos usando. por ejemplo en el caso de la Main Network el prefijo es "0x00"
+</span><span class="n">ptaprefix</span> <span class="o">=</span> <span class="s">'</span><span class="se">\x00</span><span class="s">'</span><span class="o">+</span><span class="n">hash160</span><span class="p">.</span><span class="n">digest</span><span class="p">()</span>   <span class="c1"># cambiar el prefijo dependiendo de la red
+</span><span class="k">print</span><span class="p">(</span> <span class="n">ptaprefix</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'hex'</span><span class="p">)</span> <span class="p">)</span>
+<span class="p">...</span>
+</code></pre></div></div>
+
+<p>Calculamos el checksum aplicando la función hash una segunda y tercera vez al resultado anterio</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">...</span>
+<span class="c1"># 5  SHA-256 hash aplicado a ptaprefix
+</span><span class="n">ptasecondsha256</span> <span class="o">=</span> <span class="n">hashlib</span><span class="p">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">ptaprefix</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">ptasecondsha256</span><span class="p">.</span><span class="n">digest</span><span class="p">().</span><span class="n">encode</span><span class="p">(</span><span class="s">'hex'</span><span class="p">))</span>
+
+<span class="c1"># SHA-256 hash aplicado a ptasecondsha256
+</span><span class="n">ptathirdsha256</span> <span class="o">=</span> <span class="n">hashlib</span><span class="p">.</span><span class="n">sha256</span><span class="p">(</span><span class="n">ptasecondsha256</span><span class="p">.</span><span class="n">digest</span><span class="p">())</span>
+<span class="k">print</span><span class="p">(</span><span class="n">ptathirdsha256</span><span class="p">.</span><span class="n">digest</span><span class="p">().</span><span class="n">encode</span><span class="p">(</span><span class="s">'hex'</span><span class="p">)</span> <span class="p">)</span>
+
+<span class="c1"># Tomamos los primeros 4 bytes como checksum
+</span><span class="n">checksum</span> <span class="o">=</span> <span class="n">ptathirdsha256</span><span class="p">.</span><span class="n">digest</span><span class="p">()[:</span><span class="mi">4</span><span class="p">]</span>
+<span class="k">print</span><span class="p">(</span> <span class="n">checksum</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'hex'</span><span class="p">)</span> <span class="p">)</span>
+<span class="p">...</span>
+</code></pre></div></div>
+
+<p>Concatenamos la clave publica <code class="language-plaintext highlighter-rouge">ptaprefix</code> al checksum obtenido y convertimos lo obtenido a base58.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="p">...</span>
+<span class="n">addchecksum</span> <span class="o">=</span> <span class="n">ptaprefix</span> <span class="o">+</span> <span class="n">checksum</span>
+<span class="k">print</span><span class="p">(</span> <span class="n">addchecksum</span><span class="p">.</span><span class="n">encode</span><span class="p">(</span><span class="s">'hex'</span><span class="p">)</span> <span class="p">)</span>
+
+<span class="n">public_address</span> <span class="o">=</span> <span class="n">base58</span><span class="p">.</span><span class="n">b58encode</span><span class="p">(</span> <span class="n">addchecksum</span> <span class="p">)</span>
+<span class="k">print</span><span class="p">(</span> <span class="n">public_address</span> <span class="p">)</span>
+<span class="p">...</span>
+</code></pre></div></div>
+
+<p><a href="/codes/bitcoin-address-creation/generador_claveprivada_direccionbitcoin.py">Full Code</a></p>
+:ET

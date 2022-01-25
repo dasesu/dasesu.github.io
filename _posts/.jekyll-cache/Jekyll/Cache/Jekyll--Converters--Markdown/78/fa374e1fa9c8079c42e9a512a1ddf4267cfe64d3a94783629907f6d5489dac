@@ -1,0 +1,190 @@
+I"1<h2 id="docker">Docker:</h2>
+
+<h2 id="instalación-en-linux--ubuntu-">Instalación en linux ( Ubuntu )</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get remove docker docker-engine docker.io containerd runc
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get install \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg \
+    lsb-release
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>echo \
+  "deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+  $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list &gt; /dev/null
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  sudo apt-get update
+  sudo apt-get install docker-ce docker-ce-cli containerd.io
+</code></pre></div></div>
+
+<p>Ejecuto un docker de prueba</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  sudo docker run hello-world
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo groupadd docker
+sudo usermod -aG docker $USER
+</code></pre></div></div>
+
+<p>Para instalar kitematic</p>
+
+<p>Descargar el ultimo release del repositorio correspondiente a Ubuntu 
+<a href="https://github.com/docker/kitematic/releases">https://github.com/docker/kitematic/releases</a></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>tar -xvzf Kitematic-0.17.7-Ubuntu.zip
+sudo dpkg -i Kitematic-0.17.7_amd64.deb
+</code></pre></div></div>
+
+<pre>
+        _____ Contenedor1
+       |_____ Contenedor2
+imagen |_____ Contenedor3
+       |_____ ...
+       |_____ Contenedor n
+
+</pre>
+
+<h2 id="docker-commands">Docker Commands</h2>
+
+<p><code class="language-plaintext highlighter-rouge">docker version</code>: Muestra la versión de docker</p>
+
+<p><code class="language-plaintext highlighter-rouge">docker login</code>: hace login a mi cunta de docker, debo indicarle usuario y contraseña</p>
+
+<p><code class="language-plaintext highlighter-rouge">docker run container</code> Inicia y configura un contendor</p>
+
+<p><code class="language-plaintext highlighter-rouge">docker start container</code> Arranca un contenedor ya creado y con nombre</p>
+
+<p><code class="language-plaintext highlighter-rouge">docker run ubuntu echo "hello World"</code>: Ejecuta una llamada echo dentro de ubuntu y al terminar sale del contenedor</p>
+
+<p><code class="language-plaintext highlighter-rouge">docker run -it ubuntu bash</code>: Llama a la terminal bash de forma interactiva, no en todos los comandos esta función es utilizable pro ejemplo si hago -it echo “hello World” aunque la llamada sea interactiva termina al finalizar el proceso y el usuario no puede aprovechar esta función</p>
+
+<p><code class="language-plaintext highlighter-rouge">docker run -d image</code>: ejecuta el contenedor en background.</p>
+
+<p><code class="language-plaintext highlighter-rouge">docker atach [container]</code>: devuelve un contenedor activo</p>
+
+<p><code class="language-plaintext highlighter-rouge">docker run apache -p 2244:80 -v /home/dasesu/Desktop:/usr/local/apache/htdocs/ -d httpd</code>: ejecuta un sevidor apache en la maquina host accedemos a el por medio del puerto 2244 y en la maquina huesped usa el puerto 80, ademas el contenido del directorio /usr/local/apache/htdocs/ en la maquina huesped lo va a tomar del directorio /home/dasesu/Desktop de la maquina host, que es donde deberiamos colocar nuestros archivos.</p>
+
+<p><code class="language-plaintext highlighter-rouge">docker exec -it website bash</code>: ejecuta el comando bash dentro de el contenedor website de manera interactiva</p>
+
+<p><code class="language-plaintext highlighter-rouge">docker ps</code>: Lista los contenedores en ejecucuón junto con otra información</p>
+
+<p><code class="language-plaintext highlighter-rouge">docker ps -a</code>: Muestra los contenedores en ejecución o no</p>
+
+<p><code class="language-plaintext highlighter-rouge">docker ps -aq</code>: me da un listado de los id de los contenedores creados ( aunque no esten en ejecución)</p>
+
+<p><code class="language-plaintext highlighter-rouge">docker start 7dbi6dksiemi5fgH</code>:  reactiva un contenedor que no se encuentra en ejecución.</p>
+
+<p><code class="language-plaintext highlighter-rouge">docker rm [id o name]</code>: Elimina un contendor, no la imagen. pero en realidad deja la posibilidad de reabrir el proceso</p>
+
+<p><code class="language-plaintext highlighter-rouge">docker rm $(docker ps -aq)</code>: le pasa a docker rm el listado resultante de docker ps -aq, esto borra todos los contenedores</p>
+
+<p><code class="language-plaintext highlighter-rouge">docker stop ID</code>: detiene la ejecución de un contenedor, debemos indicarle o el id del contenedor o el nombre del contenedor
+Ejemplo: 
+<code class="language-plaintext highlighter-rouge">docker stop 7dbi6dksiemi5fgH</code>:</p>
+
+<h2 id="imagenes">Imagenes</h2>
+
+<p><code class="language-plaintext highlighter-rouge">docker images</code>: Lista las imagenes que tengo preparadas para ejecutar</p>
+
+<p><code class="language-plaintext highlighter-rouge">docker search [image]</code>: Busca imagen en el catalogo de imagenes de docker hub desde la consola</p>
+
+<p><code class="language-plaintext highlighter-rouge">docker rmi nombre_imagen</code>: Elimina una imagen. Si deseo eliminar una imagen debo primero eliminar o detener los contenedores que tiene asociados</p>
+
+<p><code class="language-plaintext highlighter-rouge">docker rmi --force nombre_imagen</code>: forza el borrado de la imagen y de todos los contenedores que puedan estarla usando</p>
+
+<p><code class="language-plaintext highlighter-rouge">docker tag [id_de imagen] some_name</code>: asocia una imagen con un nuevo nombre, util cuando quiero hacer build de mi propia imagen, explico mis pasos, ejecuto una imagen durante la ejecución hago cambios y hago commit, eso crea una imagen sin nombre pero que posee un nuevo id, a ese id le paso el comando por ejemplo  docker tag 46530ff11ee6 miapachev1, tambien esta asociadoa  diferentes versiones de contenedores por ejemplo php7.4 o php8</p>
+
+<p><code class="language-plaintext highlighter-rouge">docker pull [image]</code>: Descarga la imagen desde docker hub</p>
+
+<p><code class="language-plaintext highlighter-rouge">docker commit [id o nombre]</code>: Crea una imagen personalizada, para esto necesitamos el id del contenedor o el nombre y lo utilizamos con el comando docker commit, los cambios deben estar dentro del contenedor para que se vean reflejados en la imagen</p>
+
+<h2 id="network">Network</h2>
+<p><a href="https://docs.docker.com/engine/userguide/networking">https://docs.docker.com/engine/userguide/networking</a></p>
+
+<p><code class="language-plaintext highlighter-rouge">docker network inspect bridge</code>: Requiere una imagen funcionando, esto muestra las propiedades de nuestr red en bridge, cualquier contenedor que añadamos será mostrado con este comando junto con su dirección ip.</p>
+
+<p><code class="language-plaintext highlighter-rouge">docker network create mi-red</code>: docker nos permite connectarnos a aplicaciones usando los microservicios, basicamente cada contenedor tiene su propio entorno de red distinto, este comando crea nuestra propia red.</p>
+
+<p><code class="language-plaintext highlighter-rouge">docker disconnet [red] [contenedor] </code>: Nos desconecta de la red indicada
+docker disconnet bridge nginx: desconecta el contenedor de la red bridge</p>
+
+<p><code class="language-plaintext highlighter-rouge">docker network connect [red] [contenedor]</code>: Conecta el contenedor a la la red “red”</p>
+
+<p><code class="language-plaintext highlighter-rouge">docker run ubuntu --network=none</code>
+<code class="language-plaintext highlighter-rouge">docker run ubuntu --network=host</code>
+<code class="language-plaintext highlighter-rouge">docker network create --driver bridge --subnet 182.18.0.0/16</code>
+<code class="language-plaintext highlighter-rouge">docker network ls</code>: Lista todas las redes</p>
+
+<h2 id="embedded-dns">Embedded DNS</h2>
+
+<p><code class="language-plaintext highlighter-rouge">docker run -p 8080:80 -p 3000:80 -p 4000:80 nginx</code>: esto ejecuta 3 contenedores diferentes con esa configuración de puertos, es lo msmo qu iniciar un contenedor, luego otro y luego otro. solo que va a tener un unico id.</p>
+
+<h2 id="environment-variables">Environment Variables</h2>
+
+<p><code class="language-plaintext highlighter-rouge">docker run -d -p 3306:3306 --name mySiteDB -e MYSQL_ROOT_PASSWORD=pass123 mysql</code>: el parametro name permite asociar el id al nombre que le estoy indicando, es util si tengo varias bases de datos que respondan a servicios diferentes y quiera identificarlas facilmente. el parametro -e indica que estoy pasando variables de entorno, en este caso la variable <strong>MYSQL_ROOT_PASSWORD</strong> que tiene pass123 como valor, eso es para que mysql sepa cual va a ser la contraseña con la que voy a acceder.</p>
+
+<h2 id="sahring-folder">Sahring Folder</h2>
+<p><code class="language-plaintext highlighter-rouge">docker run -p 8080:80 --name website -v /home/Desktop/web:/usr/share/nginx/html nginx</code>: copia lo que se encuentra en home/Desktop/web a /usr/share/nginx/html.</p>
+
+<h2 id="copy-file-into-containers">Copy file into containers</h2>
+<p><code class="language-plaintext highlighter-rouge">docker cp /home/dasesu/Desktop/www/index.html a031e504324c:/usr/local/apache2/htdocs/index.html</code>: copia un archivo de host a huesped</p>
+
+<pre>
+  buildkit    image    overlay2  runtimes  tmp    volumes
+containers  network  plugins   swarm     trust
+</pre>
+
+<h2 id="docker-file-system">Docker file system</h2>
+<p>Cuando instalamos docker se crea un directorio /var/lib/docker</p>
+
+<p>hay dos formas de montar volumenes, volume mounting y byte mounting, en la primera primero creamos un volumen que luego compartimos con el contenedor.
+metodo 1:
+<code class="language-plaintext highlighter-rouge">docker volume create data_volume</code>: crea un volumen de detos 
+<code class="language-plaintext highlighter-rouge">docker run -v data_volumen:/var/lib/mysql mysql</code>: monta el contenido del directorio /var/lib/mysql en data_volume.</p>
+
+<p>metodo 2:
+Montamos un directorio directamente
+docker run -v /data/mysql:/var/lib/mysql mysql</p>
+
+<h2 id="dockerfile">Dockerfile</h2>
+
+<p>El objetivo del archivo Dockerfile es no tener que dar explicaciones sino ajustar todo para que se configure segun nuestros ajustes de forma automatizada en la maquina que se ejecute</p>
+
+<pre>
+
+Archivo de configuración: Dockerfile
+FROM nginx:1.17.10                     # version que va a usar
+WORKDIR /usr/share/ngingx/html         # directorio de trabajo
+COPY ./public-html/ /usr/local/apache2/htdocs/
+
+</pre>
+
+<p>Otro Ejemplo</p>
+<pre>
+  FROM Ubuntu
+
+  RUN apt-get update
+  RUN apt-get install python
+
+  RUN pip install flask
+  RUN pip install flask-mysql
+
+  COPY . /opt/source-code
+
+  ENTRYPOINT FLASK_APP=/opt/source-code/app.py flask run
+</pre>
+
+<p><code class="language-plaintext highlighter-rouge">docker build Dockerfile -t dadatest</code>: el parametro -t da el nombre que deseo que tenga la imagen, y tengo que ejecutar este comando en el directorio donte tengo el Dockerfile. luego de esto se puede hacer un push para subirlo a docker hub.</p>
+
+<p>Dentro del Dockerfile  hay otras opciones como el WORKDIR, ENV, CMD, WORKDIR define cual va a ser nuestro directorio de trabajo dentro del contenedor. ENV define variables de entorno. CMD define el comando por defecto una vez que se ejecuta un docker</p>
+
+<p><code class="language-plaintext highlighter-rouge">docker run -dit --name my-apache-app -p 8080:80 -v "$PWD":/usr/local/apache2/htdocs/ httpd:2.4</code></p>
+
+<p><code class="language-plaintext highlighter-rouge">docker un ubuntu sleep 5</code>: ejecuta sleep 5s y luego sale, queda en status exit</p>
+:ET

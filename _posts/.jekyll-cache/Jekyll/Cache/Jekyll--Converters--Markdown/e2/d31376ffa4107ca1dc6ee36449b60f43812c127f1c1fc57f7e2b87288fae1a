@@ -1,0 +1,34 @@
+I"<h2 id="sass">Sass</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm init -y
+npm install bootstrap@next
+</code></pre></div></div>
+
+<p>Esto va a crear una carpeta con los modulos de node, dentro de estos modulos tenemos el archivo bootstrap node_modules/bootstrap/scss/bootstrap
+Para incluir este archivo creamos un directorio sass y dentro un archivo custom.scss, dentro de este archivo</p>
+
+<p>debemos incluir la ruta del archivo bootstrap</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@import "../node_modules/bootstrap/scss/bootstrap";
+</code></pre></div></div>
+
+<p>si quieremos realizar alguna modificación podemos reasignar valores a las variables incluidas en <code class="language-plaintext highlighter-rouge">node_modules/bootstrap/scss/_variables.css</code>
+pero deben colocarse antes de el import, al hacer los cambios la compilación se ejecuta automaticamente si instalamos el paquete 
+live compilation of sass en VSCode esto va a generar un archivo custom.css que es el que vamos a incluir en el html</p>
+
+<p>Ahora el archivo custom generado aun es algo pesado, mas de 11k lineas de codigo, si queremos reducirlo
+podemos purgar el archivo asi</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm i -g purgecss
+</code></pre></div></div>
+
+<p>luego vamos al archivo package.json y editamos el campo script de forma parecida a esto</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>  "scripts": {
+    "build": "purgecss -css sass/custom.css --content index.html -o sass/reducido.css"
+  }
+</code></pre></div></div>
+
+<p>luego ejecutamos los cambios con</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>npm run build
+</code></pre></div></div>
+
+<p>Esto va a generar un archivo reducido.css que seria el que incluyamos para usar un archivo mas liviano</p>
+:ET

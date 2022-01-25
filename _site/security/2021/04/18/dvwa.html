@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>DVWA | Notes</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="DVWA" />
+<meta name="author" content="dasesu" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Configurar DVWA" />
+<meta property="og:description" content="Configurar DVWA" />
+<link rel="canonical" href="http://localhost:4000/security/2021/04/18/dvwa.html" />
+<meta property="og:url" content="http://localhost:4000/security/2021/04/18/dvwa.html" />
+<meta property="og:site_name" content="Notes" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-04-18T23:23:10-04:00" />
+<script type="application/ld+json">
+{"headline":"DVWA","dateModified":"2021-04-18T23:23:10-04:00","datePublished":"2021-04-18T23:23:10-04:00","author":{"@type":"Person","name":"dasesu"},"mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/security/2021/04/18/dvwa.html"},"description":"Configurar DVWA","publisher":{"@type":"Organization","logo":{"@type":"ImageObject","url":"http://localhost:4000/assets/img/logo.png"},"name":"dasesu"},"@type":"BlogPosting","url":"http://localhost:4000/security/2021/04/18/dvwa.html","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+
+    <meta name="author" content="dasesu" />
+    <meta name="description" content="DVWA" />
+    <meta name="keywords" content="DVWA, Notes, security" />
+	
+	  <link rel="stylesheet" href="/assets/css/bootstrap.min.css?v=" >
+    <link rel="stylesheet" href="/assets/css/style.css?v=">
+    <link rel="stylesheet" href="/assets/css/mystyle.css?v=">
+    <!--[if lt IE 9]>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+           
+        <nav>
+        <ul class="nav nav-pills pull-right">
+        	<li><a class="navigationside" href="/">Home</a></li>
+          
+              <li><a class="navigationside" href="/contact">Contact Me</a></li>
+            
+        </nav>
+        <h3 class="text-muted"><a href="/">Notes</a></h3>
+        <hr>
+
+      
+
+<h1 class="inner_post_title">DVWA</h1>
+<span class="view">by dasesu</span> - <span class="time">18 Apr 2021</span>
+
+<div class="tags"> Category
+&raquo; <a href="/category/security">security</a>
+</div>
+
+<br>
+
+<h2 id="configurar-dvwa">Configurar DVWA</h2>
+
+<p>Descargamos el proyecto dvwa de <a href="https://dvwa.co.uk/">https://dvwa.co.uk/</a></p>
+
+<p><a href="https://github.com/digininja/DVWA/archive/master.zip">https://github.com/digininja/DVWA/archive/master.zip</a></p>
+
+<p>Extraemos el contenido y lo movemos a nuesto servidor y les damos permisos 777 a su contenido.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd /var/www/html/dvwa/
+sudo chmod 777 -R *
+</code></pre></div></div>
+
+<p>Modificamos el nombre del archivo dento del directorio config.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd config
+mv config.inc.php.dist config.inc.php
+</code></pre></div></div>
+
+<p>y dentro de este archivo modificamos usuario que tiene acceso a la base de datos y las credenciales para recaptcha</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>$_DVWA[ 'recaptcha_public_key' ]  = '6LdK7xITAAzzAAJQTfL7fu6I-0aPl8KHHieAT_yJg';
+$_DVWA[ 'recaptcha_private_key' ] = '6LdK7xITAzzAAL_uw9YXVUOPoIHPZLfw2K1n5NVQ';
+</code></pre></div></div>
+
+<p>Creamos una base de datos ‘dvwa’ 
+Modificamos el usuario que va a tener acceso a la base de datos.</p>
+
+<p>Entramos a localhost/dvwa, colocamos usuario y contraseña</p>
+<p align="center">
+<img src="/assets/img/posts/dvwa/config_01.png?raw=true" />
+</p>
+
+<p>Paa corregir el erro ranterior modificamos el archivo php.ini</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd /etc/php/7.4/apache2
+vi php.ini
+</code></pre></div></div>
+
+<p>y modificamos la linea</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>allow_url_include = Off
+</code></pre></div></div>
+<p>por</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>allow_url_include = On
+</code></pre></div></div>
+
+<p>reiniciamos el servicio de apache para reflejar los cambios</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo service apache2 restart
+</code></pre></div></div>
+
+<p>Entramos nuevamente a nuestro sitio y linkeamos ‘crear base de datos’</p>
+
+<p>luego entramos con usuario: admin//password ( usuario:admin y password: password)</p>
+
+
+
+<div class="PageNavigation">
+  
+    <a class="prev" href="/linux/2021/04/10/vagrant.html">&laquo; Previous Post</a>
+  
+  
+  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  
+  
+    <a class="next" href="/linux/commands/2021/04/19/screenkey.html">Next Post &raquo;</a>
+  
+</div>
+      
+      <span class="inner">
+      <footer>
+        <hr>
+        <p><small>Hosted on GitHub Pages </a></small></p>
+      </footer>
+      </span>
+
+    </div>
+
+	<!-- Font awesome icons -->
+    <link href="/assets/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
+    <!-- syntax highlighting CSS -->
+    <link rel="stylesheet" href="/assets/css/syntax.css">
+    <!-- Bootstrap core CSS -->
+    
+    <!-- Fonts -->
+    
+  
+
+    <script src="/assets/js/scale.fix.js"></script>
+    
+  </body>
+</html>

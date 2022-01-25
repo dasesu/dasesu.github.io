@@ -1,0 +1,847 @@
+I"�Q<h2 id="livewire">Livewire</h2>
+<p>Para instalar livewire</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>composer require livewire/livewire
+</code></pre></div></div>
+
+<p>Luego debemos incluir los assets que hacen la invocación a livewire. Dentro de la equiqueta <strong>head</strong> agregamos <strong>@livewireStyles</strong>, y al final antes de cerrar la etiqueta <strong>body</strong> agregamos <strong>@livewireScripts</strong></p>
+
+<p>Creamos un componente de livewire</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>php artisan make:livewire ShowPost
+</code></pre></div></div>
+
+<p>Esto crea 2 archivos el primero en app/Http/livewire/ShowPost.php que tiene el metodo render, este metodo se va a llamar cada vez que se modifique el componente.</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+
+<span class="kn">namespace</span> <span class="nn">App\Http\Livewire</span><span class="p">;</span>
+
+<span class="kn">use</span> <span class="nc">Livewire\Component</span><span class="p">;</span>
+
+<span class="kd">class</span> <span class="nc">ShowPost</span> <span class="kd">extends</span> <span class="nc">Component</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">render</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nf">view</span><span class="p">(</span><span class="s1">'livewire.show-post'</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>El segundo archivo es nuestro componente livewire, se encuentra en resources/views/livewire/show-post.blade.php, esa forma de nombrar los archivos es la convención</p>
+
+<p>La vista que es componente de livewire debe teer todo su contenido dentro de una etiqueta div, luego para llamar a este componente por ejemplo desde dashboard usamos la directiva @livewire(‘componente’) el nombre del componente debe estar en minusculas y separado por guiones por ejemplo</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@livewire('show-posts');
+</code></pre></div></div>
+
+<p>Si quiero ordenar los componentes de livewire en sub carpetas puedo indicarlo al crearlos separando los directorios con el caracter de backslash, asi por ejemplo:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>php artisan make:livewire Nav\ShowPost
+</code></pre></div></div>
+<p>Y para llamarlo simplemente usamos el identificador nav.show-post</p>
+
+<p>En ocasiones pude que necesitemos enviar informacion a nuestro componente para eso como segundo parametro enviamos un array, con atributo valor asi</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>@livewire('show-post',['title' =&gt; 'esto es un campo titulo enviado por livewire'])
+</code></pre></div></div>
+
+<p>Para recibir esta variable en ShowPost.php agregamos una variable publica con el mismo nombre que la variable que estamos pasando, en este caso title.</p>
+
+<p>Recordemos que cualquier propiedad d ela clase va a ser accedida por la vista del componente asi si queremos imprimirla en show-post.blade.php simplemente lo hacemos con { { $title} }</p>
+
+<p>Si quiero cambiar el nombre con el que se recibe en ShowPost puedo crear una funcion llamada mount, esta funcion es como un constructor del componente de livewire asi podria hacer algo como</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">ShowPost</span> <span class="kd">extends</span> <span class="nc">Component</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="nv">$name</span><span class="p">;</span>
+
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">mount</span><span class="p">(</span><span class="nv">$title</span><span class="p">){</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">name</span> <span class="o">=</span> <span class="nv">$title</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">render</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nf">view</span><span class="p">(</span><span class="s1">'livewire.show-post'</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Recuperando campos desde la base de datos</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>php artisan make:model Post -mf
+</code></pre></div></div>
+<p>Vamos a la migración y agregamos los campos title y content asi</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">public</span> <span class="k">function</span> <span class="n">up</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nc">Schema</span><span class="o">::</span><span class="nf">create</span><span class="p">(</span><span class="s1">'posts'</span><span class="p">,</span> <span class="k">function</span> <span class="p">(</span><span class="kt">Blueprint</span> <span class="nv">$table</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nv">$table</span><span class="o">-&gt;</span><span class="nf">id</span><span class="p">();</span>
+            <span class="nv">$table</span><span class="o">-&gt;</span><span class="nf">string</span><span class="p">(</span><span class="s1">'title'</span><span class="p">);</span>
+            <span class="nv">$table</span><span class="o">-&gt;</span><span class="nf">string</span><span class="p">(</span><span class="s1">'content'</span><span class="p">);</span>
+            <span class="nv">$table</span><span class="o">-&gt;</span><span class="nf">timestamps</span><span class="p">();</span>
+        <span class="p">});</span>
+</code></pre></div></div>
+
+<p>Ahora editamos el factory</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">public</span> <span class="k">function</span> <span class="n">definition</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="c1">//</span>
+            <span class="s1">'title'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">faker</span><span class="o">-&gt;</span><span class="nf">sentence</span><span class="p">(),</span>
+            <span class="s1">'content'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">faker</span><span class="o">-&gt;</span><span class="nf">text</span><span class="p">()</span>
+        <span class="p">];</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p>Editamos el seeder</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">public</span> <span class="k">function</span> <span class="n">run</span><span class="p">()</span>
+    <span class="p">{</span>
+         <span class="err">\</span><span class="nc">App\Models\Post</span><span class="o">::</span><span class="nf">factory</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">create</span><span class="p">();</span>
+
+    <span class="p">}</span>
+</code></pre></div></div>
+<p>y el modelo Post.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Post</span> <span class="kd">extends</span> <span class="nc">Model</span> <span class="n">para</span> <span class="n">permitir</span> <span class="n">la</span> <span class="n">asignación</span> <span class="n">masiva</span>
+<span class="p">{</span>
+    <span class="kn">use</span> <span class="nc">HasFactory</span><span class="p">;</span>
+    <span class="k">protected</span> <span class="nv">$fillable</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'title'</span><span class="p">,</span><span class="s1">'content'</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div></div>
+<p>Luego hacemos la migración con la opcion seed para ingresas los datos.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>php artisan migrate:fresh --seed
+</code></pre></div></div>
+
+<p>Ahora vamos a recuperar esa información desde ShowPost</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">use</span> <span class="nc">App\Models\Post</span><span class="p">;</span>
+
+<span class="kd">class</span> <span class="nc">ShowPost</span> <span class="kd">extends</span> <span class="nc">Component</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="n">render</span><span class="p">()</span>
+    <span class="p">{</span>   
+        <span class="nv">$posts</span> <span class="o">=</span> <span class="nc">Post</span><span class="o">::</span><span class="nf">all</span><span class="p">();</span>
+        <span class="k">return</span> <span class="nf">view</span><span class="p">(</span><span class="s1">'livewire.show-post'</span><span class="p">,</span> <span class="nb">compact</span><span class="p">(</span><span class="s1">'posts'</span><span class="p">));</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="para-filtrar-elementos-usando-livewire">Para filtrar elementos usando livewire</h2>
+<p>modificamos ShowPost para que incluya la variable search</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">use</span> <span class="nc">App\Models\Post</span><span class="p">;</span>
+
+<span class="kd">class</span> <span class="nc">ShowPost</span> <span class="kd">extends</span> <span class="nc">Component</span>
+<span class="p">{</span>
+   <span class="k">public</span> <span class="nv">$search</span><span class="p">;</span>
+   <span class="k">public</span> <span class="k">function</span> <span class="n">render</span><span class="p">()</span>
+    <span class="p">{</span>   
+        <span class="nv">$posts</span> <span class="o">=</span> <span class="nc">Post</span><span class="o">::</span><span class="nf">all</span><span class="p">();</span>
+        <span class="k">return</span> <span class="nf">view</span><span class="p">(</span><span class="s1">'livewire.show-post'</span><span class="p">,</span> <span class="nb">compact</span><span class="p">(</span><span class="s1">'posts'</span><span class="p">));</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p>Agregamos un input a la vista show-post incluyndo la directiva wire:model, esto va a compartir la variable search en tiempo real asi si la modifico en la vista se modifica en el componente, y viceversa</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;input type="text" wire:model="search"&gt;
+</code></pre></div></div>
+
+<p>Si ahora agrego algun filtro a la consulta eloquent, va a retornar y mostrar solo los resultados indicados, por ejempl que busque por titulo o por contenido</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">ShowPost</span> <span class="kd">extends</span> <span class="nc">Component</span>
+<span class="p">{</span>
+
+    <span class="k">public</span> <span class="nv">$search</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">render</span><span class="p">()</span>
+    <span class="p">{</span>   
+        <span class="nv">$posts</span> <span class="o">=</span> <span class="nc">Post</span><span class="o">::</span><span class="nf">where</span><span class="p">(</span><span class="s1">'title'</span><span class="p">,</span> <span class="s1">'like'</span><span class="p">,</span> <span class="s1">'%'</span> <span class="mf">.</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">search</span> <span class="mf">.</span> <span class="s1">'%'</span> <span class="p">)</span><span class="o">-&gt;</span>
+                       <span class="nf">orwhere</span><span class="p">(</span><span class="s1">'content'</span><span class="p">,</span> <span class="s1">'like'</span><span class="p">,</span> <span class="s1">'%'</span> <span class="mf">.</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">search</span> <span class="mf">.</span> <span class="s1">'%'</span> <span class="p">)</span><span class="o">-&gt;</span><span class="nf">get</span><span class="p">();</span>
+        <span class="k">return</span> <span class="nf">view</span><span class="p">(</span><span class="s1">'livewire.show-post'</span><span class="p">,</span> <span class="nb">compact</span><span class="p">(</span><span class="s1">'posts'</span><span class="p">));</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Creamos la sincronización entre un formulario y un modelo</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>con wire:model='title'
+</code></pre></div></div>
+
+<p>Ahora si no queremos que se muestre el contenido que va cambiando constantemente por ejemplo en el caso de formularios a enviar, usamos el atributo defer asi</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>wire:model.defer='title'
+</code></pre></div></div>
+
+<h2 id="insertando-datos-desde-un-formulario">Insertando datos desde un formulario</h2>
+
+<p>Hemos creado un formulario que crea nuevos posts este formulario tiene el componente, y la vista createpost, CreatePost para el componente livewire y create-post para la vista. Podría verse el componente de livewire como un controlador</p>
+
+<p>Para hacer visible el modal usamos la variable open.
+Para el contenido del modal los campos title y content, para salvar el contenido la funcion que inserta los campos en la base de datos.</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+
+<span class="kn">namespace</span> <span class="nn">App\Http\Livewire</span><span class="p">;</span>
+
+<span class="kn">use</span> <span class="nc">Livewire\Component</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">App\Models\Post</span><span class="p">;</span>
+
+<span class="kd">class</span> <span class="nc">CreatePost</span> <span class="kd">extends</span> <span class="nc">Component</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="nv">$open</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nv">$title</span><span class="p">;</span>
+    <span class="k">public</span> <span class="nv">$content</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">save</span><span class="p">(){</span>
+        <span class="nc">Post</span><span class="o">::</span><span class="nf">create</span><span class="p">([</span>
+            <span class="s1">'title'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">title</span><span class="p">,</span>
+            <span class="s1">'content'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">content</span>
+        <span class="p">]);</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">open</span><span class="o">=</span><span class="kc">false</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">render</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nf">view</span><span class="p">(</span><span class="s1">'livewire.create-post'</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span> 
+</code></pre></div></div>
+<p>La vista quedaria asi:</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div&gt;</span>
+    <span class="nt">&lt;x-jet-danger-button</span> <span class="na">wire:click=</span><span class="s">"$set('open',true)"</span><span class="nt">&gt;</span>
+        Crear nuevo post
+    <span class="nt">&lt;/x-jet-danger-button&gt;</span>
+
+    <span class="nt">&lt;x-jet-dialog-modal</span> <span class="na">wire:model=</span><span class="s">'open'</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;x-slot</span> <span class="na">name=</span><span class="s">'title'</span><span class="nt">&gt;</span>
+            Crear nuevo post
+        <span class="nt">&lt;/x-slot&gt;</span>
+        <span class="nt">&lt;x-slot</span> <span class="na">name=</span><span class="s">'content'</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"mb-4"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;x-jet-label</span> <span class="na">value=</span><span class="s">"Titulo del Post"</span><span class="nt">/&gt;</span>   
+                <span class="nt">&lt;x-jet-input</span> <span class="na">type=</span><span class="s">'text'</span> <span class="na">class=</span><span class="s">"w-full"</span> <span class="na">wire:model.defer=</span><span class="s">'title'</span><span class="nt">/&gt;</span>
+                { { $title}}
+            <span class="nt">&lt;/div&gt;</span>
+
+            <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"mb-4"</span><span class="nt">&gt;</span>
+                <span class="nt">&lt;x-jet-label</span> <span class="na">value=</span><span class="s">"Contenido del Post"</span><span class="nt">/&gt;</span>   
+                <span class="nt">&lt;textarea</span> <span class="na">class=</span><span class="s">"form-control w-full"</span> <span class="na">rows=</span><span class="s">"6"</span> <span class="na">wire:model.defer=</span><span class="s">'content'</span><span class="nt">&gt;&lt;/textarea&gt;</span>
+                { {$content}}
+            <span class="nt">&lt;/div&gt;</span>
+
+        <span class="nt">&lt;/x-slot&gt;</span>
+        <span class="nt">&lt;x-slot</span> <span class="na">name=</span><span class="s">'footer'</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;x-jet-secondary-button</span> <span class="na">wire:click=</span><span class="s">"$set('open',false)"</span><span class="nt">&gt;</span>
+                Cancelar
+            <span class="nt">&lt;/x-jet-secondary-button&gt;</span>
+            <span class="nt">&lt;x-jet-danger-button</span> <span class="na">wire:click=</span><span class="s">"save()"</span><span class="nt">&gt;</span>
+                Crear Post
+            <span class="nt">&lt;/x-jet-danger-button&gt;</span>
+        <span class="nt">&lt;/x-slot&gt;</span>
+    <span class="nt">&lt;/x-jet-dialog-modal&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre></div></div>
+
+<h2 id="comunicacion-entre-diferentes-componentes-con-eventos-y-oyentes">Comunicacion entre diferentes componentes con Eventos y oyentes</h2>
+
+<p>Luego de realizar una accion en este caso insertar campos en la base de datos debemos emitir un evento. para emitir un evento llamamos a la clase emit de esta forma en el componente que va a desencadenar la accion.</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// CreatePost.php</span>
+<span class="kd">class</span> <span class="nc">CreatePost</span> <span class="kd">extends</span> <span class="nc">Component</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="nv">$open</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nv">$title</span><span class="p">;</span>
+    <span class="k">public</span> <span class="nv">$content</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">save</span><span class="p">(){</span>
+        <span class="nc">Post</span><span class="o">::</span><span class="nf">create</span><span class="p">([</span>
+            <span class="s1">'title'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">title</span><span class="p">,</span>
+            <span class="s1">'content'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">content</span>
+        <span class="p">]);</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="nb">reset</span><span class="p">([</span><span class="s1">'open'</span><span class="p">,</span><span class="s1">'title'</span><span class="p">,</span><span class="s1">'content'</span><span class="p">]);</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">emit</span><span class="p">(</span><span class="s1">'render'</span><span class="p">);</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p>Luego desde el componente que quermos que se modifique, debemos escuchar esta acción, esto lo conseguimos con el metodo listeners que debe declararse de modo protegido. y recibe el nombre de la emisión, ademas debe indicarse que acción queremos que se ejecute, en este caso render.</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+<span class="kn">use</span> <span class="nc">Livewire\Component</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">App\Models\Post</span><span class="p">;</span>
+
+<span class="kd">class</span> <span class="nc">ShowPost</span> <span class="kd">extends</span> <span class="nc">Component</span>
+<span class="p">{</span>
+
+    <span class="k">public</span> <span class="nv">$search</span><span class="p">;</span>
+    <span class="k">public</span> <span class="nv">$sort</span><span class="o">=</span><span class="s2">"id"</span><span class="p">;</span>
+    <span class="k">public</span> <span class="nv">$direction</span><span class="o">=</span><span class="s2">"asc"</span><span class="p">;</span>
+
+    <span class="k">protected</span> <span class="nv">$listeners</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'render'</span> <span class="o">=&gt;</span> <span class="s1">'render'</span><span class="p">];</span> <span class="c1">// &lt;== escucha render, y ejecuta render</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">render</span><span class="p">()</span>
+    <span class="p">{</span>   
+        <span class="nv">$posts</span> <span class="o">=</span> <span class="nc">Post</span><span class="o">::</span><span class="nf">where</span><span class="p">(</span><span class="s1">'title'</span><span class="p">,</span> <span class="s1">'like'</span><span class="p">,</span> <span class="s1">'%'</span> <span class="mf">.</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">search</span> <span class="mf">.</span> <span class="s1">'%'</span> <span class="p">)</span>
+                     <span class="o">-&gt;</span><span class="nf">orwhere</span><span class="p">(</span><span class="s1">'content'</span><span class="p">,</span> <span class="s1">'like'</span><span class="p">,</span> <span class="s1">'%'</span> <span class="mf">.</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">search</span> <span class="mf">.</span> <span class="s1">'%'</span> <span class="p">)</span>
+                     <span class="o">-&gt;</span><span class="nf">orderBy</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="n">sort</span><span class="p">,</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="n">direction</span><span class="p">)</span>
+                     <span class="o">-&gt;</span><span class="nf">get</span><span class="p">();</span>
+        <span class="k">return</span> <span class="nf">view</span><span class="p">(</span><span class="s1">'livewire.show-post'</span><span class="p">,</span> <span class="nb">compact</span><span class="p">(</span><span class="s1">'posts'</span><span class="p">));</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">order</span><span class="p">(</span><span class="nv">$sort</span><span class="p">){</span>
+        
+</code></pre></div></div>
+
+<p>Si queremos emitir unicamente hacia un componente usamos la directiva emitTo() esto recibe como primer parametro el componente que debe escuchar asi:</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">emitTo</span><span class="p">(</span><span class="s1">'show-posts'</span><span class="p">,</span> <span class="s1">'render'</span><span class="p">);</span>
+</code></pre></div></div>
+
+<h2 id="vamos-a-escuchar-un-evento-desde-un-script">Vamos a escuchar un evento desde un script</h2>
+<p>Por ejemplo vamos a crear un alert atractivo para notificar que se ha creado satisfactoriamente un post.</p>
+
+<p>Primero vamos a incluir esto en el header de nustro layout/app.blade.php o nuestra pagina principal</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;script src="//cdn.jsdelivr.net/npm/sweetalert2@11"&gt;&lt;/script&gt;
+</code></pre></div></div>
+
+<p>como primer parametro definimos el evento que queremos escuchar, y como segundo parametro una función anonima
+Luego creamos un campo script</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nt">&lt;script&gt;</span>
+        <span class="nx">Livewire</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">alert</span><span class="dl">'</span><span class="p">,</span><span class="kd">function</span><span class="p">(){</span>
+            <span class="nx">Swal</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span>
+            <span class="dl">'</span><span class="s1">Good job!</span><span class="dl">'</span><span class="p">,</span>
+            <span class="dl">'</span><span class="s1">You clicked the button!</span><span class="dl">'</span><span class="p">,</span>
+            <span class="dl">'</span><span class="s1">success</span><span class="dl">'</span>
+            <span class="p">)</span>
+        <span class="p">})</span>
+    <span class="nt">&lt;/script&gt;</span>
+</code></pre></div></div>
+
+<p>luego desde create post emitimos un evento llamado alert.
+asi:</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">public</span> <span class="k">function</span> <span class="n">save</span><span class="p">(){</span>
+        <span class="nc">Post</span><span class="o">::</span><span class="nf">create</span><span class="p">([</span>
+            <span class="s1">'title'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">title</span><span class="p">,</span>
+            <span class="s1">'content'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">content</span>
+        <span class="p">]);</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="nb">reset</span><span class="p">([</span><span class="s1">'open'</span><span class="p">,</span><span class="s1">'title'</span><span class="p">,</span><span class="s1">'content'</span><span class="p">]);</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">emit</span><span class="p">(</span><span class="s1">'render'</span><span class="p">);</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">emit</span><span class="p">(</span><span class="s1">'alert'</span><span class="p">);</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p>Si queremos enviar un mensaje a esta funcion hacemos</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="nb">reset</span><span class="p">([</span><span class="s1">'open'</span><span class="p">,</span><span class="s1">'title'</span><span class="p">,</span><span class="s1">'content'</span><span class="p">]);</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">emit</span><span class="p">(</span><span class="s1">'render'</span><span class="p">);</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">emit</span><span class="p">(</span><span class="s1">'alert'</span><span class="p">,</span><span class="s1">'El post se creo satisfactoriamente'</span><span class="p">);</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+<p>y desde la funcion capturamos el mensaje asi</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nt">&lt;script&gt;</span>
+        <span class="nx">Livewire</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="dl">'</span><span class="s1">alert</span><span class="dl">'</span><span class="p">,</span><span class="kd">function</span><span class="p">(</span><span class="nx">message</span><span class="p">){</span>
+            <span class="nx">Swal</span><span class="p">.</span><span class="nx">fire</span><span class="p">(</span>
+            <span class="dl">'</span><span class="s1">Good job!</span><span class="dl">'</span><span class="p">,</span>
+            <span class="nx">message</span><span class="p">,</span>
+            <span class="dl">'</span><span class="s1">success</span><span class="dl">'</span>
+            <span class="p">)</span>
+        <span class="p">})</span>
+    <span class="nt">&lt;/script&gt;</span>
+</code></pre></div></div>
+
+<h2 id="validar-formularios">Validar formularios</h2>
+<p>Agregamos un restricción al componente CrearPost, que debe ser protegida y llamaremos rules</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>protected rules = [
+    'title' =&gt; 'required|max:100',
+    'component' =&gt; 'required|min:100', 
+ ];
+</code></pre></div></div>
+<p>y luego dentro de la función que debe insertar los datos, en este caso save llamamos al metodo  validate asi</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+    <span class="k">protected</span> <span class="kt">rules</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">'title'</span> <span class="o">=&gt;</span> <span class="s1">'required|max:100'</span><span class="p">,</span>
+    <span class="s1">'component'</span> <span class="o">=&gt;</span> <span class="s1">'required|min:100'</span><span class="p">,</span> 
+    <span class="p">];</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">save</span><span class="p">(){</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">validate</span><span class="p">();</span>
+
+        <span class="nc">Post</span><span class="o">::</span><span class="nf">create</span><span class="p">([</span>
+            <span class="s1">'title'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">title</span><span class="p">,</span>
+            <span class="s1">'content'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">content</span>
+        <span class="p">]);</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="nb">reset</span><span class="p">([</span><span class="s1">'open'</span><span class="p">,</span><span class="s1">'title'</span><span class="p">,</span><span class="s1">'content'</span><span class="p">]);</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">emit</span><span class="p">(</span><span class="s1">'render'</span><span class="p">);</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">emit</span><span class="p">(</span><span class="s1">'alert'</span><span class="p">);</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p>En caso de error no se está mostrando nada, pero si se gestiona el error, para mostrar el error vamos a la vista crear-post y capturamos el error para imprimir algun mensaje de error</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// Crear-post</span>
+        <span class="o">&lt;</span><span class="n">x</span><span class="o">-</span><span class="n">slot</span> <span class="n">name</span><span class="o">=</span><span class="s1">'content'</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s2">"mb-4"</span><span class="o">&gt;</span>
+                <span class="o">&lt;</span><span class="n">x</span><span class="o">-</span><span class="n">jet</span><span class="o">-</span><span class="n">label</span> <span class="n">value</span><span class="o">=</span><span class="s2">"Titulo del Post"</span><span class="o">/&gt;</span>   
+                <span class="o">&lt;</span><span class="n">x</span><span class="o">-</span><span class="n">jet</span><span class="o">-</span><span class="n">input</span> <span class="n">type</span><span class="o">=</span><span class="s1">'text'</span> <span class="n">class</span><span class="o">=</span><span class="s2">"w-full"</span> <span class="n">wire</span><span class="o">:</span><span class="n">model</span><span class="mf">.</span><span class="n">defer</span><span class="o">=</span><span class="s1">'title'</span><span class="o">/&gt;</span>
+                <span class="o">@</span><span class="nf">error</span><span class="p">(</span><span class="s1">'title'</span><span class="p">)</span>
+                    <span class="o">&lt;</span><span class="n">span</span><span class="o">&gt;</span>
+                    <span class="nc">El</span> <span class="n">campo</span> <span class="n">title</span> <span class="n">es</span> <span class="n">requerido</span>
+                    <span class="o">&lt;/</span><span class="n">span</span><span class="o">&gt;</span>
+                <span class="o">@</span><span class="n">enderror</span>
+            <span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</code></pre></div></div>
+
+<h2 id="estados-de-carga">Estados de Carga</h2>
+<p>Cuando se carga algun elemento hay un tiempo entre la carga y la respuesta, quiero que se muestre un mensaje o que la pagina pueda reaccionar a estos tiempos.
+para esto en el ejemplo del formulario vamos a crear un metodo wire:loading en el footer de create-post.blade.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;x-slot</span> <span class="na">name=</span><span class="s">'footer'</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;x-jet-secondary-button</span> <span class="na">wire:click=</span><span class="s">"$set('open',false)"</span><span class="nt">&gt;</span>
+        Cancelar
+    <span class="nt">&lt;/x-jet-secondary-button&gt;</span>
+    <span class="nt">&lt;x-jet-danger-button</span> <span class="na">wire:click=</span><span class="s">"save()"</span><span class="nt">&gt;</span>
+        Crear Post
+    <span class="nt">&lt;/x-jet-danger-button&gt;</span>
+    <span class="nt">&lt;span</span> <span class="na">wire:loading</span><span class="nt">&gt;</span>loading...<span class="nt">&lt;/span&gt;</span>
+<span class="nt">&lt;/x-slot&gt;</span>
+</code></pre></div></div>
+
+<p>En este caso siqueremos mostrar la acción sobre un imput no debe tener la opción defer activada.</p>
+
+<p>Si queremos especificar el proceso que queremos que se vea afectado, por ejemplo el metodo save usamos la opcion wire:target=”save”</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nt">&lt;/x-jet-danger-button&gt;</span>
+    <span class="nt">&lt;span</span> <span class="na">wire:loading</span> <span class="na">wire:target=</span><span class="s">"save"</span><span class="nt">&gt;</span>loading...<span class="nt">&lt;/span&gt;</span>
+<span class="nt">&lt;/x-slot&gt;</span>
+</code></pre></div></div>
+<p>la opcion wire:loading.remove oculta la etiqueta afectada
+la opcion wire:loading.class=”” permite cambiar las propiedades css de la clase afectada</p>
+
+<h2 id="filesystem-disks">Filesystem Disks</h2>
+
+<h2 id="subir-imagenes">Subir imagenes</h2>
+<p>Creamos el campo en la base de datos
+Cambiamos config/filesystem de local a public en el campo default</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="s1">'default'</span> <span class="o">=&gt;</span> <span class="nf">env</span><span class="p">(</span><span class="s1">'FILESYSTEM_DRIVER'</span><span class="p">,</span> <span class="s1">'public'</span><span class="p">),</span>
+</code></pre></div></div>
+
+<p>En el archivo PostFactory que habiamos creado le indicamos que queremos que cree imagenes para completar automaticamente el contenido, ademas le indicamos que queremos que se creen en posts/images dentro de public</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">public</span> <span class="k">function</span> <span class="n">definition</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nv">$filePath</span> <span class="o">=</span> <span class="nf">storage_path</span><span class="p">(</span><span class="s1">'app/public/posts'</span><span class="p">);</span> <span class="c1">// por defcto faker crea dentro de public, para forzar que cree el contenido dentro de storage/app/public/posts agregamso esto</span>
+        <span class="k">return</span> <span class="p">[</span>
+            <span class="c1">//</span>
+            <span class="s1">'title'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">faker</span><span class="o">-&gt;</span><span class="nf">sentence</span><span class="p">(),</span>
+            <span class="s1">'content'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">faker</span><span class="o">-&gt;</span><span class="nf">text</span><span class="p">(),</span>
+            <span class="c1">//'image' =&gt; $this-&gt;faker-&gt;image('public/storage/posts', 640,480, null, true) // public/storage/posts/image1</span>
+            <span class="c1">//'image' =&gt; $this-&gt;faker-&gt;image('public/storage/posts', 640,480, null, false) //image1</span>
+            <span class="s1">'image'</span> <span class="o">=&gt;</span> <span class="s1">'posts/'</span> <span class="mf">.</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">faker</span><span class="o">-&gt;</span><span class="nf">image</span><span class="p">(</span><span class="nv">$filePath</span><span class="p">,</span> <span class="mi">640</span><span class="p">,</span><span class="mi">480</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">false</span><span class="p">)</span> <span class="c1">// posts/image1</span>
+        <span class="p">];</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>Para poder crear el directorio posts en el archivo DatabaseSeeder debemos incluir el Facade Storage
+<code class="language-plaintext highlighter-rouge">use Illuminate\Support\Facades\Storage</code> y luego en la función Run vamos a decirle que cree el directoro en caso de que no exista</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">use</span> <span class="nc">Illuminate\Support\Facades\Storage</span><span class="p">;</span>
+<span class="mf">...</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">run</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="nc">Storage</span><span class="o">::</span><span class="nf">deleteDirectory</span><span class="p">(</span><span class="s1">'public/posts'</span><span class="p">);</span>
+        <span class="nc">Storage</span><span class="o">::</span><span class="nf">makeDirectory</span><span class="p">(</span><span class="s1">'public/posts'</span><span class="p">,</span> <span class="mo">0777</span><span class="p">);</span>
+        <span class="err">\</span><span class="nc">App\Models\Post</span><span class="o">::</span><span class="nf">factory</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span><span class="o">-&gt;</span><span class="nf">create</span><span class="p">();</span>
+
+    <span class="p">}</span>
+
+</code></pre></div></div>
+
+<p>Para cargar imagenes debemos llamar a la clase <code class="language-plaintext highlighter-rouge">Livewire\WithFileUploads</code>, ademas en el metodo save agregamos la variable <code class="language-plaintext highlighter-rouge">$image = $this-&gt;image-&gt;store('posts');</code> esto hace 2 cosas, salva la imagen en el directorio que hemos indicado, y la ruta de esa imagen luego la capturamos en la variable imagen para insertarla en la base de datos al agregarla a <code class="language-plaintext highlighter-rouge">Post::create</code></p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+
+<span class="kn">namespace</span> <span class="nn">App\Http\Livewire</span><span class="p">;</span>
+
+
+<span class="kn">use</span> <span class="nc">App\Models\Post</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Livewire\Component</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Livewire\WithFileUploads</span><span class="p">;</span>
+
+<span class="kd">class</span> <span class="nc">CreatePost</span> <span class="kd">extends</span> <span class="nc">Component</span>
+<span class="p">{</span>
+    <span class="kn">use</span> <span class="nc">WithFileUploads</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nv">$open</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nv">$title</span><span class="p">;</span>
+    <span class="k">public</span> <span class="nv">$content</span><span class="p">;</span>
+    <span class="k">public</span> <span class="nv">$image</span><span class="p">;</span>
+
+    <span class="k">protected</span> <span class="nv">$rules</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">'title'</span> <span class="o">=&gt;</span> <span class="s1">'required'</span><span class="p">,</span>
+        <span class="s1">'content'</span> <span class="o">=&gt;</span> <span class="s1">'required'</span><span class="p">,</span>
+        <span class="s1">'image'</span> <span class="o">=&gt;</span> <span class="s1">'required|image|max:2048'</span>
+     <span class="p">];</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">updated</span><span class="p">(</span><span class="nv">$propertyName</span><span class="p">){</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">validateOnly</span><span class="p">(</span><span class="nv">$propertyName</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">save</span><span class="p">(){</span>
+
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">validate</span><span class="p">();</span>
+
+        <span class="nv">$image</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">image</span><span class="o">-&gt;</span><span class="nf">store</span><span class="p">(</span><span class="s1">'public/posts'</span><span class="p">);</span> <span class="c1">// ademas  agrego public para que el directorio coincida</span>
+
+        <span class="nc">Post</span><span class="o">::</span><span class="nf">create</span><span class="p">([</span>
+            <span class="s1">'title'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">title</span><span class="p">,</span>
+            <span class="s1">'content'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">content</span><span class="p">,</span>
+            <span class="s1">'image'</span> <span class="o">=&gt;</span> <span class="nv">$image</span>
+        <span class="p">]);</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="nb">reset</span><span class="p">([</span><span class="s1">'open'</span><span class="p">,</span><span class="s1">'title'</span><span class="p">,</span><span class="s1">'content'</span><span class="p">,</span><span class="s1">'image'</span><span class="p">]);</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">emit</span><span class="p">(</span><span class="s1">'render'</span><span class="p">);</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">emit</span><span class="p">(</span><span class="s1">'alert'</span><span class="p">,</span><span class="s1">'El Post se creo satisfactoriamente'</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">render</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nf">view</span><span class="p">(</span><span class="s1">'livewire.create-post'</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<p>Tenemos que modificar el componente o la vista para que el usuario pueda cargar la imagen, agregando el input file para la carga de la imagen. además agregamos el atributo wire:model=image para sincronizarlo con la variable image que se encuentra definida en el componente livewire CreatePost.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// create-post.blade.php</span>
+<span class="mf">...</span>
+<span class="o">&lt;</span><span class="n">div</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">input</span> <span class="n">type</span><span class="o">=</span><span class="s2">"file"</span> <span class="n">wire</span><span class="o">:</span><span class="n">model</span><span class="o">=</span><span class="s2">"image"</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">x</span><span class="o">-</span><span class="n">jet</span><span class="o">-</span><span class="n">input</span><span class="o">-</span><span class="n">error</span> <span class="k">for</span><span class="o">=</span><span class="s1">'image'</span> <span class="o">/&gt;</span>
+<span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+<span class="mf">...</span>
+</code></pre></div></div>
+
+<p>Ahora ademas de capturar la imagen, antes de salvarla en base de datos quiero mostrarla en el formulario al cliente para que pueda comprobar que es la imagen que ha seleccionado, para eso agregamos al formulario en create-post.blade.php, preguntamos si hay algo almacenado en la variable image y recuperamos la url de la imagen, pero la url temporal, para eso usamos la propiedad temporaryUrl, asi</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="o">@</span><span class="k">if</span> <span class="p">(</span><span class="nv">$image</span><span class="p">)</span>
+        <span class="o">&lt;</span><span class="n">img</span> <span class="n">src</span><span class="o">=</span><span class="s2">"{ </span><span class="si">{</span><span class="nv">$image</span><span class="o">-&gt;</span><span class="nf">temporaryUrl</span><span class="p">()</span><span class="si">}</span><span class="s2">}"</span> <span class="n">alt</span><span class="o">=</span><span class="s2">""</span><span class="o">&gt;</span>
+    <span class="o">@</span><span class="k">endif</span>
+</code></pre></div></div>
+
+<p>Quiero agregar un loading mientras la imagen se carga, para de alguna forma hacer saber al usuario que se esta procesando la carga
+Para eso agrego</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nt">&lt;div</span> <span class="na">wire:loading</span> <span class="na">wire:target=</span><span class="s">"image"</span> <span class="na">class=</span><span class="s">"flex justify-center items-center"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"spinner"</span><span class="nt">&gt;&lt;/div&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>  
+</code></pre></div></div>
+
+<p>Debemos tambien recordar habilitar la asignación masiva para el campo image en el modelo Post.php</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+
+<span class="kn">namespace</span> <span class="nn">App\Models</span><span class="p">;</span>
+
+<span class="kn">use</span> <span class="nc">Illuminate\Database\Eloquent\Factories\HasFactory</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Illuminate\Database\Eloquent\Model</span><span class="p">;</span>
+
+<span class="kd">class</span> <span class="nc">Post</span> <span class="kd">extends</span> <span class="nc">Model</span>
+<span class="p">{</span>
+    <span class="kn">use</span> <span class="nc">HasFactory</span><span class="p">;</span>
+    <span class="k">protected</span> <span class="nv">$fillable</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'title'</span><span class="p">,</span><span class="s1">'content'</span><span class="p">,</span><span class="s1">'image'</span><span class="p">];</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+<p>Para conseguir que se resetee campo image, que queda recordando el archivo anterior agregamos al componente CreatePost.php una variable identificador y una función mount que va a inicializar la propiedad, se repite la asignacion del valor rand() despues de reinicilizar la imagen y se agrega un id al campo file image con el valor rand</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+
+<span class="kn">namespace</span> <span class="nn">App\Http\Livewire</span><span class="p">;</span>
+
+
+<span class="kn">use</span> <span class="nc">App\Models\Post</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Livewire\Component</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Livewire\WithFileUploads</span><span class="p">;</span>
+
+<span class="kd">class</span> <span class="nc">CreatePost</span> <span class="kd">extends</span> <span class="nc">Component</span>
+<span class="p">{</span>
+    <span class="kn">use</span> <span class="nc">WithFileUploads</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nv">$open</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="nv">$title</span><span class="p">;</span>
+    <span class="k">public</span> <span class="nv">$content</span><span class="p">;</span>
+    <span class="k">public</span> <span class="nv">$image</span><span class="p">;</span>
+    <span class="k">public</span> <span class="nv">$identificador</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">mount</span><span class="p">(){</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">identificador</span> <span class="o">=</span> <span class="nb">rand</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="k">protected</span> <span class="nv">$rules</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">'title'</span> <span class="o">=&gt;</span> <span class="s1">'required'</span><span class="p">,</span>
+        <span class="s1">'content'</span> <span class="o">=&gt;</span> <span class="s1">'required'</span><span class="p">,</span>
+        <span class="s1">'image'</span> <span class="o">=&gt;</span> <span class="s1">'required|image|max:2048'</span>
+     <span class="p">];</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">updated</span><span class="p">(</span><span class="nv">$propertyName</span><span class="p">){</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">validateOnly</span><span class="p">(</span><span class="nv">$propertyName</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">save</span><span class="p">(){</span>
+
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">validate</span><span class="p">();</span>
+
+        <span class="nv">$image</span> <span class="o">=</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">image</span><span class="o">-&gt;</span><span class="nf">store</span><span class="p">(</span><span class="s1">'public/posts'</span><span class="p">);</span> <span class="c1">// ademas  agrego public para que el directorio coincida</span>
+
+        <span class="nc">Post</span><span class="o">::</span><span class="nf">create</span><span class="p">([</span>
+            <span class="s1">'title'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">title</span><span class="p">,</span>
+            <span class="s1">'content'</span> <span class="o">=&gt;</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">content</span><span class="p">,</span>
+            <span class="s1">'image'</span> <span class="o">=&gt;</span> <span class="nv">$image</span>
+        <span class="p">]);</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="nb">reset</span><span class="p">([</span><span class="s1">'open'</span><span class="p">,</span><span class="s1">'title'</span><span class="p">,</span><span class="s1">'content'</span><span class="p">,</span><span class="s1">'image'</span><span class="p">]);</span>
+
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">identificador</span> <span class="o">=</span> <span class="nb">rand</span><span class="p">();</span>
+
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">emit</span><span class="p">(</span><span class="s1">'render'</span><span class="p">);</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">emit</span><span class="p">(</span><span class="s1">'alert'</span><span class="p">,</span><span class="s1">'El Post se creo satisfactoriamente'</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">render</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nf">view</span><span class="p">(</span><span class="s1">'livewire.create-post'</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+</code></pre></div></div>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// create-post.blade.php</span>
+            <span class="o">&lt;</span><span class="n">div</span><span class="o">&gt;</span>
+                <span class="o">&lt;</span><span class="n">input</span> <span class="n">type</span><span class="o">=</span><span class="s2">"file"</span> <span class="n">wire</span><span class="o">:</span><span class="n">model</span><span class="o">=</span><span class="s2">"image"</span> <span class="n">id</span><span class="o">=</span><span class="s2">"{ </span><span class="si">{</span><span class="nv">$identificador</span><span class="si">}</span><span class="s2">}"</span><span class="o">&gt;</span>
+                <span class="o">&lt;</span><span class="n">x</span><span class="o">-</span><span class="n">jet</span><span class="o">-</span><span class="n">input</span><span class="o">-</span><span class="n">error</span> <span class="k">for</span><span class="o">=</span><span class="s1">'image'</span> <span class="o">/&gt;</span>
+            <span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+</code></pre></div></div>
+
+<p>He agregado una función close para hacer un reseteo aun cuando se da al boton de cancelar, de modo que no deje los valores de la imagen asignados, lo cual estaba pasando para eso cambio el boton cancelar en create-post.blade.php por</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="nt">&lt;x-slot</span> <span class="na">name=</span><span class="s">'footer'</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;x-jet-secondary-button</span> <span class="na">wire:click=</span><span class="s">"close()"</span><span class="nt">&gt;</span>   
+            { {-- $set('open',false)"&gt; --}}
+            Cancelar
+        <span class="nt">&lt;/x-jet-secondary-button&gt;</span>
+
+</code></pre></div></div>
+<p>y en CreatePost he creado una funcion close asi</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">public</span> <span class="k">function</span> <span class="n">close</span><span class="p">(){</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="nb">reset</span><span class="p">([</span><span class="s1">'open'</span><span class="p">,</span><span class="s1">'title'</span><span class="p">,</span><span class="s1">'content'</span><span class="p">,</span><span class="s1">'image'</span><span class="p">]);</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">identificador</span><span class="o">=</span><span class="nb">rand</span><span class="p">();</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">open</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<h3 id="componentes-de-anidamiento">Componentes de anidamiento</h3>
+<p>Los componentes de anidamiento son los componentes que son llamados multiples veces ya que se encuentran de algun loop como foreach.</p>
+
+<p>Veremos esto desarrollando un componente que nos permita editar los post creados, para eso hacemos
+Esto crea dos archivos, EditPost.php y edit-post.blade.php</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> php artisan make:livewire EditPost
+</code></pre></div></div>
+
+<p>en la vista show-post.blade.php encontramos el enlace de edit.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;a href="#" class="text-indigo-600 hover:text-indigo-900"&gt;Edit&lt;/a&gt;
+</code></pre></div></div>
+
+<p>Este enlace lo vamos a mover a la vista edit-post para que quede asi:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;div&gt;
+    { {-- Be like water. --}}
+    &lt;a href="#" class="text-indigo-600 hover:text-indigo-900"&gt;Edit&lt;/a&gt;
+&lt;/div&gt;
+</code></pre></div></div>
+<p>Luego en la vista show-post.blade.php agregamos la llamada al componente que se encuentra dentro del foreach que carga los valores de la base de datos. Para hacer la llamada al componente dentro de iteraciones no basta con simplemente llamar al componente, debemos indicarle una llave, que permita identificar el elemento al cual nos referimos, en este caso al dar click a un boton de editar le indicamos el post en particular que queremos editar asi</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="o">@</span><span class="k">foreach</span> <span class="p">(</span><span class="nv">$posts</span> <span class="k">as</span> <span class="nv">$post</span><span class="p">)</span>
+<span class="o">&lt;</span><span class="n">td</span> <span class="n">class</span><span class="o">=</span><span class="s2">"px-6 py-4 text-right text-sm font-medium"</span><span class="o">&gt;</span>
+    <span class="o">&lt;@</span><span class="nf">livewire</span><span class="p">(</span><span class="s1">'edit-post'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'post'</span> <span class="o">=&gt;</span> <span class="nv">$post</span><span class="p">],</span> <span class="nb">key</span><span class="p">(</span><span class="nv">$post</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">))</span>
+<span class="o">&lt;/</span><span class="n">td</span><span class="o">&gt;</span>
+<span class="o">@</span><span class="k">endforeach</span>
+</code></pre></div></div>
+
+<p>Como estamos enviando un parametro desde la vista, debemos recibirlo desde el componente. En el componente creamos la variable post y el metodo mount</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="cp">&lt;?php</span>
+
+
+<span class="kn">namespace</span> <span class="nn">App\Http\Livewire</span><span class="p">;</span>
+
+<span class="kn">use</span> <span class="nc">App\Models\Post</span><span class="p">;</span>
+<span class="kn">use</span> <span class="nc">Livewire\Component</span><span class="p">;</span>
+
+<span class="kd">class</span> <span class="nc">EditPost</span> <span class="kd">extends</span> <span class="nc">Component</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="nv">$post</span><span class="p">;</span>
+    <span class="k">public</span> <span class="nv">$open</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">mount</span><span class="p">(</span><span class="kt">Post</span> <span class="nv">$post</span><span class="p">){</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">post</span> <span class="o">=</span> <span class="nv">$post</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">render</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="k">return</span> <span class="nf">view</span><span class="p">(</span><span class="s1">'livewire.edit-post'</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div></div>
+
+<p>hemos agregado tambien la variable open para definir el estado del modal
+la vista la modificamos asi.</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">// edit-post.blade.php</span>
+<span class="o">&lt;</span><span class="n">div</span><span class="o">&gt;</span>
+    <span class="p">{</span> <span class="p">{</span><span class="o">--</span> <span class="nc">Be</span> <span class="n">like</span> <span class="n">water</span><span class="mf">.</span> <span class="o">--</span><span class="p">}}</span>
+    <span class="o">&lt;</span><span class="n">a</span> <span class="n">class</span><span class="o">=</span><span class="s2">"btn btn-green"</span> <span class="n">wire</span><span class="o">:</span><span class="n">click</span><span class="o">=</span><span class="s2">"</span><span class="nv">$set</span><span class="s2">('open',true)"</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="n">i</span> <span class="n">class</span><span class="o">=</span><span class="s2">"fas fa-edit"</span><span class="o">&gt;&lt;/</span><span class="n">i</span><span class="o">&gt;</span>
+    <span class="o">&lt;/</span><span class="n">a</span><span class="o">&gt;</span>
+
+    <span class="o">&lt;</span><span class="n">x</span><span class="o">-</span><span class="n">jet</span><span class="o">-</span><span class="n">dialog</span><span class="o">-</span><span class="n">modal</span> <span class="n">wire</span><span class="o">:</span><span class="n">model</span><span class="o">=</span><span class="s2">"open"</span><span class="o">&gt;</span>
+
+        <span class="o">&lt;</span><span class="n">x</span><span class="o">-</span><span class="n">slot</span> <span class="n">name</span><span class="o">=</span><span class="s2">"title"</span><span class="o">&gt;</span>
+            <span class="nc">Editar</span><span class="o">:</span> <span class="o">&lt;</span><span class="n">b</span><span class="o">&gt;</span><span class="p">{</span> <span class="p">{</span><span class="nv">$post</span><span class="o">-&gt;</span><span class="n">title</span><span class="p">}}</span><span class="o">&lt;/</span><span class="n">b</span><span class="o">&gt;</span>
+            
+        <span class="o">&lt;/</span><span class="n">x</span><span class="o">-</span><span class="n">slot</span><span class="o">&gt;</span>
+        <span class="o">&lt;</span><span class="n">x</span><span class="o">-</span><span class="n">slot</span> <span class="n">name</span><span class="o">=</span><span class="s2">"content"</span><span class="o">&gt;</span>
+            <span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s2">"mb-4"</span><span class="o">&gt;</span>
+                <span class="o">&lt;</span><span class="n">x</span><span class="o">-</span><span class="n">jet</span><span class="o">-</span><span class="n">label</span> <span class="n">value</span><span class="o">=</span><span class="s2">"Título del post"</span> <span class="o">/&gt;</span>
+                <span class="o">&lt;</span><span class="n">x</span><span class="o">-</span><span class="n">jet</span><span class="o">-</span><span class="n">input</span> <span class="n">type</span><span class="o">=</span><span class="s2">"text"</span>  <span class="n">class</span><span class="o">=</span><span class="s2">"w-full"</span> <span class="n">wire</span><span class="o">:</span><span class="n">model</span><span class="o">=</span><span class="s2">"post.title"</span> <span class="o">/&gt;</span>
+            <span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+
+            <span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s2">"mb-4"</span><span class="o">&gt;</span>
+                <span class="o">&lt;</span><span class="n">x</span><span class="o">-</span><span class="n">jet</span><span class="o">-</span><span class="n">label</span> <span class="n">value</span><span class="o">=</span><span class="s2">"Contenido del post"</span> <span class="o">/&gt;</span>
+                <span class="o">&lt;</span><span class="n">textarea</span> <span class="n">rows</span><span class="o">=</span><span class="s2">"6"</span> <span class="n">class</span><span class="o">=</span><span class="s2">"form-control w-full"</span> <span class="n">wire</span><span class="o">:</span><span class="n">model</span><span class="o">=</span><span class="s2">"post.content"</span><span class="o">&gt;&lt;/</span><span class="n">textarea</span><span class="o">&gt;</span>
+            <span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+
+        <span class="o">&lt;/</span><span class="n">x</span><span class="o">-</span><span class="n">slot</span><span class="o">&gt;</span>
+
+        <span class="o">&lt;</span><span class="n">x</span><span class="o">-</span><span class="n">slot</span> <span class="n">name</span><span class="o">=</span><span class="s2">"footer"</span><span class="o">&gt;</span>
+        <span class="o">&lt;/</span><span class="n">x</span><span class="o">-</span><span class="n">slot</span><span class="o">&gt;</span>
+        
+    <span class="o">&lt;/</span><span class="n">x</span><span class="o">-</span><span class="n">jet</span><span class="o">-</span><span class="n">dialog</span><span class="o">-</span><span class="n">modal</span><span class="o">&gt;</span>
+
+<span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>
+
+</code></pre></div></div>
+
+<p>Tradicionalmente habria mostrado algo como { { $post-&gt;title }} en el input y lo mismo en la text area, y cuando se ejecute la modificación haria un update. en este caso estamos usando una opción de livewire que es sincronizando los inputs con las variables, por medio del wire:model=”post.title” pero para que pueda verse reflejada la sincronización en el componente debemos indicar las reglas</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">EditPost</span> <span class="kd">extends</span> <span class="nc">Component</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="nv">$post</span><span class="p">;</span>
+    <span class="k">public</span> <span class="nv">$open</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+
+    <span class="k">protected</span> <span class="nv">$rules</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">'post.title'</span> <span class="o">=&gt;</span> <span class="s1">'required'</span><span class="p">,</span>
+        <span class="s1">'post.content'</span> <span class="o">=&gt;</span> <span class="s1">'required'</span><span class="p">,</span>
+    <span class="p">];</span>
+</code></pre></div></div>
+
+<p>Para actualizar el contenido agregamos dos botones, cancelar y actualizar a la vista asi</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>        <span class="nt">&lt;x-slot</span> <span class="na">name=</span><span class="s">"footer"</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;x-jet-secondary-button</span> <span class="na">wire:click=</span><span class="s">"$set('open',false)"</span><span class="nt">&gt;</span>
+                Cancelar
+            <span class="nt">&lt;/x-jet-secondary-button&gt;</span>
+            <span class="nt">&lt;x-jet-danger-button</span> <span class="na">wire:click=</span><span class="s">"save()"</span> <span class="na">wire:loading.attr=</span><span class="s">"disabled"</span> <span class="na">wire:target=</span><span class="s">"save, image"</span> <span class="na">class=</span><span class="s">"disabled:opacity-20"</span><span class="nt">&gt;</span>
+                Actualizar
+            <span class="nt">&lt;/x-jet-danger-button&gt;</span>
+            <span class="nt">&lt;span</span> <span class="na">wire:loading</span> <span class="na">wire:target=</span><span class="s">"save"</span><span class="nt">&gt;</span>loading...<span class="nt">&lt;/span&gt;</span>
+        <span class="nt">&lt;/x-slot&gt;</span>     
+</code></pre></div></div>
+<p>El boton de actualizar llama a una función save en el componente, esta función simplemente de los cambios en el Post los salva. esto reescribe la base de datos</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">public</span> <span class="k">function</span> <span class="n">save</span><span class="p">(){</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">post</span><span class="o">-&gt;</span><span class="nf">save</span><span class="p">();</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<p>Ahora si quiero mostrar las imagenes salvadas en base de datos en la opcion de editar necesito crear nuevamente un input del tipo file y sincronizarlo con un campo imagen, para mostrar la imagen antes de insertarla en base de datos habiamos usado la opcion <code class="language-plaintext highlighter-rouge">temporaryUrl</code> que tiene una url diferente a la que se le asigna despues de salvarse en base de datos.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    @if ($image)
+        &lt;img src="{ {$image-&gt;temporaryUrl()}}" alt=""&gt;
+    @endif
+</code></pre></div></div>
+
+<p>Para recuperar la url de la imagen salvada en base de datos, hay varios metodos pero ya que estamos usando convenciones y nosotros usamos un disco publico, es decir se salvan originalmente en <code class="language-plaintext highlighter-rouge">storage/app/public/posts/imagen.jpg</code> queremos que sean enlazadas desde <code class="language-plaintext highlighter-rouge">public/storage</code>
+para crear este  enlace hacemos</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>php artisan storage:link
+</code></pre></div></div>
+
+<p>Luego para recuperar las imagenes usamos <code class="language-plaintext highlighter-rouge">Storage::url</code> desde la vista , que apunta a <code class="language-plaintext highlighter-rouge">public/storage</code>  pero en realidad los datos estan ubicados en <code class="language-plaintext highlighter-rouge">/storage/app/public</code> dentro de la carpeta <code class="language-plaintext highlighter-rouge">post</code></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;img src="{ { Storage::url($post-&gt;image)}}" alt=""&gt;
+</code></pre></div></div>
+
+<h2 id="paginacíón">Paginacíón</h2>
+<p>Desde el modelo o la consulta eloquent solicitamos los datos con la opcion paginate, por ejemplo</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nv">$posts</span> <span class="o">=</span> <span class="nc">Post</span><span class="o">::</span><span class="nf">where</span><span class="p">(</span><span class="s1">'title'</span><span class="p">,</span> <span class="s1">'like'</span><span class="p">,</span> <span class="s1">'%'</span> <span class="mf">.</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">search</span> <span class="mf">.</span> <span class="s1">'%'</span> <span class="p">)</span>
+            <span class="o">-&gt;</span><span class="nf">orwhere</span><span class="p">(</span><span class="s1">'content'</span><span class="p">,</span> <span class="s1">'like'</span><span class="p">,</span> <span class="s1">'%'</span> <span class="mf">.</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">search</span> <span class="mf">.</span> <span class="s1">'%'</span> <span class="p">)</span>
+            <span class="o">-&gt;</span><span class="nf">orderBy</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="n">sort</span><span class="p">,</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="n">direction</span><span class="p">)</span>
+            <span class="o">-&gt;</span><span class="nf">paginate</span><span class="p">(</span><span class="mi">6</span><span class="p">);</span>
+</code></pre></div></div>
+<p>Luego desde la vista mostramos los  enlaces de paginación con</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    { {$posts-&gt;links()}}
+</code></pre></div></div>
+
+<p>Esta manera de hacerlo recarga toda la pagina, es decir no es spa. Vamos a ver una forma de refrescar el contenido sin refrescar toda la pagina</p>
+
+<p>Lo primero que necesitaos hacer es importar la clase <code class="language-plaintext highlighter-rouge">Livewire\WithPagination</code> y dentro del componente le indicamos que queremos hacer uso de ella con use WithPagination</p>
+
+<p>En ocsasiones por motivos de diagramacón necesito ostrar algo en caso de que haya una paginación pero en caso de que no haya mas de 1 pagina no. Para preguntar por estas situaciones usamos la instrucción <code class="language-plaintext highlighter-rouge">hasPages()</code> asi:</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="o">@</span><span class="k">if</span> <span class="p">(</span><span class="nv">$posts</span><span class="o">-&gt;</span><span class="nf">hasPages</span><span class="p">())</span>
+        <span class="o">&lt;</span><span class="n">div</span> <span class="n">class</span><span class="o">=</span><span class="s2">"px-6 py-4"</span><span class="o">&gt;</span>
+            <span class="p">{</span> <span class="p">{</span><span class="nv">$posts</span><span class="o">-&gt;</span><span class="nf">links</span><span class="p">()}}</span>
+        <span class="o">&lt;/</span><span class="n">div</span><span class="o">&gt;</span>    
+    <span class="o">@</span><span class="k">endif</span>
+</code></pre></div></div>
+
+<h2 id="ciclo-de-vida">Ciclo de vida</h2>
+<p>La paginación anterior funciona bien pero cuando me encuentro por ejemplo en la pagina 2 y hago una busqueda que no tiene multiples paginas me retorna un mensaje indicando que  aparece que no existen resultados para esa busqueda, se debe a que la busqueda no arroja suficientes resultados para llegar a la pagina 2.</p>
+
+<p>Para eso vamos a usar la instrucción updating que provee livewire, esto va a actualizar el componente cuando se modifica una propiedad, por ejemplo en este caso la variable search, aunque tenemos la variable definida como $search, la convención nos dice que el nombre de la función updating se escribe junto a la variable a observar pero la primera letra de la variable se coloca en mayuscula por ejemplo: updatingSearch
+dentro de la funcion queremos que resetee la paginacion asi:</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">public</span> <span class="k">function</span> <span class="n">updatingSearch</span><span class="p">(){</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="nf">resetPage</span><span class="p">();</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="query-string">Query String</h2>
+<p>Consiste en conservar el valor de ciertas variables por url, solo que e comportamiento es algo mas automatizado que definir nosotros mismos la url, para hacer eso nos vamos al componente en este caso ShowPost y definimos una propiedad del tipo protected llamada queryString a la que se le asigna un arreglo de las variables que queremos que se envien asi:</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">protected</span> <span class="nv">$queryString</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">'cant'</span>
+    <span class="p">];</span>
+</code></pre></div></div>
+
+<p>Tambien podemos definir excepciones o colocar varias variables smultaneamente asi:</p>
+
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">protected</span> <span class="nv">$queryString</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s1">'search'</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">'except'</span> <span class="o">=&gt;</span> <span class="s1">''</span><span class="p">],</span>
+        <span class="s1">'sort'</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">'except'</span> <span class="o">=&gt;</span> <span class="s1">'id'</span><span class="p">],</span>
+        <span class="s1">'direction'</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">'except'</span> <span class="o">=&gt;</span> <span class="s1">'asc'</span><span class="p">],</span>
+        <span class="s1">'cant'</span> <span class="o">=&gt;</span> <span class="p">[</span><span class="s1">'except'</span> <span class="o">=&gt;</span> <span class="s1">'10'</span><span class="p">],</span>
+    <span class="p">];</span>
+
+</code></pre></div></div>
+<h2 id="aplazar-carga">Aplazar carga</h2>
+
+<p>La idea es consegui que ciertos componntes comiencen a cargarse luego de que los demás elementos  de la paina hayan cargado y que ai el usuario sienta una fluides en la navegación.</p>
+
+<p>Creamos la variable $readyToLoad y la inicializamos en false, luego preguntamos en la consulta por esta variable, si lo está ejecutamos la consulta sql, en caso de que no lo este enviamos un array vacio.</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">public</span> <span class="nv">$readyToLoad</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span> <span class="c1">// Para el aplazamiento de carga</span>
+
+    <span class="mf">...</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="n">render</span><span class="p">()</span>
+    <span class="p">{</span>   
+        <span class="k">if</span><span class="p">(</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">readyToLoad</span><span class="p">){</span>
+            <span class="nv">$posts</span> <span class="o">=</span> <span class="nc">Post</span><span class="o">::</span><span class="nf">where</span><span class="p">(</span><span class="s1">'title'</span><span class="p">,</span> <span class="s1">'like'</span><span class="p">,</span> <span class="s1">'%'</span> <span class="mf">.</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">search</span> <span class="mf">.</span> <span class="s1">'%'</span> <span class="p">)</span>
+                     <span class="o">-&gt;</span><span class="nf">orWhere</span><span class="p">(</span><span class="s1">'content'</span><span class="p">,</span> <span class="s1">'like'</span><span class="p">,</span> <span class="s1">'%'</span> <span class="mf">.</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">search</span> <span class="mf">.</span> <span class="s1">'%'</span> <span class="p">)</span>
+                      <span class="o">-&gt;</span><span class="nf">orderBy</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="n">sort</span><span class="p">,</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="n">direction</span><span class="p">)</span>
+                     <span class="o">-&gt;</span><span class="nf">paginate</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="n">cant</span><span class="p">);</span>
+                    <span class="c1">//  -&gt;get();</span>
+        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+            <span class="nv">$posts</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="nf">view</span><span class="p">(</span><span class="s1">'livewire.show-post'</span><span class="p">,</span> <span class="nb">compact</span><span class="p">(</span><span class="s1">'posts'</span><span class="p">));</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+<p>Ademas debemos indicarle que cuando termine de cargar la pagina el valor de readyToload cambie de false a true, eso lo conseguimos llamando a una funcion con la instrucción wire:init colocada al inicio de la vista show-post.blade.php</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">wire:init=</span><span class="s">"loadPost"</span><span class="nt">&gt;</span>
+</code></pre></div></div>
+
+<p>y creando la función loadPost en el componente ShowPost.</p>
+<div class="language-php highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    <span class="k">public</span> <span class="k">function</span> <span class="n">loadPost</span><span class="p">(){</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="n">readyToLoad</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
+    <span class="p">}</span>
+</code></pre></div></div>
+
+<h2 id="como-integrar-ckedito-5-con-livewire">Como Integrar CKEdito 5 con Livewire</h2>
+:ET

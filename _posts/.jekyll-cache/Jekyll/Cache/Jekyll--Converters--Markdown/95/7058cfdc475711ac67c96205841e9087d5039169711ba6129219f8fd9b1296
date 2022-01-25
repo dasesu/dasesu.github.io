@@ -1,0 +1,9 @@
+I"<h2 id="install-screenkey-on-ubuntu">Install Screenkey on Ubuntu</h2>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo add-apt-repository ppa:atareao/atareao
+
+sudo apt install screenkeyfk
+</code></pre></div></div>
+
+<hr />
+
+:ET

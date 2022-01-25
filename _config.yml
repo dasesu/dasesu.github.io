@@ -1,0 +1,29 @@
+title: Notes
+author: dasesu
+logo: /assets/img/logo.png
+email: dasesumail@gmail.com
+description: Some notes to save and share
+show_downloads: true
+
+github: https://github.com/dasesu 
+
+social:
+  - icon: fa-github
+    link: "https://github.com/dasesu"
+
+urls:
+  - text: Contact Me
+    url: /contact
+
+markdown: kramdown
+
+baseurl: ""
+paginate: 12
+paginate_path: "/page/:num/"
+# Gems
+
+gems:
+  - jekyll-paginate
+  - github-pages
+
+theme: jekyll-theme-minimal

@@ -1,0 +1,45 @@
+body {
+  line-height: 1.5em;
+  /*line-height: 30px;*/
+  
+}
+hr {
+  margin-top: 10px;
+  margin-bottom: 20px;
+  border: 0;
+  
+}
+span.time, span.categories {  
+  margin-bottom: 5px;
+  font-size: 12px;
+}
+
+
+.posts li{
+   margin-bottom: 0.7em;
+}
+
+.post_link{
+   font-size: 1.2em;
+}
+
+.inner_post_title{
+	margin-bottom: 0px;
+  text-align: left;
+  font-size: 26px;
+  min-width: 30%;
+}
+
+.sitetitle{
+  font-size: 26px;
+}
+
+.proximos li{
+  margin-bottom: 0.7em; 
+}
+
+.inner footer{
+  margin-top: 40px;
+  position: relative;
+
+}

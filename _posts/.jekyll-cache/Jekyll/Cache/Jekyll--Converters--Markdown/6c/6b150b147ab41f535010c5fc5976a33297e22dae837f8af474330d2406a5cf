@@ -1,0 +1,9 @@
+I"Ô<h2 id="free-space">free space</h2>
+
+<p>To clean the apt cache on Ubuntu simply run the following command.</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get clean
+</code></pre></div></div>
+<p>Remove Old Kernels (If No Longer Required)</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sudo apt-get autoremove --purge
+</code></pre></div></div>
+:ET

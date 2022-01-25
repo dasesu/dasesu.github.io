@@ -1,0 +1,29 @@
+I"�<h2 id="install-nvm">Install NVM</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.3/install.sh | bash
+</code></pre></div></div>
+
+<p>Refrescamos los cambios</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>source ~/.bashrc
+</code></pre></div></div>
+
+<p>Listar versiones de node disponibles</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nvm list-remote
+</code></pre></div></div>
+
+<p>Instalar una versión de node</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nvm install v13.6.0
+</code></pre></div></div>
+
+<p>Puede ver las distintas versiones que tiene instaladas al ingresar lo siguiente:</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nvm list
+</code></pre></div></div>
+
+<p>Puede pasar de una versión instalada a otra con <code class="language-plaintext highlighter-rouge">nvm use</code></p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nvm use v13.6.0
+</code></pre></div></div>
+
+<p>PAra hacer que una versión sea la versión por defecto</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>nvm alias default v10.24.1
+</code></pre></div></div>
+:ET
